@@ -5,6 +5,86 @@ class Admin extends Controller {
         $this->adminModel = $this->model('AdminModel');
         $this->sponsorModel = $this->model('SponsorModel');
         $this->studentModel = $this->model('StudentModel');
+        $this->formModel = $this->model('FormModel');
+        $this->assignmentModel = $this->model('AssignmentModel');
+    }
+
+    public function forms() {
+        if (!isLoggedIn()) redirect('admin/login');
+
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+            $data = [
+                'label' => trim($_POST['label']),
+                'type' => trim($_POST['type']),
+                'assigned_to' => trim($_POST['assigned_to']),
+                'options' => trim($_POST['options']),
+                'label_err' => ''
+            ];
+
+            if (empty($data['label'])) $data['label_err'] = 'Please enter label';
+
+            if (empty($data['label_err'])) {
+                if ($this->formModel->addField($data)) {
+                    flash('form_message', 'Field Added');
+                    redirect('admin/forms');
+                } else {
+                    die('Something went wrong');
+                }
+            } else {
+                $fields = $this->formModel->getFields();
+                $data['fields'] = $fields;
+                $this->view('admin/forms/index', $data);
+            }
+        } else {
+            $fields = $this->formModel->getFields();
+            $data = [
+                'fields' => $fields,
+                'label' => '', 'type' => 'text', 'assigned_to' => 'sponsor', 'options' => '', 'label_err' => ''
+            ];
+            $this->view('admin/forms/index', $data);
+        }
+    }
+
+    public function delete_field($id) {
+        if (!isLoggedIn()) redirect('admin/login');
+        if ($this->formModel->deleteField($id)) {
+            flash('form_message', 'Field Removed');
+            redirect('admin/forms');
+        } else {
+            die('Something went wrong');
+        }
+    }
+
+    public function assignments() {
+        if (!isLoggedIn()) redirect('admin/login');
+
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $sponsor_id = $_POST['sponsor_id'];
+            $student_id = $_POST['student_id'];
+            if ($this->assignmentModel->assign($sponsor_id, $student_id)) {
+                flash('assignment_message', 'Student Assigned');
+                redirect('admin/assignments');
+            }
+        }
+
+        $assignments = $this->assignmentModel->getAssignments();
+        $sponsors = $this->sponsorModel->getSponsors();
+        $students = $this->studentModel->getStudents();
+        $data = [
+            'assignments' => $assignments,
+            'sponsors' => $sponsors,
+            'students' => $students
+        ];
+        $this->view('admin/assignments/index', $data);
+    }
+
+    public function unassign($sponsor_id, $student_id) {
+        if (!isLoggedIn()) redirect('admin/login');
+        if ($this->assignmentModel->unassign($sponsor_id, $student_id)) {
+            flash('assignment_message', 'Assignment Removed');
+            redirect('admin/assignments');
+        }
     }
 
     public function sponsors() {
