@@ -7,6 +7,34 @@ class Admin extends Controller {
         $this->studentModel = $this->model('StudentModel');
         $this->formModel = $this->model('FormModel');
         $this->assignmentModel = $this->model('AssignmentModel');
+        $this->messageModel = $this->model('MessageModel');
+    }
+
+    public function moderation() {
+        if (!isLoggedIn()) redirect('admin/login');
+        
+        $messages = $this->messageModel->getPendingMessages();
+        foreach($messages as $message) {
+            $message->responses = $this->messageModel->getMessageResponses($message->id);
+        }
+        $data = ['messages' => $messages];
+        $this->view('admin/moderation/index', $data);
+    }
+
+    public function approve($id) {
+        if (!isLoggedIn()) redirect('admin/login');
+        if ($this->messageModel->updateStatus($id, 'approved')) {
+            flash('moderation_message', 'Message Approved');
+            redirect('admin/moderation');
+        }
+    }
+
+    public function reject($id) {
+        if (!isLoggedIn()) redirect('admin/login');
+        if ($this->messageModel->updateStatus($id, 'rejected')) {
+            flash('moderation_message', 'Message Rejected');
+            redirect('admin/moderation');
+        }
     }
 
     public function forms() {
