@@ -1,0 +1,225 @@
+Build a full-stack web application called “IOI Scholarship Sponsor–Student Communication System” using PHP (MVC), MySQL, Bootstrap 5, and session-based authentication.
+
+The core objective of the system is to provide a secure and moderated communication platform where sponsors can send messages to assigned students, with all communication passing through admin approval before delivery.
+
+SPONSOR ACCESS LINK
+
+Generate a unique secure access link (tokenized URL) for each sponsor.
+
+Example:
+/sponsor/dashboard.php?token=abc123xyz
+
+Admin should be able to:
+
+View and copy the generated link
+Export or share the link manually
+
+QR codes will be generated externally using the generated sponsor link.
+
+MOBILE-FIRST RESPONSIVE DESIGN (HIGH PRIORITY)
+
+The system must be designed mobile-first before desktop.
+
+Requirements:
+
+Use Bootstrap 5 mobile-first grid system
+Design UI starting from small screens (≤576px) and scale upward
+Use large touch-friendly buttons
+Keep navigation simple with minimal clicks
+Use optimized stacked forms on mobile devices
+Ensure readable font sizes
+Optimize assets for fast loading
+
+UI Guidelines:
+
+Use card-based layouts for content sections
+Use sticky action buttons for key actions like Send and Approve
+Avoid horizontal scrolling
+Use modals or collapsible sections where appropriate
+Optimize profile and banner images
+Theme colors:
+Primary: #005BFF
+Secondary: White
+Accent: Green
+Button hover color:
+#4FA242
+
+TECHNOLOGY STACK
+
+Backend:
+
+PHP (Laravel or Core PHP MVC)
+
+Frontend:
+
+HTML5
+Bootstrap 5
+
+JavaScript:
+
+Vanilla JavaScript or jQuery
+
+Database:
+
+MySQL
+
+Authentication:
+
+Session-based login system
+
+Hosting Compatibility:
+
+Must run on Hostinger shared hosting (cPanel, Apache, MySQL)
+
+USER ROLES
+
+ADMIN
+
+Admin should be able to:
+
+Manage sponsors
+Manage students
+Manage other admins
+Assign multiple students to sponsors
+Generate sponsor access links (tokens)
+Create dynamic communication forms
+Moderate messages (approve/reject)
+Receive email notifications with moderation links
+
+SPONSOR
+
+Sponsors should be able to:
+
+Access the system through login or secure access link
+View assigned students
+Send messages using communication forms
+
+After sending a message:
+
+The sponsor should see a successful delivery confirmation
+The notification must not indicate that the message is awaiting admin approval
+
+Sponsors must not be able to bypass admin moderation.
+
+STUDENT
+
+Student profile should include:
+
+First Name
+Surname
+Age
+Class
+Email
+Profile Photo
+Banner Image displayed beside the message form
+About Section with rich text and images
+Multiple PDF result uploads
+
+Students should be able to:
+
+Receive approved messages
+View message history
+Reply to messages
+
+Student replies must also pass through admin approval before delivery.
+
+MESSAGE FLOW
+
+Sponsor submits message
+Message is saved with status “pending”
+Admin receives:
+Email notification
+Link to moderation panel
+Admin can:
+Approve and deliver the message to the student
+Reject the message so it is not delivered
+Student replies follow the same moderation process before reaching sponsors
+
+FORM BUILDER SYSTEM
+
+Admin should be able to dynamically create custom fields including:
+
+Text input
+Text area
+Dropdown
+File upload
+
+Admin should also be able to assign forms to:
+
+Sponsors
+Students
+
+SECURITY REQUIREMENTS
+
+Use PHP session authentication
+Sanitize and validate all inputs
+Protect against SQL injection and XSS
+Use secure random token generation for sponsor access links
+Validate uploaded files (PDFs and images only)
+
+DATABASE STRUCTURE
+
+Sponsors:
+
+id
+name
+email
+access_token
+
+Students:
+
+id
+first_name
+surname
+age
+class
+email
+profile_photo
+banner_image
+about
+
+Admins:
+
+id
+name
+email
+password
+
+Messages:
+
+id
+sender_type
+sender_id
+receiver_id
+content
+status
+created_at
+
+Form Fields:
+
+id
+label
+type
+assigned_to
+
+EMAIL SYSTEM
+
+Use SMTP compatible with Hostinger hosting.
+
+Admin should receive:
+
+Message copy
+Moderation link
+
+Students and sponsors should only receive approved messages.
+
+FINAL OUTPUT REQUIREMENTS
+
+Clean MVC folder structure
+Fully responsive Bootstrap 5 UI
+MySQL database schema
+Shared-hosting compatible deployment
+Organized reusable components
+Setup and installation documentation
+
+The system should prioritize simplicity, security, responsiveness, and ease of use on mobile devices first before desktop experiences.
