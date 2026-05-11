@@ -3,14 +3,19 @@
     <div class="col-md-4">
         <!-- Profile Card -->
         <div class="card shadow-sm mb-4">
-            <div class="card-header bg-primary text-white text-center">
-                <div class="bg-white text-primary rounded-circle d-flex align-items-center justify-content-center mx-auto my-3" style="width: 80px; height: 80px; font-size: 2rem; font-weight: bold;">
+            <div class="student-banner" style="background-image: linear-gradient(135deg, #005BFF 0%, #4FA242 100%);"></div>
+            <div class="card-body text-center pt-0">
+                <div class="bg-primary text-white student-profile-photo d-flex align-items-center justify-content-center mx-auto" style="font-size: 2rem; font-weight: bold;">
                     <?php echo substr($data['student']->first_name, 0, 1) . substr($data['student']->surname, 0, 1); ?>
                 </div>
-                <h5><?php echo $data['student']->first_name . ' ' . $data['student']->surname; ?></h5>
-                <p class="small mb-2"><?php echo $data['student']->class; ?></p>
+                <h5 class="mt-2"><?php echo $data['student']->first_name . ' ' . $data['student']->surname; ?></h5>
+                <p class="small text-muted mb-2"><?php echo $data['student']->class; ?></p>
+                <div class="d-flex justify-content-center gap-2 mb-3">
+                    <span class="badge bg-light text-primary border"><?php echo $data['student']->age; ?> Years</span>
+                    <span class="badge bg-light text-success border">Active Student</span>
+                </div>
             </div>
-            <div class="card-body">
+            <div class="card-body border-top">
                 <h6>About Me</h6>
                 <p class="small text-muted"><?php echo $data['student']->about; ?></p>
                 <hr>

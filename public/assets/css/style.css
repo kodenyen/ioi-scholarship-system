@@ -1,0 +1,86 @@
+:root {
+    --primary-color: #005BFF;
+    --secondary-color: #FFFFFF;
+    --accent-color: #4FA242; /* Green accent */
+    --hover-color: #4FA242;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f8f9fa;
+    color: #333;
+}
+
+.bg-primary {
+    background-color: var(--primary-color) !important;
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    transition: background-color 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: var(--hover-color);
+    border-color: var(--hover-color);
+}
+
+.btn-outline-primary {
+    color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.btn-outline-primary:hover {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.card {
+    border: none;
+    border-radius: 12px;
+}
+
+/* Mobile-First Adjustments */
+@media (max-width: 576px) {
+    .container {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+    
+    h1 {
+        font-size: 1.8rem;
+    }
+    
+    .btn-lg {
+        padding: 12px 20px;
+        font-size: 1.1rem;
+    }
+    
+    .sticky-md-bottom {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 1000;
+        box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+    }
+}
+
+.student-banner {
+    height: 150px;
+    background-color: #eee;
+    background-size: cover;
+    background-position: center;
+    border-radius: 12px 12px 0 0;
+}
+
+.student-profile-photo {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border: 4px solid #fff;
+    margin-top: -50px;
+    background-color: #fff;
+    object-fit: cover;
+}
