@@ -106,7 +106,7 @@
         <div class="portal-branding">
             <?php 
                 $logo = getSetting('site_logo');
-                if($logo && file_exists(APPROOT . '/' . $logo)) : 
+                if($logo && file_exists(APPROOT . '/public/' . $logo)) : 
             ?>
                 <img src="<?php echo URLROOT . '/' . $logo; ?>" alt="Logo">
             <?php endif; ?>

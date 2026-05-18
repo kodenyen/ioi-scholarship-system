@@ -5,7 +5,7 @@
             <div class="text-center mb-4">
                 <?php 
                     $logo = getSetting('site_logo');
-                    if($logo && file_exists(APPROOT . '/' . $logo)) : 
+                    if($logo && file_exists(APPROOT . '/public/' . $logo)) : 
                 ?>
                     <img src="<?php echo URLROOT . '/' . $logo; ?>" alt="Logo" class="mb-3" style="max-height: 80px; width: auto;">
                 <?php endif; ?>

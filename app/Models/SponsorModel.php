@@ -93,8 +93,8 @@ class SponsorModel {
         $this->db->execute();
 
         // Delete profile photo from disk
-        if(!empty($sponsor->profile_photo) && file_exists(APPROOT . '/' . $sponsor->profile_photo)) {
-            unlink(APPROOT . '/' . $sponsor->profile_photo);
+        if(!empty($sponsor->profile_photo) && file_exists(APPROOT . '/public/' . $sponsor->profile_photo)) {
+            unlink(APPROOT . '/public/' . $sponsor->profile_photo);
         }
 
         $this->db->query('DELETE FROM sponsors WHERE id = :id');

@@ -195,7 +195,7 @@ class Admin extends Controller {
             // Handle file upload
             if(!empty($_FILES['profile_photo']['name'])) {
                 $filename = time() . '_' . $_FILES['profile_photo']['name'];
-                $target_dir = APPROOT . '/uploads/sponsor_photos/';
+                $target_dir = APPROOT . '/public/uploads/sponsor_photos/';
                 $target_file = $target_dir . basename($filename);
                 if(move_uploaded_file($_FILES['profile_photo']['tmp_name'], $target_file)) {
                     $data['profile_photo'] = 'uploads/sponsor_photos/' . $filename;
@@ -248,11 +248,11 @@ class Admin extends Controller {
             // Handle file upload
             if(!empty($_FILES['profile_photo']['name'])) {
                 $filename = time() . '_' . $_FILES['profile_photo']['name'];
-                $target_dir = APPROOT . '/uploads/sponsor_photos/';
+                $target_dir = APPROOT . '/public/uploads/sponsor_photos/';
                 $target_file = $target_dir . basename($filename);
                 if(move_uploaded_file($_FILES['profile_photo']['tmp_name'], $target_file)) {
                     // Delete old photo
-                    if(!empty($sponsor->profile_photo) && file_exists(APPROOT . '/' . $sponsor->profile_photo)) {
+                    if(!empty($sponsor->profile_photo) && file_exists(APPROOT . '/public/' . $sponsor->profile_photo)) {
                         unlink(APPROOT . '/' . $sponsor->profile_photo);
                     }
                     $data['profile_photo'] = 'uploads/sponsor_photos/' . $filename;
@@ -364,7 +364,7 @@ class Admin extends Controller {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             if(!empty($_FILES['result_file']['name'])) {
                 $filename = time() . '_' . $_FILES['result_file']['name'];
-                $target_dir = APPROOT . '/uploads/results/';
+                $target_dir = APPROOT . '/public/uploads/results/';
                 if(!is_dir($target_dir)) mkdir($target_dir);
                 $target_file = $target_dir . basename($filename);
                 
@@ -388,7 +388,7 @@ class Admin extends Controller {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             if(!empty($_FILES['gallery_photo']['name'])) {
                 $filename = time() . '_' . $_FILES['gallery_photo']['name'];
-                $target_dir = APPROOT . '/uploads/gallery/';
+                $target_dir = APPROOT . '/public/uploads/gallery/';
                 if(!is_dir($target_dir)) mkdir($target_dir);
                 $target_file = $target_dir . basename($filename);
                 
@@ -417,7 +417,7 @@ class Admin extends Controller {
         $this->db->bind(':id', $upload_id);
         $file = $this->db->single();
 
-        if($file && file_exists(APPROOT . '/' . $file->file_path)) {
+        if($file && file_exists(APPROOT . '/public/' . $file->file_path)) {
             unlink(APPROOT . '/' . $file->file_path);
         }
 
@@ -477,7 +477,7 @@ class Admin extends Controller {
             // Handle file upload
             if(!empty($_FILES['profile_photo']['name'])) {
                 $filename = time() . '_' . $_FILES['profile_photo']['name'];
-                $target_dir = APPROOT . '/uploads/profile_photos/';
+                $target_dir = APPROOT . '/public/uploads/profile_photos/';
                 $target_file = $target_dir . basename($filename);
                 if(move_uploaded_file($_FILES['profile_photo']['tmp_name'], $target_file)) {
                     $data['profile_photo'] = 'uploads/profile_photos/' . $filename;
@@ -540,11 +540,11 @@ class Admin extends Controller {
             // Handle file upload
             if(!empty($_FILES['profile_photo']['name'])) {
                 $filename = time() . '_' . $_FILES['profile_photo']['name'];
-                $target_dir = APPROOT . '/uploads/profile_photos/';
+                $target_dir = APPROOT . '/public/uploads/profile_photos/';
                 $target_file = $target_dir . basename($filename);
                 if(move_uploaded_file($_FILES['profile_photo']['tmp_name'], $target_file)) {
                     // Delete old photo
-                    if(!empty($student->profile_photo) && file_exists(APPROOT . '/' . $student->profile_photo)) {
+                    if(!empty($student->profile_photo) && file_exists(APPROOT . '/public/' . $student->profile_photo)) {
                         unlink(APPROOT . '/' . $student->profile_photo);
                     }
                     $data['profile_photo'] = 'uploads/profile_photos/' . $filename;
@@ -684,14 +684,14 @@ class Admin extends Controller {
             // Handle logo upload
             if(!empty($_FILES['site_logo']['name'])) {
                 $filename = 'logo_' . time() . '_' . $_FILES['site_logo']['name'];
-                $target_dir = APPROOT . '/uploads/system/';
+                $target_dir = APPROOT . '/public/uploads/system/';
                 if(!is_dir($target_dir)) mkdir($target_dir, 0777, true);
                 $target_file = $target_dir . basename($filename);
                 
                 if(move_uploaded_file($_FILES['site_logo']['tmp_name'], $target_file)) {
                     // Delete old logo if exists
                     $oldLogo = getSetting('site_logo');
-                    if($oldLogo && file_exists(APPROOT . '/' . $oldLogo)) {
+                    if($oldLogo && file_exists(APPROOT . '/public/' . $oldLogo)) {
                         unlink(APPROOT . '/' . $oldLogo);
                     }
                     $this->adminModel->updateSetting('site_logo', 'uploads/system/' . $filename);
@@ -702,7 +702,7 @@ class Admin extends Controller {
             // Handle logo deletion
             if(isset($_POST['delete_logo'])) {
                 $oldLogo = getSetting('site_logo');
-                if($oldLogo && file_exists(APPROOT . '/' . $oldLogo)) {
+                if($oldLogo && file_exists(APPROOT . '/public/' . $oldLogo)) {
                     unlink(APPROOT . '/' . $oldLogo);
                 }
                 $this->adminModel->updateSetting('site_logo', '');

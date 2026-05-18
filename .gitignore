@@ -1,0 +1,20 @@
+# Ignore all user-uploaded files
+public/uploads/gallery/*
+public/uploads/profile_photos/*
+public/uploads/results/*
+public/uploads/sponsor_photos/*
+public/uploads/system/*
+
+# But keep the directories
+!public/uploads/gallery/.gitkeep
+!public/uploads/profile_photos/.gitkeep
+!public/uploads/results/.gitkeep
+!public/uploads/sponsor_photos/.gitkeep
+!public/uploads/system/.gitkeep
+
+# Ignore core OS/Environment files
+.env
+.DS_Store
+Thumbs.db
+node_modules/
+vendor/

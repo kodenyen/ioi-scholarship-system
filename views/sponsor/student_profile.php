@@ -402,7 +402,7 @@
             <div class="print-header">
                 <?php 
                     $logo = getSetting('site_logo');
-                    if($logo && file_exists(APPROOT . '/' . $logo)) : 
+                    if($logo && file_exists(APPROOT . '/public/' . $logo)) : 
                 ?>
                     <img src="<?php echo URLROOT . '/' . $logo; ?>" style="max-height: 60px; margin-bottom: 30px;">
                 <?php endif; ?>
@@ -616,7 +616,7 @@
                     <div class="d-flex flex-column align-items-center justify-content-center h-100">
                         <?php 
                             $logo = getSetting('site_logo');
-                            if($logo && file_exists(APPROOT . '/' . $logo)) : 
+                            if($logo && file_exists(APPROOT . '/public/' . $logo)) : 
                         ?>
                             <img src="<?php echo URLROOT . '/' . $logo; ?>" alt="Logo" style="max-height: 80px; max-width: 80%; object-fit: contain; opacity: 0.5; filter: grayscale(100%);">
                         <?php endif; ?>
@@ -627,7 +627,7 @@
                 <div class="page-back book-cover" style="border-radius: 10px 0 0 10px;">
                     <?php 
                         $logo = getSetting('site_logo');
-                        if($logo && file_exists(APPROOT . '/' . $logo)) : 
+                        if($logo && file_exists(APPROOT . '/public/' . $logo)) : 
                     ?>
                         <div class="mb-4 d-flex justify-content-center w-100">
                             <img src="<?php echo URLROOT . '/' . $logo; ?>" alt="Logo" style="max-height: 100px; max-width: 80%; object-fit: contain;">

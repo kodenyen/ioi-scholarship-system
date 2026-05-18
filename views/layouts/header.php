@@ -218,9 +218,9 @@
             <a class="navbar-brand" href="<?php echo URLROOT; ?>">
                 <?php 
                     $logo = getSetting('site_logo');
-                    if($logo && file_exists(APPROOT . '/' . $logo)) : 
-                ?>
-                    <img src="<?php echo URLROOT . '/' . $logo; ?>" alt="IOI Logo">
+                    if($logo && file_exists(APPROOT . '/public/' . $logo)) : 
+            ?>
+                <img src="<?php echo URLROOT . '/' . $logo; ?>" alt="IOI Logo">
                 <?php else : ?>
                     <span class="fw-800 fs-4 text-dark"><?php echo SITE_NAME; ?></span>
                 <?php endif; ?>
