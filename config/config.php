@@ -2,7 +2,7 @@
 
 define('DB_HOST', 'localhost');
 define('DB_NAME', 'u104465392_ioi_scholars');
-define('DB_USER', 'u104465392_messagedb');
+define('DB_USER', 'u104465392_messagdb');
 define('DB_PASS', 'IOImessage@20253#');
 
 define('SITE_NAME', 'IOI Scholarship');
