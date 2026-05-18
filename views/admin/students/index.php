@@ -32,7 +32,10 @@
     .data-meta { font-size: 0.85rem; color: #6c757d; margin-bottom: 1.2rem; display: flex; align-items: center; gap: 8px; }
     .badge-class { padding: 4px 10px; border-radius: 6px; background: #ebfbee; color: #2b8a3e; font-weight: 700; font-size: 0.7rem; text-transform: uppercase; }
     
-    .student-about { font-size: 0.85rem; color: #555; line-height: 1.6; margin-bottom: 1.5rem; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; min-height: 2.7rem; }
+    .student-about-container { position: relative; margin-bottom: 1.5rem; }
+    .student-about { font-size: 0.85rem; color: #555; line-height: 1.6; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; transition: all 0.3s ease; }
+    .student-about.expanded { -webkit-line-clamp: unset; display: block; }
+    .btn-read-more { font-size: 0.75rem; font-weight: 700; color: #005BFF; cursor: pointer; background: none; border: none; padding: 0; margin-top: 5px; text-transform: uppercase; }
     
     .link-box { background: #f8f9fa; border-radius: 12px; padding: 12px; margin-bottom: 1.5rem; border: 1px solid #eee; }
     .link-label { font-size: 0.65rem; font-weight: 700; color: #888; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; display: block; }
@@ -118,7 +121,12 @@
                             <span class="text-muted small">&bull; <?php echo $student->age; ?> Years Old</span>
                         </div>
                         
-                        <p class="student-about"><?php echo $student->about; ?></p>
+                        <div class="student-about-container">
+                            <p class="student-about" id="about-<?php echo $student->id; ?>"><?php echo $student->about; ?></p>
+                            <?php if(strlen($student->about) > 100) : ?>
+                                <button type="button" class="btn-read-more" onclick="toggleAbout(<?php echo $student->id; ?>)" id="btn-<?php echo $student->id; ?>">Read More</button>
+                            <?php endif; ?>
+                        </div>
 
                         <div class="link-box">
                             <span class="link-label">Student Portal Link</span>
@@ -178,6 +186,19 @@
 </div>
 
 <script>
+function toggleAbout(id) {
+    const aboutEl = document.getElementById('about-' + id);
+    const btnEl = document.getElementById('btn-' + id);
+    
+    if (aboutEl.classList.contains('expanded')) {
+        aboutEl.classList.remove('expanded');
+        btnEl.innerText = 'Read More';
+    } else {
+        aboutEl.classList.add('expanded');
+        btnEl.innerText = 'Show Less';
+    }
+}
+
 function copyStudentToken(id) {
     var copyText = document.getElementById("token-student-" + id);
     copyText.select();

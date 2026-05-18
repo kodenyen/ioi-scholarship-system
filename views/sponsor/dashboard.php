@@ -17,10 +17,14 @@
     
     .card-main-content { padding: 60px 24px 24px; }
     .student-name { font-weight: 700; font-size: 1.25rem; color: #001219; margin-bottom: 0.2rem; }
-    .student-class { font-size: 0.85rem; font-weight: 600; color: #2b9348; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 1.5rem; }
+    .student-class { font-size: 0.85rem; font-weight: 600; color: #2b9348; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.5rem; }
     
-    .btn-portal { background: #001219; color: white; border: none; border-radius: 12px; padding: 0.75rem; font-weight: 600; width: 100%; transition: all 0.3s; display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 10px; }
-    .btn-portal:hover { background: #005BFF; color: white; }
+    .student-about-preview { font-size: 0.8rem; color: #666; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; margin-bottom: 1.5rem; transition: all 0.3s; }
+    .student-about-preview.expanded { -webkit-line-clamp: unset; display: block; }
+    .btn-read-about { font-size: 0.7rem; font-weight: 800; color: #005BFF; cursor: pointer; background: none; border: none; padding: 0; margin-bottom: 1rem; text-transform: uppercase; display: block; }
+    
+    .btn-portal { background: #005BFF; color: white; border: none; border-radius: 12px; padding: 0.75rem; font-weight: 600; width: 100%; transition: all 0.3s; display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 10px; }
+    .btn-portal:hover { background: #0046cc; color: white; }
     .btn-msg { background: #e7f5ff; color: #005BFF; border: none; border-radius: 12px; padding: 0.75rem; font-weight: 600; width: 100%; transition: all 0.3s; display: flex; align-items: center; justify-content: center; gap: 8px; }
     .btn-msg:hover { background: #005BFF; color: white; }
     
@@ -44,7 +48,10 @@
 
     <div class="row g-4">
         <div class="col-lg-8">
-            <h5 class="fw-bold mb-4">Assigned Students</h5>
+            <h5 class="fw-bold mb-4 text-dark d-flex align-items-center gap-2">
+                <i class="fa-solid fa-graduation-cap text-primary"></i>
+                Assigned Students
+            </h5>
             <div class="row g-4">
                 <?php foreach($data['students'] as $student) : ?>
                     <div class="col-md-6 animate-up delay-1">
@@ -64,6 +71,13 @@
                                 <div class="student-name"><?php echo $student->first_name . ' ' . $student->surname; ?></div>
                                 <div class="student-class"><?php echo $student->class; ?> Scholar</div>
                                 
+                                <div class="student-about-preview" id="about-<?php echo $student->id; ?>">
+                                    <?php echo $student->about; ?>
+                                </div>
+                                <?php if(strlen($student->about) > 80) : ?>
+                                    <button class="btn-read-about" onclick="toggleStudentAbout(<?php echo $student->id; ?>)" id="btn-<?php echo $student->id; ?>">Read Bio</button>
+                                <?php endif; ?>
+                                
                                 <a href="<?php echo URLROOT; ?>/sponsor/student_profile/<?php echo $student->id; ?>?token=<?php echo $_GET['token']; ?>" class="btn-portal">
                                     <i class="fa-solid fa-book-open"></i> View Portfolio
                                 </a>
@@ -78,36 +92,66 @@
         </div>
 
         <div class="col-lg-4">
-            <div class="history-card animate-up delay-2">
-                <div class="history-header">
-                    <i class="fa-solid fa-clock-rotate-left text-primary"></i>
-                    Message History
-                </div>
-                
+            <h5 class="fw-bold mb-4 text-dark d-flex align-items-center gap-2">
+                <i class="fa-solid fa-clock-rotate-left text-primary"></i>
+                Message History
+            </h5>
+        <div class="history-card animate-up delay-2">
                 <?php if(empty($data['messages'])) : ?>
                     <div class="text-center py-4">
                         <p class="text-muted small">No message yet.</p>
                     </div>
-                <?php endif; ?>
-
-                <?php foreach($data['messages'] as $message) : ?>
-                    <div class="msg-item">
-                        <div class="msg-meta">
-                            <?php if($message->sender_type == 'sponsor') : ?>
-                                <span class="msg-tag tag-sent">Sent to <?php echo explode(' ', $message->receiver_name)[0]; ?></span>
-                            <?php else : ?>
-                                <span class="msg-tag tag-from">From <?php echo explode(' ', $message->sender_name)[0]; ?></span>
-                            <?php endif; ?>
-                            <small class="text-muted" style="font-size: 0.7rem;"><?php echo date('M d', strtotime($message->created_at)); ?></small>
-                        </div>
-                        <p class="m-0 small text-dark" style="line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
-                            <?php echo $message->content; ?>
-                        </p>
+                <?php else : ?>
+                    <div id="message-container">
+                        <?php foreach($data['messages'] as $index => $message) : ?>
+                            <div class="msg-item <?php echo $index >= 5 ? 'd-none hidden-msg' : ''; ?>">
+                                <div class="msg-meta">
+                                    <?php if($message->sender_type == 'sponsor') : ?>
+                                        <span class="msg-tag tag-sent">Sent to <?php echo explode(' ', $message->receiver_name)[0]; ?></span>
+                                    <?php else : ?>
+                                        <span class="msg-tag tag-from">From <?php echo explode(' ', $message->sender_name)[0]; ?></span>
+                                    <?php endif; ?>
+                                    <small class="text-muted" style="font-size: 0.7rem;"><?php echo date('M d', strtotime($message->created_at)); ?></small>
+                                </div>
+                                <p class="m-0 small text-dark" style="line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
+                                    <?php echo $message->content; ?>
+                                </p>
+                            </div>
+                        <?php endforeach; ?>
                     </div>
-                <?php endforeach; ?>
+
+                    <?php if(count($data['messages']) > 5) : ?>
+                        <div class="text-center mt-3">
+                            <button id="btn-view-more" class="btn btn-link btn-sm text-primary fw-bold text-decoration-none">
+                                <i class="fa-solid fa-chevron-down me-1"></i> View More
+                            </button>
+                        </div>
+                        <script>
+                            document.getElementById('btn-view-more').addEventListener('click', function() {
+                                const hiddenMsgs = document.querySelectorAll('.hidden-msg');
+                                hiddenMsgs.forEach(msg => msg.classList.remove('d-none'));
+                                this.parentElement.remove();
+                            });
+                        </script>
+                    <?php endif; ?>
+                <?php endif; ?>
             </div>
         </div>
     </div>
 </div>
 
 <?php require APPROOT . '/views/layouts/footer.php'; ?>
+<script>
+function toggleStudentAbout(id) {
+    const aboutEl = document.getElementById('about-' + id);
+    const btnEl = document.getElementById('btn-' + id);
+    
+    if (aboutEl.classList.contains('expanded')) {
+        aboutEl.classList.remove('expanded');
+        btnEl.innerText = 'Read Bio';
+    } else {
+        aboutEl.classList.add('expanded');
+        btnEl.innerText = 'Show Less';
+    }
+}
+</script>

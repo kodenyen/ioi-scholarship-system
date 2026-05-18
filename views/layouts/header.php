@@ -279,7 +279,39 @@
                     <?php endforeach; ?>
 
                     <!-- USER ACTIONS (LOGIN/LOGOUT) -->
-                    <?php if(isset($_SESSION['admin_id'])) : ?>
+                    <?php 
+                        $url = $_SERVER['REQUEST_URI'];
+                        $isStudentPath = (strpos($url, '/student') !== false);
+                        $isSponsorPath = (strpos($url, '/sponsor') !== false);
+                        $isAdminPath = (strpos($url, '/admin') !== false);
+                    ?>
+
+                    <?php if($isStudentPath && isset($_SESSION['student_id'])) : ?>
+                        <li class="nav-item dropdown ms-lg-3">
+                            <a class="nav-link dropdown-toggle bg-light rounded-pill px-3" href="#" data-bs-toggle="dropdown">
+                                <i class="fa-solid fa-graduation-cap text-primary me-1"></i> Student
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><a class="dropdown-item" href="<?php echo URLROOT; ?>/student/dashboard">Dashboard</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item text-danger" href="<?php echo URLROOT; ?>/student/logout">Logout</a></li>
+                            </ul>
+                        </li>
+                    <?php elseif($isSponsorPath && isset($_SESSION['sponsor_id'])) : ?>
+                        <li class="nav-item dropdown ms-lg-3">
+                            <a class="nav-link dropdown-toggle bg-light rounded-pill px-3" href="#" data-bs-toggle="dropdown">
+                                <i class="fa-solid fa-hand-holding-heart text-primary me-1"></i> Sponsor
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li>
+                                    <?php $token = isset($_GET['token']) ? $_GET['token'] : ''; ?>
+                                    <a class="dropdown-item" href="<?php echo URLROOT; ?>/sponsor/dashboard<?php echo $token ? '?token='.$token : ''; ?>">Dashboard</a>
+                                </li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item text-danger" href="<?php echo URLROOT; ?>/sponsor/logout">Logout</a></li>
+                            </ul>
+                        </li>
+                    <?php elseif(isset($_SESSION['admin_id'])) : ?>
                         <li class="nav-item dropdown ms-lg-3">
                             <a class="nav-link dropdown-toggle bg-light rounded-pill px-3" href="#" data-bs-toggle="dropdown">
                                 <i class="fa-solid fa-user-shield text-primary me-1"></i> Admin
@@ -292,6 +324,7 @@
                             </ul>
                         </li>
                     <?php elseif(isset($_SESSION['sponsor_id'])) : ?>
+                        <!-- Fallback for sponsor if not on sponsor path -->
                         <li class="nav-item dropdown ms-lg-3">
                             <a class="nav-link dropdown-toggle bg-light rounded-pill px-3" href="#" data-bs-toggle="dropdown">
                                 <i class="fa-solid fa-hand-holding-heart text-primary me-1"></i> Sponsor
@@ -303,6 +336,7 @@
                             </ul>
                         </li>
                     <?php elseif(isset($_SESSION['student_id'])) : ?>
+                        <!-- Fallback for student if not on student path -->
                         <li class="nav-item dropdown ms-lg-3">
                             <a class="nav-link dropdown-toggle bg-light rounded-pill px-3" href="#" data-bs-toggle="dropdown">
                                 <i class="fa-solid fa-graduation-cap text-primary me-1"></i> Student
