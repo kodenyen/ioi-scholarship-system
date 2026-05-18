@@ -104,20 +104,30 @@
     transition: transform 1s;
 }
 
-/* 3D Stacking Effect (Right side pages) */
-.book::after {
+/* 3D Stacking Effect replaced by real base */
+.book-base {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--page-bg);
+    border-radius: 0 5px 5px 0;
+    z-index: 0;
+    box-shadow: 10px 10px 20px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--page-border);
+}
+
+.book-base::after {
     content: '';
     position: absolute;
-    top: 5px;
-    right: -10px;
-    width: 100%;
-    height: calc(100% - 10px);
-    background: repeating-linear-gradient(90deg, var(--page-bg), var(--page-bg) 2px, var(--page-border) 3px);
-    border: 1px solid #ccc;
-    border-radius: 0 5px 5px 0;
-    z-index: -1;
-    transform: translateZ(-20px);
-    box-shadow: 10px 10px 20px rgba(0,0,0,0.1);
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(0,0,0,0.03) 3px);
+    pointer-events: none;
 }
 
 /* Spine */
@@ -324,116 +334,150 @@
     <div id="printable-profile" class="print-only">
         <style>
             @media print {
-                .print-only { display: block !important; }
-                .page-break { page-break-before: always; }
-                body { background: white !important; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+                .print-only { display: block !important; visibility: visible !important; }
+                .page-break { page-break-before: always; clear: both; display: block; height: 1px; }
+                body { background: white !important; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 0; margin: 0; }
+                @page { margin: 2cm; size: A4; }
+                .no-print { display: none !important; }
             }
+            .print-container { width: 100%; max-width: 800px; margin: 0 auto; color: #333; }
             .print-header {
                 text-align: center;
-                border-bottom: 3px solid var(--book-cover-color);
-                padding-bottom: 20px;
+                border-bottom: 4px solid var(--book-cover-color);
+                padding-bottom: 30px;
                 margin-bottom: 40px;
             }
             .print-section {
-                margin-bottom: 30px;
+                margin-bottom: 40px;
+                page-break-inside: avoid;
             }
             .print-section h3 {
                 color: var(--book-cover-color);
-                border-bottom: 1px solid #eee;
-                padding-bottom: 10px;
+                border-bottom: 2px solid #f0f0f0;
+                padding-bottom: 12px;
                 text-transform: uppercase;
-                font-size: 1.2rem;
+                font-size: 1.4rem;
+                font-weight: 800;
+                margin-bottom: 20px;
             }
             .print-grid {
-                display: grid;
-                grid-template-columns: repeat(2, 1fr);
+                display: flex;
+                flex-wrap: wrap;
                 gap: 20px;
                 margin-top: 20px;
             }
+            .print-photo-wrapper {
+                width: calc(50% - 10px);
+                margin-bottom: 20px;
+                page-break-inside: avoid;
+            }
             .print-photo {
                 width: 100%;
-                height: 250px;
+                height: 280px;
                 object-fit: cover;
-                border-radius: 10px;
-                border: 1px solid #ddd;
+                border-radius: 12px;
+                border: 1px solid #eee;
+                box-shadow: 0 4px 10px rgba(0,0,0,0.05);
             }
             .print-badge {
                 display: inline-block;
-                padding: 5px 15px;
-                background: #f0f0f0;
-                border-radius: 20px;
-                font-size: 0.9rem;
-                margin-right: 10px;
+                padding: 6px 18px;
+                background: #f8f9fa;
+                border-radius: 30px;
+                font-size: 0.95rem;
+                font-weight: 600;
+                margin: 5px;
+                border: 1px solid #eee;
+            }
+            .story-content {
+                line-height: 1.8;
+                font-size: 1.15rem;
+                color: #444;
+                text-align: justify;
             }
         </style>
 
-        <!-- PAGE 1: COVER & BIO -->
-        <div class="print-header">
-            <img src="<?php echo !empty($data['student']->profile_photo) ? URLROOT . '/' . $data['student']->profile_photo : ''; ?>" style="width: 150px; height: 150px; border-radius: 50%; border: 5px solid #eee; margin-bottom: 20px;">
-            <h1 style="margin: 0; font-size: 2.5rem;"><?php echo $data['student']->first_name . ' ' . $data['student']->surname; ?></h1>
-            <p style="font-size: 1.2rem; color: #666;">Official Your Student Portfolio | Heaven of Hope Academy</p>
-            <div style="margin-top: 20px;">
-                <span class="print-badge"><strong>Class:</strong> <?php echo $data['student']->class; ?></span>
-                <span class="print-badge"><strong>Age:</strong> <?php echo $data['student']->age; ?> Years</span>
-                <span class="print-badge"><strong>ID:</strong> SCH-<?php echo str_pad($data['student']->id, 4, '0', STR_PAD_LEFT); ?></span>
+        <div class="print-container">
+            <!-- PAGE 1: COVER & BIO -->
+            <div class="print-header">
+                <?php 
+                    $logo = getSetting('site_logo');
+                    if($logo && file_exists(APPROOT . '/' . $logo)) : 
+                ?>
+                    <img src="<?php echo URLROOT . '/' . $logo; ?>" style="max-height: 60px; margin-bottom: 30px;">
+                <?php endif; ?>
+                
+                <div style="margin-bottom: 30px;">
+                    <img src="<?php echo !empty($data['student']->profile_photo) ? URLROOT . '/' . $data['student']->profile_photo : ''; ?>" style="width: 180px; height: 180px; border-radius: 50%; border: 8px solid #f8f9fa; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
+                </div>
+                
+                <h1 style="margin: 0; font-size: 3rem; font-weight: 900; color: #001219;"><?php echo $data['student']->first_name . ' ' . $data['student']->surname; ?></h1>
+                <p style="font-size: 1.3rem; color: #666; margin-top: 10px;">Official Student Portfolio | Heaven of Hope Academy</p>
+                
+                <div style="margin-top: 30px;">
+                    <span class="print-badge">Class: <?php echo $data['student']->class; ?></span>
+                    <span class="print-badge">Age: <?php echo $data['student']->age; ?> Years</span>
+                    <span class="print-badge">ID: SCH-<?php echo str_pad($data['student']->id, 4, '0', STR_PAD_LEFT); ?></span>
+                </div>
             </div>
-        </div>
 
-        <div class="print-section">
-            <h3>My Story</h3>
-            <p style="line-height: 1.8; font-size: 1.1rem;"><?php echo nl2br($data['student']->about); ?></p>
-        </div>
-
-        <div class="print-section">
-            <h3>Educational Goals</h3>
-            <p style="line-height: 1.8; font-size: 1.1rem;"><?php echo nl2br($data['student']->educational_goals); ?></p>
-        </div>
-
-        <!-- PAGE 2: FAITH & GALLERY -->
-        <div class="page-break"></div>
-        <div class="print-section">
-            <h3>Faith & Prayer</h3>
-            <div style="background: #fdf6e3; padding: 25px; border-left: 5px solid #b58900; margin-bottom: 20px;">
-                <h4 style="margin-top: 0; color: #b58900;">Memory Verse</h4>
-                <p style="font-style: italic; font-size: 1.2rem;">"<?php echo $data['student']->memory_verse; ?>"</p>
-            </div>
-            <div style="background: #e1f5fe; padding: 25px; border-radius: 10px; border: 1px dashed #039be5;">
-                <h4 style="margin-top: 0; color: #039be5;">Prayer Needs</h4>
-                <p><?php echo nl2br($data['student']->prayer_needs); ?></p>
-            </div>
-        </div>
-
-        <div class="print-section">
-            <h3>Photo Gallery</h3>
-            <div class="print-grid">
-                <?php foreach($data['gallery'] as $photo) : ?>
-                    <div>
-                        <img src="<?php echo URLROOT . '/' . $photo->photo_path; ?>" class="print-photo">
-                        <?php if(!empty($photo->caption)) : ?>
-                            <p style="font-size: 0.8rem; text-align: center; color: #666; margin-top: 5px;"><?php echo $photo->caption; ?></p>
-                        <?php endif; ?>
-                    </div>
-                <?php endforeach; ?>
-            </div>
-        </div>
-
-        <!-- PAGE 3: OFFICIAL RESULTS -->
-        <?php if(!empty($data['uploads'])) : ?>
-            <div class="page-break"></div>
             <div class="print-section">
-                <h3>Official Results & Certificates</h3>
-                <?php foreach($data['uploads'] as $up) : ?>
-                    <div style="margin-bottom: 30px; text-align: center;">
-                        <h4 style="text-align: left; border-bottom: 1px solid #eee; padding-bottom: 5px;"><?php echo $up->file_name; ?></h4>
-                        <img src="<?php echo URLROOT . '/' . $up->file_path; ?>" style="max-width: 100%; border: 1px solid #ddd; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
-                    </div>
-                <?php endforeach; ?>
+                <h3>My Story</h3>
+                <div class="story-content"><?php echo nl2br($data['student']->about); ?></div>
             </div>
-        <?php endif; ?>
 
-        <div style="margin-top: 50px; text-align: center; color: #999; border-top: 1px solid #eee; padding-top: 20px;">
-            <p>Thank you for your support. Together we are changing lives.</p>
-            <p style="font-size: 0.8rem;">Generated on <?php echo date('M d, Y'); ?> | IOI Global Scholarship Program</p>
+            <div class="print-section">
+                <h3>Educational Goals</h3>
+                <div class="story-content"><?php echo nl2br($data['student']->educational_goals); ?></div>
+            </div>
+
+            <!-- PAGE 2: FAITH & GALLERY -->
+            <div class="page-break"></div>
+            
+            <div class="print-section">
+                <h3>Faith & Prayer</h3>
+                <div style="background: #fdfdf5; padding: 30px; border-left: 6px solid var(--brand-green); border-radius: 0 15px 15px 0; margin-bottom: 25px; border: 1px solid #f0f0e0;">
+                    <h4 style="margin-top: 0; color: var(--brand-green); text-transform: uppercase; font-size: 0.9rem; letter-spacing: 1px;">Favorite Memory Verse</h4>
+                    <p style="font-style: italic; font-size: 1.4rem; color: #333; margin: 15px 0 0;">"<?php echo $data['student']->memory_verse; ?>"</p>
+                </div>
+                <div style="background: #f0f7ff; padding: 30px; border-radius: 20px; border: 2px dashed #005BFF;">
+                    <h4 style="margin-top: 0; color: #005BFF; text-transform: uppercase; font-size: 0.9rem; letter-spacing: 1px;">Current Prayer Needs</h4>
+                    <p style="font-size: 1.1rem; color: #333; margin: 15px 0 0;"><?php echo nl2br($data['student']->prayer_needs); ?></p>
+                </div>
+            </div>
+
+            <div class="print-section">
+                <h3>Photo Gallery</h3>
+                <div class="print-grid">
+                    <?php foreach($data['gallery'] as $photo) : ?>
+                        <div class="print-photo-wrapper">
+                            <img src="<?php echo URLROOT . '/' . $photo->photo_path; ?>" class="print-photo">
+                            <?php if(!empty($photo->caption)) : ?>
+                                <p style="font-size: 0.9rem; text-align: center; color: #666; margin-top: 10px; font-weight: 600;"><?php echo $photo->caption; ?></p>
+                            <?php endif; ?>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+
+            <!-- PAGE 3: OFFICIAL RESULTS -->
+            <?php if(!empty($data['uploads'])) : ?>
+                <div class="page-break"></div>
+                <div class="print-section">
+                    <h3>Official Results & Certificates</h3>
+                    <?php foreach($data['uploads'] as $up) : ?>
+                        <div style="margin-bottom: 40px; text-align: center; page-break-inside: avoid;">
+                            <h4 style="text-align: left; background: #f8f9fa; padding: 10px 20px; border-radius: 8px; border-left: 4px solid #001219;"><?php echo $up->file_name; ?></h4>
+                            <img src="<?php echo URLROOT . '/' . $up->file_path; ?>" style="max-width: 100%; border: 2px solid #eee; border-radius: 10px; margin-top: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.05);">
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            <?php endif; ?>
+
+            <div style="margin-top: 60px; text-align: center; color: #aaa; border-top: 1px solid #eee; padding-top: 30px; page-break-inside: avoid;">
+                <p style="font-weight: 600;">Thank you for your support. Together we are changing lives.</p>
+                <p style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px;">Generated on <?php echo date('M d, Y'); ?> | IOI Global Scholarship Program</p>
+            </div>
         </div>
     </div>
 
@@ -539,7 +583,7 @@
                 </div>
             </div>
 
-            <!-- PAGE 5: RESULTS & END -->
+            <!-- PAGE 5: RESULTS -->
             <div class="page" id="page5" style="z-index: 6;" onclick="flipPage(5)">
                 <div class="page-front">
                     <div class="page-title">Official Results</div>
@@ -556,6 +600,29 @@
                         <?php endif; ?>
                     </div>
                     <div class="page-number">8</div>
+                </div>
+                <div class="page-back">
+                    <!-- Blank dummy page -->
+                    <div class="d-flex align-items-center justify-content-center h-100 opacity-25">
+                        <i class="fa-solid fa-book-open-reader fa-3x"></i>
+                    </div>
+                    <div class="page-number">9</div>
+                </div>
+            </div>
+
+            <!-- PAGE 6: DUMMY LOGO & BACK COVER -->
+            <div class="page" id="page6" style="z-index: 5;" onclick="flipPage(6)">
+                <div class="page-front">
+                    <div class="d-flex flex-column align-items-center justify-content-center h-100">
+                        <?php 
+                            $logo = getSetting('site_logo');
+                            if($logo && file_exists(APPROOT . '/' . $logo)) : 
+                        ?>
+                            <img src="<?php echo URLROOT . '/' . $logo; ?>" alt="Logo" style="max-height: 80px; max-width: 80%; object-fit: contain; opacity: 0.5; filter: grayscale(100%);">
+                        <?php endif; ?>
+                        <p class="text-muted small mt-3">Empowering the next generation.</p>
+                    </div>
+                    <div class="page-number">10</div>
                 </div>
                 <div class="page-back book-cover" style="border-radius: 10px 0 0 10px;">
                     <?php 
@@ -586,7 +653,7 @@
 <script>
 const sound = document.getElementById('pageFlipSound');
 const viewport = document.getElementById('viewport');
-const totalPages = 5;
+const totalPages = 6;
 
 function flipPage(pageNum) {
     const page = document.getElementById('page' + pageNum);
