@@ -1,0 +1,62 @@
+i want the header MENU to be a responsive /navigation bar  that closely matches the provided design with the following specifications:
+
+-Top Info Bar
+Full-width thin bar at the very top
+Background: green gradient (left → right slightly darker green)
+Left text:
+“Mentoring Leaders to Mobilize Churches for Mercy Mission”
+White font, small size
+Right side:
+Phone icon + number: +1 832 930 7166
+Email icon + contact@irelandoutreach.org
+Align right horizontally
+White text
+Main Navigation Bar
+Background: white
+Height: medium (not too tall)
+Left side:
+Logo image
+
+
+Create horizontal menu items:
+
+*HOME (active – green text with underline)
+*ABOUT US (dropdown arrow): 
+      ABOUT IOI
+      MISSION EXPOSURE
+      STATEMENT OF FAITH
+      HEADQUARTERS
+*MINISTRIES (c)
+           UNITED STATE(dropdown:BES-BIBLETIMES,PRINT MEDIA
+           IRELAND
+           NIGERIA(drop down:THADDEUS SCHOLARSHIP)
+           GHANA
+           LIBERIA
+*IOI UPDATES (dropdown arrow)
+            MINISTRY UPDATE
+            MISSION  EXPOSURE
+            PROJECTS
+            GALLARY
+            
+*CONTACT US
+
+-Donate Button
+Positioned at far right
+Blue rounded button
+Text: DONATE
+White text color
+Slight padding and modern look
+
+-Styling Details:
+Green active underline under “HOME”
+Hover effects (menu items turn green)
+Proper spacing and alignment
+Menu should be fully responsive
+Collapse into hamburger menu on mobile
+
+NOTE: I WANT ADMIN TO BE ABLE TO SET AND EDIT THE HEADER AND THE MENU ITEM AND SUBMENU ARRANGEMENT IN ADMIN SETTING.
+
+Extras
+Use Font Awesome icons for phone and email
+Ensure clean spacing and professional church/NGO feel
+Keep layout pixel-close to a modern NGO website header

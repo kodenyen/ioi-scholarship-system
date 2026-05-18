@@ -1,8 +1,17 @@
 <?php require APPROOT . '/views/layouts/header.php'; ?>
 <div class="row">
     <div class="col-md-6 mx-auto">
-        <div class="card card-body bg-white mt-5 shadow-sm">
-            <h2 class="text-center mb-4">Admin Login</h2>
+        <div class="card card-body bg-white mt-5 shadow-sm border-0 rounded-4 p-5">
+            <div class="text-center mb-4">
+                <?php 
+                    $logo = getSetting('site_logo');
+                    if($logo && file_exists(APPROOT . '/' . $logo)) : 
+                ?>
+                    <img src="<?php echo URLROOT . '/' . $logo; ?>" alt="Logo" class="mb-3" style="max-height: 80px; width: auto;">
+                <?php endif; ?>
+                <h2 class="fw-bold">Admin Login</h2>
+                <p class="text-muted small">Please enter your credentials to manage the platform.</p>
+            </div>
             <form action="<?php echo URLROOT; ?>/admin/login" method="post">
                 <div class="mb-3">
                     <label for="email" class="form-label">Email Address: <sup>*</sup></label>
@@ -15,7 +24,7 @@
                     <span class="invalid-feedback"><?php echo $data['password_err']; ?></span>
                 </div>
                 <div class="d-grid mt-4">
-                    <button type="submit" class="btn btn-primary btn-lg">Login</button>
+                    <button type="submit" class="btn btn-primary btn-lg" style="background-color: #005BFF !important; border-color: #005BFF !important;">Login</button>
                 </div>
             </form>
         </div>

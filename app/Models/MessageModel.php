@@ -67,7 +67,11 @@ class MessageModel {
                           CASE 
                             WHEN m.sender_type = "sponsor" THEN (SELECT name FROM sponsors WHERE id = m.sender_id)
                             WHEN m.sender_type = "student" THEN (SELECT CONCAT(first_name, " ", surname) FROM students WHERE id = m.sender_id)
-                          END as sender_name
+                          END as sender_name,
+                          CASE 
+                            WHEN m.sender_type = "sponsor" THEN (SELECT CONCAT(first_name, " ", surname) FROM students WHERE id = m.receiver_id)
+                            WHEN m.sender_type = "student" THEN (SELECT name FROM sponsors WHERE id = m.receiver_id)
+                          END as receiver_name
                           FROM messages m 
                           WHERE status = "approved" 
                           AND ((sender_type = :type AND sender_id = :id) OR (sender_type != :type AND receiver_id = :id))
@@ -75,5 +79,24 @@ class MessageModel {
         $this->db->bind(':type', $type);
         $this->db->bind(':id', $id);
         return $this->db->resultSet();
+    }
+
+    public function getMessageById($id) {
+        $this->db->query('SELECT m.*, 
+                          CASE 
+                            WHEN m.sender_type = "sponsor" THEN (SELECT name FROM sponsors WHERE id = m.sender_id)
+                            WHEN m.sender_type = "student" THEN (SELECT CONCAT(first_name, " ", surname) FROM students WHERE id = m.sender_id)
+                          END as sender_name,
+                          CASE 
+                            WHEN m.sender_type = "sponsor" THEN (SELECT email FROM students WHERE id = m.receiver_id)
+                            WHEN m.sender_type = "student" THEN (SELECT email FROM sponsors WHERE id = m.receiver_id)
+                          END as receiver_email,
+                          CASE 
+                            WHEN m.sender_type = "sponsor" THEN (SELECT CONCAT(first_name, " ", surname) FROM students WHERE id = m.receiver_id)
+                            WHEN m.sender_type = "student" THEN (SELECT name FROM sponsors WHERE id = m.receiver_id)
+                          END as receiver_name
+                          FROM messages m WHERE m.id = :id');
+        $this->db->bind(':id', $id);
+        return $this->db->single();
     }
 }

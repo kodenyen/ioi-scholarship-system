@@ -6,7 +6,7 @@ define('DB_USER', 'root');
 define('DB_PASS', '');
 
 define('SITE_NAME', 'IOI Scholarship');
-define('URLROOT', 'http://localhost/sponsor_student'); 
+define('URLROOT', 'http://localhost:8000'); 
 define('APPROOT', dirname(dirname(__FILE__)));
 
 // SMTP Config (for Hostinger)

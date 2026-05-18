@@ -1,55 +1,114 @@
 <?php require APPROOT . '/views/layouts/header.php'; ?>
-<div class="row">
-    <div class="col-md-4">
-        <!-- Profile Card -->
-        <div class="card shadow-sm mb-4">
-            <div class="student-banner" style="background-image: linear-gradient(135deg, #005BFF 0%, #4FA242 100%);"></div>
-            <div class="card-body text-center pt-0">
-                <div class="bg-primary text-white student-profile-photo d-flex align-items-center justify-content-center mx-auto" style="font-size: 2rem; font-weight: bold;">
-                    <?php echo substr($data['student']->first_name, 0, 1) . substr($data['student']->surname, 0, 1); ?>
-                </div>
-                <h5 class="mt-2"><?php echo $data['student']->first_name . ' ' . $data['student']->surname; ?></h5>
-                <p class="small text-muted mb-2"><?php echo $data['student']->class; ?></p>
-                <div class="d-flex justify-content-center gap-2 mb-3">
-                    <span class="badge bg-light text-primary border"><?php echo $data['student']->age; ?> Years</span>
-                    <span class="badge bg-light text-success border">Active Student</span>
-                </div>
-            </div>
-            <div class="card-body border-top">
-                <h6>About Me</h6>
-                <p class="small text-muted"><?php echo $data['student']->about; ?></p>
-                <hr>
-                <h6>Contact Info</h6>
-                <p class="small text-muted mb-0"><?php echo $data['student']->email; ?></p>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-8">
-        <h3>My Messages</h3>
-        <?php flash('student_message'); ?>
-        <div class="list-group">
-            <?php if(empty($data['messages'])) : ?>
-                <div class="alert alert-light border shadow-sm">No approved messages yet. All communication is moderated by admin.</div>
-            <?php endif; ?>
-            
-            <?php foreach($data['messages'] as $message) : ?>
-                <div class="card shadow-sm mb-3">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between mb-2">
-                            <h6 class="text-primary mb-0">From: <?php echo $message->sender_name; ?></h6>
-                            <small class="text-muted"><?php echo date('M d, Y', strtotime($message->created_at)); ?></small>
-                        </div>
-                        <p class="mb-3"><?php echo nl2br($message->content); ?></p>
-                        
-                        <?php if($message->sender_type == 'sponsor') : ?>
-                            <div class="d-grid d-md-flex justify-content-md-end">
-                                <a href="<?php echo URLROOT; ?>/student/reply/<?php echo $message->sender_id; ?>" class="btn btn-outline-primary btn-sm">Reply</a>
+
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+    body { background-color: #f0f2f5; font-family: 'Plus Jakarta Sans', sans-serif; }
+    .profile-card { background: white; border: none; border-radius: 24px; box-shadow: 0 8px 30px rgba(0,0,0,0.05); overflow: hidden; border: 1px solid rgba(0,0,0,0.02); }
+    .profile-banner { height: 120px; background: linear-gradient(135deg, #005BFF 0%, #2b9348 100%); }
+    .profile-avatar-wrapper { width: 120px; height: 120px; border-radius: 30px; background: white; padding: 6px; margin: -60px auto 1rem; box-shadow: 0 12px 25px rgba(0,0,0,0.1); }
+    .profile-avatar-img { width: 100%; height: 100%; border-radius: 24px; object-fit: cover; }
+    .profile-avatar-placeholder { width: 100%; height: 100%; border-radius: 24px; background: #f8f9fa; color: #005BFF; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; font-weight: 800; }
+    
+    .status-pill { padding: 6px 15px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; background: #ebfbee; color: #2b8a3e; display: inline-block; margin-bottom: 1.5rem; }
+    
+    .info-section { padding: 1.5rem; border-top: 1px solid #f0f0f0; }
+    .info-label { font-size: 0.7rem; font-weight: 700; color: #888; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.5rem; display: block; }
+    
+    .sponsor-mini-card { display: flex; align-items: center; gap: 12px; padding: 10px; border-radius: 12px; background: #f8f9fa; margin-bottom: 10px; border: 1px solid transparent; transition: all 0.2s; }
+    .sponsor-mini-card:hover { border-color: #005BFF; background: white; }
+    .sponsor-mini-avatar { width: 35px; height: 35px; border-radius: 8px; background: #e7f5ff; color: #005BFF; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.8rem; }
+    
+    .message-bubble { background: white; border-radius: 20px; padding: 1.5rem; box-shadow: 0 4px 15px rgba(0,0,0,0.03); margin-bottom: 1.5rem; border: 1px solid rgba(0,0,0,0.01); position: relative; }
+    .message-bubble.from-sponsor { border-left: 5px solid #005BFF; }
+    .message-bubble.to-sponsor { border-left: 5px solid #2b9348; }
+    .msg-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; }
+    
+    .btn-reply { background: #005BFF; color: white; border: none; border-radius: 10px; padding: 6px 15px; font-size: 0.8rem; font-weight: 600; transition: all 0.2s; display: inline-flex; align-items: center; gap: 6px; }
+    .btn-reply:hover { background: #2b9348; color: white; transform: translateY(-1px); }
+</style>
+
+<div class="container py-4">
+    <div class="row g-4">
+        <div class="col-lg-4 animate-up">
+            <div class="profile-card">
+                <div class="profile-banner"></div>
+                <div class="card-body text-center p-4">
+                    <div class="profile-avatar-wrapper">
+                        <?php if(!empty($data['student']->profile_photo)) : ?>
+                            <img src="<?php echo URLROOT . '/' . $data['student']->profile_photo; ?>" alt="Me" class="profile-avatar-img">
+                        <?php else : ?>
+                            <div class="profile-avatar-placeholder">
+                                <?php echo substr($data['student']->first_name, 0, 1); ?>
                             </div>
                         <?php endif; ?>
                     </div>
+                    <h4 class="fw-bold mb-1"><?php echo $data['student']->first_name . ' ' . $data['student']->surname; ?></h4>
+                    <p class="text-muted small mb-3"><?php echo $data['student']->class; ?> Student &bull; <?php echo $data['student']->age; ?> Years</p>
+                    <div class="status-pill">Active Scholar</div>
+                    
+                    <div class="text-start info-section">
+                        <span class="info-label">My Sponsors</span>
+                        <?php if(!empty($data['sponsors'])) : ?>
+                            <?php foreach($data['sponsors'] as $sponsor) : ?>
+                                <div class="sponsor-mini-card">
+                                    <div class="sponsor-mini-avatar"><?php echo substr($sponsor->name, 0, 1); ?></div>
+                                    <div class="flex-grow-1">
+                                        <div class="fw-bold small"><?php echo $sponsor->name; ?></div>
+                                    </div>
+                                    <a href="<?php echo URLROOT; ?>/student/send_message/<?php echo $sponsor->id; ?>" class="btn-reply">
+                                        <i class="fa-solid fa-paper-plane small"></i> Message
+                                    </a>
+                                </div>
+                            <?php endforeach; ?>
+                        <?php else : ?>
+                            <p class="text-muted small">No sponsors assigned yet.</p>
+                        <?php endif; ?>
+                    </div>
+
+                    <div class="text-start info-section">
+                        <span class="info-label">About Me</span>
+                        <p class="small text-dark m-0" style="line-height: 1.6;"><?php echo $data['student']->about; ?></p>
+                    </div>
                 </div>
-            <?php endforeach; ?>
+            </div>
+        </div>
+
+        <div class="col-lg-8">
+            <div class="d-flex justify-content-between align-items-center mb-4 animate-up">
+                <h4 class="fw-bold m-0">Recent Messages</h4>
+            </div>
+
+            <?php flash('student_message'); ?>
+
+            <div class="animate-up delay-1">
+                <?php if(empty($data['messages'])) : ?>
+                    <div class="bg-white p-5 rounded-4 text-center shadow-sm border border-dashed">
+                        <i class="fa-regular fa-comments fa-3x text-muted mb-3"></i>
+                        <p class="text-muted">No messages yet. Start a conversation with your sponsors!</p>
+                    </div>
+                <?php endif; ?>
+
+                <?php foreach($data['messages'] as $message) : ?>
+                    <div class="message-bubble <?php echo $message->sender_type == 'sponsor' ? 'from-sponsor' : 'to-sponsor'; ?>">
+                        <div class="msg-header">
+                            <div>
+                                <span class="fw-bold text-dark"><?php echo $message->sender_name; ?></span>
+                                <small class="text-muted ms-2">&bull; <?php echo date('M d, Y', strtotime($message->created_at)); ?></small>
+                            </div>
+                            <?php if($message->sender_type == 'sponsor') : ?>
+                                <a href="<?php echo URLROOT; ?>/student/reply/<?php echo $message->sender_id; ?>" class="btn-reply">Reply</a>
+                            <?php endif; ?>
+                        </div>
+                        <p class="m-0 text-muted small" style="line-height: 1.7;">
+                            <?php echo nl2br($message->content); ?>
+                        </p>
+                    </div>
+                <?php endforeach; ?>
+            </div>
         </div>
     </div>
 </div>
+
 <?php require APPROOT . '/views/layouts/footer.php'; ?>

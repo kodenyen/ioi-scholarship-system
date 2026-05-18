@@ -23,4 +23,12 @@ class AdminModel {
         }
         return false;
     }
+
+    public function updateSetting($key, $value) {
+        $this->db->query('INSERT INTO settings (setting_key, setting_value) VALUES (:key, :value) ON DUPLICATE KEY UPDATE setting_value = :value2');
+        $this->db->bind(':key', $key);
+        $this->db->bind(':value', $value);
+        $this->db->bind(':value2', $value);
+        return $this->db->execute();
+    }
 }

@@ -1,0 +1,8 @@
+Admin should be able add and edit or delete pages informtion for the students portfolio:
+My story
+Academic Profile
+Educational goal
+Official Results
+Photo gallary
+Best Memory Verse
+Prayer needs
