@@ -1,12 +1,12 @@
 <?php
 
 define('DB_HOST', 'localhost');
-define('DB_NAME', 'ioi_scholarship');
-define('DB_USER', 'root');
-define('DB_PASS', '');
+define('DB_NAME', 'u104465392_ioi_scholars');
+define('DB_USER', 'u104465392_messagedb');
+define('DB_PASS', 'IOImessage@20253#');
 
 define('SITE_NAME', 'IOI Scholarship');
-define('URLROOT', 'http://localhost:8000'); 
+define('URLROOT', 'https://message.ioiglobal.org'); 
 define('APPROOT', dirname(dirname(__FILE__)));
 
 // SMTP Config (for Hostinger)
