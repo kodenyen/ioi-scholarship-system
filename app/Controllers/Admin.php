@@ -40,17 +40,29 @@ class Admin extends Controller {
     public function approve($id) {
         if (!isLoggedIn()) redirect('admin/login');
         if ($this->messageModel->updateStatus($id, 'approved')) {
-            // Send Notification Email
+            // Send Notification Email to the RECEIVER
             $message = $this->messageModel->getMessageById($id);
             if ($message) {
-                // Get sponsor access token
-                $this->db->query('SELECT access_token FROM sponsors WHERE id = :id');
-                $this->db->bind(':id', $message->receiver_id);
-                $sponsor = $this->db->single();
-                $token = $sponsor ? $sponsor->access_token : '';
-
-                $subject = "New Message from Scholar: " . $message->sender_name;
+                $receiverEmail = $message->receiver_email;
+                $receiverName = $message->receiver_name;
+                $senderName = $message->sender_name;
                 
+                $subject = "New Message from " . ($message->sender_type == 'student' ? 'Scholar' : 'Sponsor') . ": " . $senderName;
+                
+                // Determine login link and token
+                $loginUrl = URLROOT;
+                if ($message->sender_type == 'student') {
+                    // Recipient is Sponsor
+                    $this->db->query('SELECT access_token FROM sponsors WHERE id = :id');
+                    $this->db->bind(':id', $message->receiver_id);
+                    $sponsor = $this->db->single();
+                    $token = $sponsor ? $sponsor->access_token : '';
+                    $loginUrl .= "/sponsor/dashboard?token=" . $token;
+                } else {
+                    // Recipient is Student
+                    $loginUrl .= "/student/login";
+                }
+
                 // Format the email body
                 $body = "
                     <div style='font-family: \"Segoe UI\", Tahoma, Geneva, Verdana, sans-serif; padding: 30px; border: 1px solid #f0f0f0; border-radius: 15px; max-width: 600px; margin: 0 auto; color: #333;'>
@@ -59,17 +71,17 @@ class Admin extends Controller {
                             <p style='color: #888; font-size: 0.9rem;'>Communication Portal Notification</p>
                         </div>
                         
-                        <p>Hello <strong>{$message->receiver_name}</strong>,</p>
-                        <p>You have received a new message from <strong>{$message->sender_name}</strong> through the scholarship communication portal.</p>
+                        <p>Hello <strong>{$receiverName}</strong>,</p>
+                        <p>A new message from <strong>{$senderName}</strong> has been approved by the admin.</p>
                         
                         <div style='padding: 20px; background: #f8f9fa; border-left: 4px solid #005BFF; border-radius: 5px; margin: 25px 0; font-style: italic; color: #444; line-height: 1.6;'>
                             \"{$message->content}\"
                         </div>
                         
-                        <p style='margin-bottom: 30px;'>Please click the button below to view the full conversation and reply. This link will log you in automatically.</p>
+                        <p style='margin-bottom: 30px;'>Please click the button below to view the full conversation and reply.</p>
                         
                         <div style='text-align: center;'>
-                            <a href=\"" . URLROOT . "/sponsor/dashboard?token={$token}\" style='background: #005BFF; color: white; padding: 14px 35px; text-decoration: none; border-radius: 10px; font-weight: bold; display: inline-block; box-shadow: 0 4px 15px rgba(0,91,255,0.2);'>Access Your Dashboard</a>
+                            <a href=\"{$loginUrl}\" style='background: #005BFF; color: white; padding: 14px 35px; text-decoration: none; border-radius: 10px; font-weight: bold; display: inline-block; box-shadow: 0 4px 15px rgba(0,91,255,0.2);'>Access Portal</a>
                         </div>
                         
                         <div style='margin-top: 40px; padding-top: 20px; border-top: 1px solid #eee; font-size: 0.8rem; color: #999; text-align: center;'>
@@ -78,7 +90,7 @@ class Admin extends Controller {
                     </div>
                 ";
                 
-                sendEmail($message->receiver_email, $subject, $body);
+                sendEmail($receiverEmail, $subject, $body);
             }
 
             flash('moderation_message', 'Message Approved and notification sent to receiver');

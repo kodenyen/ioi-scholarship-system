@@ -150,30 +150,25 @@ class Student extends Controller {
 
             $message_id = $this->messageModel->addMessage($messageData);
             if ($message_id) {
-                // Notify Sponsor of the reply
-                $this->db = new Database();
-                $this->db->query('SELECT email, name, access_token FROM sponsors WHERE id = :id');
-                $this->db->bind(':id', $sponsor_id);
-                $sponsorObj = $this->db->single();
-
-                if ($sponsorObj) {
-                    $studentName = $_SESSION['student_name'];
-                    $subject = "New Reply from Scholar: " . $studentName;
-                    $body = "
-                        <div style='font-family: Arial, sans-serif; padding: 20px; border: 1px solid #eee; border-radius: 10px;'>
-                            <h2 style='color: #005BFF;'>New Reply Received</h2>
-                            <p>Hello <strong>{$sponsorObj->name}</strong>,</p>
-                            <p>You have received a new reply from <strong>{$studentName}</strong>.</p>
-                            <div style='background: #f9f9f9; padding: 15px; border-left: 4px solid #005BFF;'>
-                                {$messageData['content']}
-                            </div>
-                            <p style='margin-top: 20px;'>
-                                <a href=\"" . URLROOT . "/sponsor/dashboard?token={$sponsorObj->access_token}\" style='background: #005BFF; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;'>View Message & Reply</a>
-                            </p>
+                // Notify Admin for Moderation (All communication must be approved)
+                $adminEmail = getSetting('contact_email') ?: 'admin@ioi.com';
+                $studentName = $_SESSION['student_name'];
+                $adminSubject = "New Student Reply for Review: " . $studentName;
+                $adminBody = "
+                    <div style='font-family: Arial, sans-serif; padding: 20px; border: 1px solid #eee; border-radius: 10px;'>
+                        <h2 style='color: #005BFF;'>New Reply for Moderation</h2>
+                        <p>Student <strong>{$studentName}</strong> has sent a new reply that requires your approval.</p>
+                        <hr>
+                        <p><strong>Reply Content:</strong></p>
+                        <div style='background: #f9f9f9; padding: 15px; border-left: 4px solid #005BFF;'>
+                            {$messageData['content']}
                         </div>
-                    ";
-                    sendEmail($sponsorObj->email, $subject, $body);
-                }
+                        <p style='margin-top: 20px;'>
+                            <a href=\"" . URLROOT . "/admin/moderation\" style='background: #005BFF; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;'>Review Reply</a>
+                        </p>
+                    </div>
+                ";
+                sendEmail($adminEmail, $adminSubject, $adminBody);
 
                 $fields = $this->formModel->getFields('student');
                 foreach($fields as $field) {

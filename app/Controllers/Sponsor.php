@@ -139,6 +139,26 @@ class Sponsor extends Controller {
 
             $message_id = $this->messageModel->addMessage($messageData);
             if ($message_id) {
+                // Notify Admin for Moderation
+                $adminEmail = getSetting('contact_email') ?: 'admin@ioi.com';
+                $sponsorName = $sponsor->name;
+                $adminSubject = "New Sponsor Message for Review: " . $sponsorName;
+                $adminBody = "
+                    <div style='font-family: Arial, sans-serif; padding: 20px; border: 1px solid #eee; border-radius: 10px;'>
+                        <h2 style='color: #005BFF;'>New Message for Moderation</h2>
+                        <p>Sponsor <strong>{$sponsorName}</strong> has sent a new message to a scholar that requires your approval.</p>
+                        <hr>
+                        <p><strong>Message Content:</strong></p>
+                        <div style='background: #f9f9f9; padding: 15px; border-left: 4px solid #005BFF;'>
+                            {$messageData['content']}
+                        </div>
+                        <p style='margin-top: 20px;'>
+                            <a href=\"" . URLROOT . "/admin/moderation\" style='background: #005BFF; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;'>Review Message</a>
+                        </p>
+                    </div>
+                ";
+                sendEmail($adminEmail, $adminSubject, $adminBody);
+
                 // Save dynamic form fields
                 $fields = $this->formModel->getFields('sponsor');
                 foreach($fields as $field) {
