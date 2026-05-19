@@ -10,7 +10,7 @@
     .settings-container { display: grid; grid-template-columns: 280px 1fr; gap: 2rem; margin-top: 2rem; }
     
     .settings-nav { background: white; border-radius: 24px; padding: 1.5rem; box-shadow: 0 8px 30px rgba(0,0,0,0.05); height: fit-content; }
-    .settings-nav-item { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-radius: 12px; color: #6c757d; font-weight: 600; text-decoration: none; transition: all 0.2s; margin-bottom: 5px; }
+    .settings-nav-item { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-radius: 12px; color: #6c757d; font-weight: 600; text-decoration: none; transition: all 0.2s; margin-bottom: 5px; cursor: pointer; }
     .settings-nav-item:hover { background: #f8f9fa; color: #005BFF; }
     .settings-nav-item.active { background: #e7f5ff; color: #005BFF; }
     
@@ -39,15 +39,15 @@
     <div class="settings-container">
         <!-- Sidebar Navigation -->
         <div class="settings-nav animate-up delay-1">
-            <a href="<?php echo URLROOT; ?>/admin/settings" class="settings-nav-item active">
+            <div class="settings-nav-item active" onclick="showSection('branding')">
                 <i class="fa-solid fa-palette"></i> Branding & Logo
-            </a>
+            </div>
             <a href="<?php echo URLROOT; ?>/admin/menu_manager" class="settings-nav-item">
                 <i class="fa-solid fa-bars"></i> Menu Manager
             </a>
-            <a href="#email-settings" class="settings-nav-item" onclick="showSection('email-settings')">
+            <div class="settings-nav-item" onclick="showSection('email')">
                 <i class="fa-solid fa-envelope"></i> Email/SMTP Settings
-            </a>
+            </div>
             <a href="#" class="settings-nav-item opacity-50">
                 <i class="fa-solid fa-shield-halved"></i> Security
             </a>
@@ -58,7 +58,7 @@
             <form action="<?php echo URLROOT; ?>/admin/settings" method="post" enctype="multipart/form-data">
                 
                 <!-- Branding Section -->
-                <div id="branding-section">
+                <div id="section-branding">
                     <div class="settings-section-title">
                         <i class="fa-solid fa-circle-nodes text-primary"></i> Platform Branding
                     </div>
@@ -69,29 +69,62 @@
                             <div class="logo-preview-box">
                                 <?php if(!empty($data['site_logo'])) : ?>
                                     <img src="<?php echo URLROOT . '/' . $data['site_logo']; ?>" class="logo-img-preview" id="logoPreview">
-                                    <button type="submit" name="delete_logo" class="btn-delete-logo" onclick="return confirm('Remove logo and use site name text?')">
+                                    <button type="submit" name="delete_logo" class="btn-delete-logo" onclick="return confirm('Remove logo?')">
                                         <i class="fa-solid fa-trash-can"></i>
                                     </button>
                                 <?php else : ?>
-                                    <div class="text-center text-muted" id="placeholderText">
+                                    <div class="text-center text-muted" id="logoPlaceholder">
                                         <i class="fa-solid fa-image fa-3x mb-2 opacity-25"></i>
-                                        <p class="small m-0">No logo uploaded.<br>Using "<?php echo SITE_NAME; ?>" text.</p>
+                                        <p class="small m-0">No logo uploaded.</p>
                                     </div>
                                     <img src="" class="logo-img-preview d-none" id="logoPreview">
                                 <?php endif; ?>
                             </div>
-                            
-                            <div class="mb-4">
-                                <input type="file" name="site_logo" class="form-control" id="logoInput" accept="image/*">
+                            <input type="file" name="site_logo" class="form-control" id="logoInput" accept="image/*">
+                        </div>
+                    </div>
+
+                    <div class="settings-section-title">
+                        <i class="fa-solid fa-book-open text-primary"></i> 3D Portfolio Final Page
+                    </div>
+
+                    <div class="row g-4 mb-5">
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold small text-uppercase mb-3">Ending Banner Image</label>
+                            <div class="logo-preview-box" style="height: 140px;">
+                                <?php 
+                                    $banner = getSetting('book_base_banner');
+                                    if(!empty($banner)) : 
+                                ?>
+                                    <img src="<?php echo URLROOT . '/' . $banner; ?>" class="logo-img-preview" id="bannerPreview">
+                                    <button type="submit" name="delete_banner" class="btn-delete-logo" onclick="return confirm('Remove banner?')">
+                                        <i class="fa-solid fa-trash-can"></i>
+                                    </button>
+                                <?php else : ?>
+                                    <div class="text-center text-muted" id="bannerPlaceholder">
+                                        <p class="small m-0">No banner uploaded.</p>
+                                    </div>
+                                    <img src="" class="logo-img-preview d-none" id="bannerPreview">
+                                <?php endif; ?>
+                            </div>
+                            <input type="file" name="book_base_banner" class="form-control" id="bannerInput" accept="image/*">
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label fw-bold small text-uppercase">Button Text</label>
+                                <input type="text" name="book_base_btn_text" class="form-control" value="<?php echo getSetting('book_base_btn_text'); ?>">
+                            </div>
+                            <div>
+                                <label class="form-label fw-bold small text-uppercase">Button Link URL</label>
+                                <input type="url" name="book_base_btn_url" class="form-control" value="<?php echo getSetting('book_base_btn_url'); ?>">
                             </div>
                         </div>
                     </div>
 
                     <div class="settings-section-title">
-                        <i class="fa-solid fa-info-circle text-primary"></i> Top Header Information
+                        <i class="fa-solid fa-info-circle text-primary"></i> Other Information
                     </div>
-
-                    <div class="row g-4 mb-5">
+                    <div class="row g-4">
                         <div class="col-md-12">
                             <label class="form-label fw-bold small text-uppercase">Announcement Text</label>
                             <input type="text" name="top_bar_text" class="form-control" value="<?php echo $data['top_bar_text']; ?>">
@@ -112,23 +145,23 @@
                 </div>
 
                 <!-- Email/SMTP Section -->
-                <div id="email-section" class="d-none">
+                <div id="section-email" class="d-none">
                     <div class="settings-section-title">
                         <i class="fa-solid fa-envelope-circle-check text-primary"></i> SMTP Server Configuration
                     </div>
-                    <p class="text-muted small mb-4">Configure your SMTP settings to enable email notifications for sponsors and students.</p>
+                    <p class="text-muted small mb-4">Configure your SMTP settings to enable email notifications.</p>
                     
                     <div class="row g-4">
                         <div class="col-md-8">
                             <label class="form-label fw-bold small text-uppercase">SMTP Host</label>
-                            <input type="text" name="smtp_host" class="form-control" placeholder="smtp.example.com" value="<?php echo $data['smtp_host']; ?>">
+                            <input type="text" name="smtp_host" class="form-control" value="<?php echo $data['smtp_host']; ?>">
                         </div>
                         <div class="col-md-4">
                             <label class="form-label fw-bold small text-uppercase">SMTP Port</label>
-                            <input type="text" name="smtp_port" class="form-control" placeholder="465 or 587" value="<?php echo $data['smtp_port']; ?>">
+                            <input type="text" name="smtp_port" class="form-control" value="<?php echo $data['smtp_port']; ?>">
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label fw-bold small text-uppercase">SMTP Username (Email)</label>
+                            <label class="form-label fw-bold small text-uppercase">SMTP Username</label>
                             <input type="text" name="smtp_user" class="form-control" value="<?php echo $data['smtp_user']; ?>">
                         </div>
                         <div class="col-md-6">
@@ -138,13 +171,13 @@
                         <div class="col-md-6">
                             <label class="form-label fw-bold small text-uppercase">Encryption</label>
                             <select name="smtp_encryption" class="form-select">
-                                <option value="ssl" <?php echo $data['smtp_encryption'] == 'ssl' ? 'selected' : ''; ?>>SSL (Port 465)</option>
-                                <option value="tls" <?php echo $data['smtp_encryption'] == 'tls' ? 'selected' : ''; ?>>TLS (Port 587)</option>
+                                <option value="ssl" <?php echo $data['smtp_encryption'] == 'ssl' ? 'selected' : ''; ?>>SSL (465)</option>
+                                <option value="tls" <?php echo $data['smtp_encryption'] == 'tls' ? 'selected' : ''; ?>>TLS (587)</option>
                             </select>
                         </div>
                         <div class="col-md-6">
                             <label class="form-label fw-bold small text-uppercase">From Name</label>
-                            <input type="text" name="smtp_from_name" class="form-control" placeholder="IOI Scholarship Admin" value="<?php echo $data['smtp_from_name']; ?>">
+                            <input type="text" name="smtp_from_name" class="form-control" value="<?php echo $data['smtp_from_name']; ?>">
                         </div>
                     </div>
                 </div>
@@ -160,38 +193,35 @@
 </div>
 
 <script>
-    function showSection(id) {
-        if(id === 'email-settings') {
-            document.getElementById('branding-section').classList.add('d-none');
-            document.getElementById('email-section').classList.remove('d-none');
-            event.target.closest('.settings-nav').querySelectorAll('.settings-nav-item').forEach(el => el.classList.remove('active'));
-            event.target.classList.add('active');
-        } else {
-            document.getElementById('branding-section').classList.remove('d-none');
-            document.getElementById('email-section').classList.add('d-none');
-        }
+    function showSection(section) {
+        document.getElementById('section-branding').classList.add('d-none');
+        document.getElementById('section-email').classList.add('d-none');
+        document.getElementById('section-' + section).classList.remove('d-none');
+        
+        document.querySelectorAll('.settings-nav-item').forEach(el => el.classList.remove('active'));
+        event.currentTarget.classList.add('active');
     }
 
-    // Live preview of uploaded logo
-    </div>
-</div>
-
-<script>
-    // Live preview of uploaded logo
-    document.getElementById('logoInput').addEventListener('change', function(e) {
-        const file = e.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const preview = document.getElementById('logoPreview');
-                const placeholder = document.getElementById('placeholderText');
-                preview.src = e.target.result;
-                preview.classList.remove('d-none');
-                if(placeholder) placeholder.classList.add('d-none');
+    // Live preview of uploaded images
+    function initPreview(inputId, previewId, placeholderId) {
+        document.getElementById(inputId).addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const preview = document.getElementById(previewId);
+                    const placeholder = document.getElementById(placeholderId);
+                    preview.src = e.target.result;
+                    preview.classList.remove('d-none');
+                    if(placeholder) placeholder.classList.add('d-none');
+                }
+                reader.readAsDataURL(file);
             }
-            reader.readAsDataURL(file);
-        }
-    });
+        });
+    }
+
+    initPreview('logoInput', 'logoPreview', 'logoPlaceholder');
+    initPreview('bannerInput', 'bannerPreview', 'bannerPlaceholder');
 </script>
 
 <?php require APPROOT . '/views/layouts/footer.php'; ?>

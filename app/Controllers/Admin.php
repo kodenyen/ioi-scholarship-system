@@ -703,15 +703,42 @@ class Admin extends Controller {
             if(isset($_POST['delete_logo'])) {
                 $oldLogo = getSetting('site_logo');
                 if($oldLogo && file_exists(APPROOT . '/public/' . $oldLogo)) {
-                    unlink(APPROOT . '/' . $oldLogo);
+                    unlink(APPROOT . '/public/' . $oldLogo);
                 }
                 $this->adminModel->updateSetting('site_logo', '');
                 flash('settings_message', 'Logo removed');
             }
 
+            // Handle book base banner upload
+            if(!empty($_FILES['book_base_banner']['name'])) {
+                $filename = 'banner_' . time() . '_' . $_FILES['book_base_banner']['name'];
+                $target_dir = APPROOT . '/public/uploads/system/';
+                if(!is_dir($target_dir)) mkdir($target_dir, 0777, true);
+                $target_file = $target_dir . basename($filename);
+
+                if(move_uploaded_file($_FILES['book_base_banner']['tmp_name'], $target_file)) {
+                    $oldBanner = getSetting('book_base_banner');
+                    if($oldBanner && file_exists(APPROOT . '/public/' . $oldBanner)) {
+                        unlink(APPROOT . '/public/' . $oldBanner);
+                    }
+                    $this->adminModel->updateSetting('book_base_banner', 'uploads/system/' . $filename);
+                }
+            }
+
+            // Handle banner deletion
+            if(isset($_POST['delete_banner'])) {
+                $oldBanner = getSetting('book_base_banner');
+                if($oldBanner && file_exists(APPROOT . '/public/' . $oldBanner)) {
+                    unlink(APPROOT . '/public/' . $oldBanner);
+                }
+                $this->adminModel->updateSetting('book_base_banner', '');
+                flash('settings_message', 'Banner removed');
+            }
+
             // Handle other settings
             $text_keys = [
                 'top_bar_text', 'contact_phone', 'contact_email', 'donate_url',
+                'book_base_btn_text', 'book_base_btn_url',
                 'smtp_host', 'smtp_port', 'smtp_user', 'smtp_pass', 'smtp_encryption', 'smtp_from_name'
             ];
             foreach($text_keys as $key) {
