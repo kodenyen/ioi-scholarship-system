@@ -65,7 +65,17 @@
 }
 
 @media print {
-    .no-print { display: none !important; opacity: 0 !important; visibility: hidden !important; height: 0 !important; overflow: hidden !important; }
+    .no-print, .portfolio-wrapper, .book-viewport, .book, .page, .book-base { 
+        display: none !important; 
+        opacity: 0 !important; 
+        visibility: hidden !important; 
+        height: 0 !important; 
+        width: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        position: absolute !important;
+        top: -9999px !important;
+    }
     .print-only { display: block !important; visibility: visible !important; }
     body { background: white !important; }
 }
@@ -309,7 +319,7 @@
 }
 </style>
 
-<div class="portfolio-wrapper">
+<div class="portfolio-wrapper no-print">
     <div class="container text-center no-print portfolio-title-container">
         <h1 class="portfolio-title">Your Student Portfolio</h1>
         <div class="title-underline"></div>
@@ -481,7 +491,7 @@
         </div>
     </div>
 
-    <div class="book-viewport" id="viewport">
+    <div class="book-viewport no-print" id="viewport">
         <div class="book" id="book">
             <!-- STATIC BOOK BASE (Inside Back Cover) -->
             <div class="book-base">
@@ -652,7 +662,7 @@
         </div>
     </div>
     
-    <p class="mt-5 text-muted small"><i class="fa fa-hand-pointer-o"></i> Click pages to flip forward and backward</p>
+    <p class="mt-5 text-muted small no-print"><i class="fa fa-hand-pointer-o"></i> Click pages to flip forward and backward</p>
 </div>
 
 <script>
