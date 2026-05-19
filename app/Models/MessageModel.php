@@ -61,7 +61,7 @@ class MessageModel {
         return $this->db->resultSet();
     }
 
-    public function getMessagesForUser($type, $id) {
+    public function getMessagesForUser($type, $id, $archived = 0) {
         // Get approved messages where user is receiver or approved messages where user is sender
         $this->db->query('SELECT m.*, 
                           CASE 
@@ -74,11 +74,33 @@ class MessageModel {
                           END as receiver_name
                           FROM messages m 
                           WHERE status = "approved" 
+                          AND is_archived = :archived
                           AND ((sender_type = :type AND sender_id = :id) OR (sender_type != :type AND receiver_id = :id))
                           ORDER BY created_at DESC');
         $this->db->bind(':type', $type);
         $this->db->bind(':id', $id);
+        $this->db->bind(':archived', $archived);
         return $this->db->resultSet();
+    }
+
+    public function archiveMessage($id, $status = 1) {
+        $this->db->query('UPDATE messages SET is_archived = :status WHERE id = :id');
+        $this->db->bind(':id', $id);
+        $this->db->bind(':status', $status);
+        return $this->db->execute();
+    }
+
+    public function deleteMessage($id) {
+        $this->db->query('DELETE FROM messages WHERE id = :id');
+        $this->db->bind(':id', $id);
+        return $this->db->execute();
+    }
+
+    public function clearMessages($type, $id) {
+        $this->db->query('DELETE FROM messages WHERE (sender_type = :type AND sender_id = :id) OR (sender_type != :type AND receiver_id = :id)');
+        $this->db->bind(':type', $type);
+        $this->db->bind(':id', $id);
+        return $this->db->execute();
     }
 
     public function getMessageById($id) {

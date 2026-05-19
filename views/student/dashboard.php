@@ -99,9 +99,15 @@
         <div class="col-lg-8">
             <div class="d-flex justify-content-between align-items-center mb-4 animate-up">
                 <h4 class="fw-bold m-0">Recent Messages</h4>
+                <?php if(!empty($data['messages'])) : ?>
+                    <a href="<?php echo URLROOT; ?>/admin/clear_messages?type=student&id=<?php echo $data['student']->id; ?>" class="btn btn-sm btn-outline-danger rounded-pill px-3" onclick="return confirm('Clear entire conversation history?')">
+                        <i class="fa fa-trash-can me-1"></i> Clear All
+                    </a>
+                <?php endif; ?>
             </div>
 
             <?php flash('student_message'); ?>
+            <?php flash('message_success'); ?>
 
             <div class="animate-up delay-1">
                 <?php if(empty($data['messages'])) : ?>
@@ -114,13 +120,24 @@
                         <?php foreach($data['messages'] as $index => $message) : ?>
                             <div class="message-bubble <?php echo $message->sender_type == 'sponsor' ? 'from-sponsor' : 'to-sponsor'; ?> <?php echo $index >= 5 ? 'd-none hidden-student-msg' : ''; ?>">
                                 <div class="msg-header">
-                                    <div>
+                                    <div class="d-flex align-items-center">
                                         <span class="fw-bold text-dark"><?php echo $message->sender_name; ?></span>
                                         <small class="text-muted ms-2">&bull; <?php echo date('M d, Y', strtotime($message->created_at)); ?></small>
                                     </div>
-                                    <?php if($message->sender_type == 'sponsor') : ?>
-                                        <a href="<?php echo URLROOT; ?>/student/reply/<?php echo $message->sender_id; ?>" class="btn-reply">Reply</a>
-                                    <?php endif; ?>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <?php if($message->sender_type == 'sponsor') : ?>
+                                            <a href="<?php echo URLROOT; ?>/student/reply/<?php echo $message->sender_id; ?>" class="btn-reply py-1">Reply</a>
+                                        <?php endif; ?>
+                                        <div class="dropdown">
+                                            <button class="btn btn-link text-muted p-0" data-bs-toggle="dropdown">
+                                                <i class="fa fa-ellipsis-v"></i>
+                                            </button>
+                                            <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0 rounded-3">
+                                                <li><a class="dropdown-item small" href="<?php echo URLROOT; ?>/admin/archive_message/<?php echo $message->id; ?>?type=student"><i class="fa fa-archive me-2 text-muted"></i> Archive</a></li>
+                                                <li><a class="dropdown-item small text-danger" href="<?php echo URLROOT; ?>/admin/delete_message/<?php echo $message->id; ?>?type=student" onclick="return confirm('Delete this message?')"><i class="fa fa-trash me-2"></i> Delete</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
                                 </div>
                                 <p class="m-0 text-muted small" style="line-height: 1.7;">
                                     <?php echo nl2br($message->content); ?>

@@ -48,6 +48,9 @@
             <div class="settings-nav-item" onclick="showSection('email')">
                 <i class="fa-solid fa-envelope"></i> Email/SMTP Settings
             </div>
+            <div class="settings-nav-item" onclick="showSection('admins')">
+                <i class="fa-solid fa-user-shield"></i> Admin Management
+            </div>
             <a href="#" class="settings-nav-item opacity-50">
                 <i class="fa-solid fa-shield-halved"></i> Security
             </a>
@@ -182,6 +185,48 @@
                     </div>
                 </div>
 
+                <!-- Admin Management Section -->
+                <div id="section-admins" class="d-none">
+                    <div class="settings-section-title d-flex justify-content-between align-items-center">
+                        <div><i class="fa-solid fa-user-shield text-primary"></i> Administrative Accounts</div>
+                        <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#addAdminModal">
+                            <i class="fa fa-plus"></i> Add Admin
+                        </button>
+                    </div>
+                    
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Created</th>
+                                    <th class="text-end">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach($data['admins'] as $admin) : ?>
+                                    <tr>
+                                        <td><strong><?php echo $admin->name; ?></strong></td>
+                                        <td><?php echo $admin->email; ?></td>
+                                        <td><span class="small text-muted"><?php echo date('M d, Y', strtotime($admin->created_at)); ?></span></td>
+                                        <td class="text-end">
+                                            <button type="button" class="btn btn-sm btn-outline-primary me-2" onclick='openEditAdmin(<?php echo json_encode($admin); ?>)'>
+                                                <i class="fa fa-edit"></i>
+                                            </button>
+                                            <?php if($admin->id != $_SESSION['admin_id']) : ?>
+                                                <a href="<?php echo URLROOT; ?>/admin/delete_admin/<?php echo $admin->id; ?>" class="btn btn-sm btn-outline-danger" onclick="return confirm('Remove this administrator?')">
+                                                    <i class="fa fa-trash"></i>
+                                                </a>
+                                            <?php endif; ?>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
                 <div class="mt-5 pt-4 border-top">
                     <button type="submit" class="btn btn-save-settings">
                         <i class="fa-solid fa-check-double me-2"></i> Update Settings
@@ -196,10 +241,22 @@
     function showSection(section) {
         document.getElementById('section-branding').classList.add('d-none');
         document.getElementById('section-email').classList.add('d-none');
+        document.getElementById('section-admins').classList.add('d-none');
         document.getElementById('section-' + section).classList.remove('d-none');
         
         document.querySelectorAll('.settings-nav-item').forEach(el => el.classList.remove('active'));
-        event.currentTarget.classList.add('active');
+        // Find the clicked item using event or section name
+        if(event) {
+            event.currentTarget.classList.add('active');
+        }
+    }
+
+    function openEditAdmin(admin) {
+        document.getElementById('edit_admin_id').value = admin.id;
+        document.getElementById('edit_admin_name').value = admin.name;
+        document.getElementById('edit_admin_email').value = admin.email;
+        document.getElementById('editAdminForm').action = '<?php echo URLROOT; ?>/admin/edit_admin/' + admin.id;
+        new bootstrap.Modal(document.getElementById('editAdminModal')).show();
     }
 
     // Live preview of uploaded images
@@ -225,3 +282,68 @@
 </script>
 
 <?php require APPROOT . '/views/layouts/footer.php'; ?>
+
+<!-- Add Admin Modal -->
+<div class="modal fade" id="addAdminModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content" style="border-radius: 20px; border: none; box-shadow: 0 10px 40px rgba(0,0,0,0.1);">
+            <div class="modal-header border-0 pb-0">
+                <h5 class="modal-title fw-bold">Add Administrator</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form action="<?php echo URLROOT; ?>/admin/add_admin" method="post">
+                <div class="modal-body py-4">
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold">Full Name</label>
+                        <input type="text" name="name" class="form-control rounded-3" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold">Email Address</label>
+                        <input type="email" name="email" class="form-control rounded-3" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold">Password</label>
+                        <input type="password" name="password" class="form-control rounded-3" required>
+                    </div>
+                </div>
+                <div class="modal-footer border-0">
+                    <button type="button" class="btn btn-light rounded-3" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary rounded-3 px-4">Create Admin</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Admin Modal -->
+<div class="modal fade" id="editAdminModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content" style="border-radius: 20px; border: none; box-shadow: 0 10px 40px rgba(0,0,0,0.1);">
+            <div class="modal-header border-0 pb-0">
+                <h5 class="modal-title fw-bold">Edit Administrator</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form id="editAdminForm" action="" method="post">
+                <input type="hidden" name="id" id="edit_admin_id">
+                <div class="modal-body py-4">
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold">Full Name</label>
+                        <input type="text" name="name" id="edit_admin_name" class="form-control rounded-3" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold">Email Address</label>
+                        <input type="email" name="email" id="edit_admin_email" class="form-control rounded-3" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold">New Password (leave blank to keep current)</label>
+                        <input type="password" name="password" class="form-control rounded-3">
+                    </div>
+                </div>
+                <div class="modal-footer border-0">
+                    <button type="button" class="btn btn-light rounded-3" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary rounded-3 px-4">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

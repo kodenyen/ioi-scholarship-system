@@ -92,10 +92,18 @@
         </div>
 
         <div class="col-lg-4">
-            <h5 class="fw-bold mb-4 text-dark d-flex align-items-center gap-2">
-                <i class="fa-solid fa-clock-rotate-left text-primary"></i>
-                Message History
-            </h5>
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h5 class="fw-bold m-0 text-dark d-flex align-items-center gap-2">
+                    <i class="fa-solid fa-clock-rotate-left text-primary"></i>
+                    Message History
+                </h5>
+                <?php if(!empty($data['messages'])) : ?>
+                    <a href="<?php echo URLROOT; ?>/admin/clear_messages?type=sponsor&id=<?php echo $data['sponsor']->id; ?>" class="text-danger small fw-bold text-decoration-none" onclick="return confirm('Clear all messages?')">Clear</a>
+                <?php endif; ?>
+            </div>
+            
+            <?php flash('message_success'); ?>
+
         <div class="history-card animate-up delay-2">
                 <?php if(empty($data['messages'])) : ?>
                     <div class="text-center py-4">
@@ -111,11 +119,22 @@
                                     <?php else : ?>
                                         <span class="msg-tag tag-from">From <?php echo explode(' ', $message->sender_name)[0]; ?></span>
                                     <?php endif; ?>
-                                    <small class="text-muted" style="font-size: 0.7rem;"><?php echo date('M d', strtotime($message->created_at)); ?></small>
+                                    <div class="dropdown">
+                                        <button class="btn btn-link text-muted p-0 btn-sm" data-bs-toggle="dropdown">
+                                            <i class="fa fa-ellipsis-h"></i>
+                                        </button>
+                                        <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0 small">
+                                            <li><a class="dropdown-item py-1" href="<?php echo URLROOT; ?>/admin/archive_message/<?php echo $message->id; ?>?type=sponsor"><i class="fa fa-archive me-2 text-muted"></i> Archive</a></li>
+                                            <li><a class="dropdown-item py-1 text-danger" href="<?php echo URLROOT; ?>/admin/delete_message/<?php echo $message->id; ?>?type=sponsor" onclick="return confirm('Delete?')"><i class="fa fa-trash me-2"></i> Delete</a></li>
+                                        </ul>
+                                    </div>
                                 </div>
                                 <p class="m-0 small text-dark" style="line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
                                     <?php echo $message->content; ?>
                                 </p>
+                                <div class="text-end mt-1">
+                                    <small class="text-muted" style="font-size: 0.65rem;"><?php echo date('M d', strtotime($message->created_at)); ?></small>
+                                </div>
                             </div>
                         <?php endforeach; ?>
                     </div>

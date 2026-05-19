@@ -757,6 +757,7 @@ class Admin extends Controller {
 
         $data = [
             'title' => 'System Settings',
+            'admins' => $this->adminModel->getAdmins(),
             'site_logo' => getSetting('site_logo'),
             'top_bar_text' => getSetting('top_bar_text'),
             'contact_phone' => getSetting('contact_phone'),
@@ -822,5 +823,90 @@ class Admin extends Controller {
             flash('menu_message', 'Menu item removed');
         }
         redirect('admin/menu_manager');
+    }
+
+    // --- Admin Management ---
+
+    public function add_admin() {
+        if (!isLoggedIn()) redirect('admin/login');
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+            $data = [
+                'name' => trim($_POST['name']),
+                'email' => trim($_POST['email']),
+                'password' => password_hash($_POST['password'], PASSWORD_DEFAULT)
+            ];
+            if ($this->adminModel->addAdmin($data)) {
+                flash('settings_message', 'New Admin Added');
+            }
+            redirect('admin/settings');
+        }
+    }
+
+    public function edit_admin($id) {
+        if (!isLoggedIn()) redirect('admin/login');
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+            $data = [
+                'id' => $id,
+                'name' => trim($_POST['name']),
+                'email' => trim($_POST['email']),
+                'password' => !empty($_POST['password']) ? password_hash($_POST['password'], PASSWORD_DEFAULT) : ''
+            ];
+            if ($this->adminModel->updateAdmin($data)) {
+                flash('settings_message', 'Admin Profile Updated');
+            }
+            redirect('admin/settings');
+        }
+    }
+
+    public function delete_admin($id) {
+        if (!isLoggedIn()) redirect('admin/login');
+        
+        // Prevent deleting yourself
+        if ($id == $_SESSION['admin_id']) {
+            flash('settings_message', 'You cannot delete your own account', 'alert alert-danger');
+            redirect('admin/settings');
+            return;
+        }
+
+        if ($this->adminModel->deleteAdmin($id)) {
+            flash('settings_message', 'Admin Removed');
+        }
+        redirect('admin/settings');
+    }
+
+    // --- Message Management ---
+
+    public function archive_message($id) {
+        // This is a generic method that can be called from student or sponsor dashboards too
+        // But for now we put logic here
+        $type = isset($_GET['type']) ? $_GET['type'] : 'student';
+        $status = isset($_GET['status']) ? (int)$_GET['status'] : 1;
+
+        if ($this->messageModel->archiveMessage($id, $status)) {
+            flash('message_success', $status ? 'Message Archived' : 'Message Restored');
+        }
+        redirect($type . '/dashboard');
+    }
+
+    public function delete_message($id) {
+        $type = isset($_GET['type']) ? $_GET['type'] : 'student';
+        if ($this->messageModel->deleteMessage($id)) {
+            flash('message_success', 'Message Deleted');
+        }
+        redirect($type . '/dashboard');
+    }
+
+    public function clear_messages() {
+        $type = isset($_GET['type']) ? $_GET['type'] : '';
+        $id = isset($_GET['id']) ? $_GET['id'] : '';
+        
+        if ($type && $id) {
+            if ($this->messageModel->clearMessages($type, $id)) {
+                flash('message_success', 'Conversation Cleared');
+            }
+            redirect($type . '/dashboard');
+        }
     }
 }
