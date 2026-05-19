@@ -9,10 +9,6 @@ define('SITE_NAME', 'IOI Scholarship');
 define('URLROOT', 'https://message.ioiglobal.org'); 
 define('APPROOT', dirname(dirname(__FILE__)));
 
-// Enable Error Reporting for Diagnosis
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-
 // Use the physical 'public' folder for uploads, regardless of server folder names
 define('PUBROOT', APPROOT . '/public');
 
