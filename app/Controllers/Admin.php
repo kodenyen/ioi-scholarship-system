@@ -10,6 +10,7 @@ class Admin extends Controller {
     private $db;
 
     public function __construct() {
+        $this->db = new Database();
         $this->adminModel = $this->model('AdminModel');
         $this->sponsorModel = $this->model('SponsorModel');
         $this->studentModel = $this->model('StudentModel');
@@ -341,7 +342,6 @@ class Admin extends Controller {
         $student = $this->studentModel->getStudentById($id);
         
         // Get student assignments (sponsors)
-        $this->db = new Database();
         $this->db->query('SELECT s.* FROM sponsors s JOIN sponsor_student ss ON s.id = ss.sponsor_id WHERE ss.student_id = :id');
         $this->db->bind(':id', $id);
         $sponsors = $this->db->resultSet();

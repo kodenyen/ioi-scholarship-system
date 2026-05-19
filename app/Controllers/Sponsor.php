@@ -8,6 +8,7 @@ class Sponsor extends Controller {
     private $db;
 
     public function __construct() {
+        $this->db = new Database();
         $this->sponsorModel = $this->model('SponsorModel');
         $this->studentModel = $this->model('StudentModel');
         $this->messageModel = $this->model('MessageModel');
@@ -59,7 +60,6 @@ class Sponsor extends Controller {
         if (!$student) redirect('sponsor/dashboard?token=' . $token);
 
         // Check if student is assigned to this sponsor
-        $this->db = new Database();
         $this->db->query('SELECT * FROM sponsor_student WHERE sponsor_id = :sponsor_id AND student_id = :student_id');
         $this->db->bind(':sponsor_id', $sponsor->id);
         $this->db->bind(':student_id', $id);
