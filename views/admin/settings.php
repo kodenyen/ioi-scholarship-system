@@ -70,7 +70,7 @@
                         <div class="col-md-6">
                             <label class="form-label fw-bold small text-uppercase mb-3">Organization Logo</label>
                             <div class="logo-preview-box">
-                                <?php if(!empty($data['site_logo'])) : ?>
+                                <?php if(!empty($data['site_logo']) && file_exists(PUBROOT . '/' . $data['site_logo'])) : ?>
                                     <img src="<?php echo URLROOT . '/' . $data['site_logo']; ?>" class="logo-img-preview" id="logoPreview">
                                     <button type="submit" name="delete_logo" class="btn-delete-logo" onclick="return confirm('Remove logo?')">
                                         <i class="fa-solid fa-trash-can"></i>
@@ -78,7 +78,7 @@
                                 <?php else : ?>
                                     <div class="text-center text-muted" id="logoPlaceholder">
                                         <i class="fa-solid fa-image fa-3x mb-2 opacity-25"></i>
-                                        <p class="small m-0">No logo uploaded.</p>
+                                        <p class="small m-0">No logo uploaded or file missing.</p>
                                     </div>
                                     <img src="" class="logo-img-preview d-none" id="logoPreview">
                                 <?php endif; ?>
@@ -97,7 +97,7 @@
                             <div class="logo-preview-box" style="height: 140px;">
                                 <?php 
                                     $banner = getSetting('book_base_banner');
-                                    if(!empty($banner)) : 
+                                    if(!empty($banner) && file_exists(PUBROOT . '/' . $banner)) : 
                                 ?>
                                     <img src="<?php echo URLROOT . '/' . $banner; ?>" class="logo-img-preview" id="bannerPreview">
                                     <button type="submit" name="delete_banner" class="btn-delete-logo" onclick="return confirm('Remove banner?')">
@@ -105,7 +105,7 @@
                                     </button>
                                 <?php else : ?>
                                     <div class="text-center text-muted" id="bannerPlaceholder">
-                                        <p class="small m-0">No banner uploaded.</p>
+                                        <p class="small m-0">No banner uploaded or file missing.</p>
                                     </div>
                                     <img src="" class="logo-img-preview d-none" id="bannerPreview">
                                 <?php endif; ?>
