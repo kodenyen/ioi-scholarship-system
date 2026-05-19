@@ -8,6 +8,7 @@ define('DB_PASS', 'IOImessage@20253#');
 define('SITE_NAME', 'IOI Scholarship');
 define('URLROOT', 'https://message.ioiglobal.org'); 
 define('APPROOT', dirname(dirname(__FILE__)));
+define('PUBROOT', APPROOT . '/public_html');
 
 // SMTP Config (for Hostinger)
 define('SMTP_HOST', 'smtp.hostinger.com');

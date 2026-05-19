@@ -165,9 +165,9 @@ class StudentModel {
         $this->db->query('SELECT photo_path FROM student_photos WHERE id = :id');
         $this->db->bind(':id', $id);
         $photo = $this->db->single();
-        
-        if($photo && file_exists(APPROOT . '/public/' . $photo->photo_path)) {
-            unlink(APPROOT . '/public/' . $photo->photo_path);
+
+        if ($photo && file_exists(PUBROOT . '/' . $photo->photo_path)) {
+            unlink(PUBROOT . '/' . $photo->photo_path);
         }
 
         $this->db->query('DELETE FROM student_photos WHERE id = :id');
@@ -185,8 +185,8 @@ class StudentModel {
         $this->db->execute();
 
         // Delete profile photo from disk
-        if(!empty($student->profile_photo) && file_exists(APPROOT . '/public/' . $student->profile_photo)) {
-            unlink(APPROOT . '/public/' . $student->profile_photo);
+        if(!empty($student->profile_photo) && file_exists(PUBROOT . '/' . $student->profile_photo)) {
+            unlink(PUBROOT . '/' . $student->profile_photo);
         }
 
         $this->db->query('DELETE FROM students WHERE id = :id');
