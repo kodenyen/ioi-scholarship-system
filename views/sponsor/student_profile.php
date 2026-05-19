@@ -483,6 +483,17 @@
 
     <div class="book-viewport" id="viewport">
         <div class="book" id="book">
+            <!-- STATIC BOOK BASE (Inside Back Cover) -->
+            <div class="book-base">
+                <?php 
+                    $logo = getSetting('site_logo');
+                    if($logo && file_exists(APPROOT . '/public/' . $logo)) : 
+                ?>
+                    <img src="<?php echo URLROOT . '/' . $logo; ?>" alt="Logo" style="max-height: 100px; max-width: 80%; object-fit: contain; opacity: 0.8;">
+                <?php endif; ?>
+                <p class="text-muted small mt-3" style="font-weight: 600; text-transform: uppercase; letter-spacing: 2px;">Empowering Scholars</p>
+            </div>
+
             <!-- PAGE 1: COVER & STORY -->
             <div class="page" id="page1" style="z-index: 10;" onclick="flipPage(1)">
                 <div class="page-front book-cover">
@@ -583,7 +594,7 @@
                 </div>
             </div>
 
-            <!-- PAGE 5: RESULTS -->
+            <!-- PAGE 5: RESULTS & BACK COVER -->
             <div class="page" id="page5" style="z-index: 6;" onclick="flipPage(5)">
                 <div class="page-front">
                     <div class="page-title">Official Results</div>
@@ -600,29 +611,6 @@
                         <?php endif; ?>
                     </div>
                     <div class="page-number">8</div>
-                </div>
-                <div class="page-back">
-                    <!-- Blank dummy page -->
-                    <div class="d-flex align-items-center justify-content-center h-100 opacity-25">
-                        <i class="fa-solid fa-book-open-reader fa-3x"></i>
-                    </div>
-                    <div class="page-number">9</div>
-                </div>
-            </div>
-
-            <!-- PAGE 6: DUMMY LOGO & BACK COVER -->
-            <div class="page" id="page6" style="z-index: 5;" onclick="flipPage(6)">
-                <div class="page-front">
-                    <div class="d-flex flex-column align-items-center justify-content-center h-100">
-                        <?php 
-                            $logo = getSetting('site_logo');
-                            if($logo && file_exists(APPROOT . '/public/' . $logo)) : 
-                        ?>
-                            <img src="<?php echo URLROOT . '/' . $logo; ?>" alt="Logo" style="max-height: 80px; max-width: 80%; object-fit: contain; opacity: 0.5; filter: grayscale(100%);">
-                        <?php endif; ?>
-                        <p class="text-muted small mt-3">Empowering the next generation.</p>
-                    </div>
-                    <div class="page-number">10</div>
                 </div>
                 <div class="page-back book-cover" style="border-radius: 10px 0 0 10px;">
                     <?php 
@@ -653,7 +641,7 @@
 <script>
 const sound = document.getElementById('pageFlipSound');
 const viewport = document.getElementById('viewport');
-const totalPages = 6;
+const totalPages = 5;
 
 function flipPage(pageNum) {
     const page = document.getElementById('page' + pageNum);
