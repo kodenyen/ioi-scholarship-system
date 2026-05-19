@@ -347,7 +347,7 @@
         <div class="print-header">
             <?php 
                 $logo = getSetting('site_logo');
-                if($logo && file_exists(APPROOT . '/public/' . $logo)) : 
+                if($logo && file_exists(PUBROOT . '/' . $logo)) : 
             ?>
                 <img src="<?php echo URLROOT . '/' . $logo; ?>" style="max-height: 60px; margin-bottom: 30px;">
             <?php endif; ?>
@@ -458,7 +458,7 @@
                         $baseBtnText = getSetting('book_base_btn_text');
                         $baseBtnUrl = getSetting('book_base_btn_url');
                         
-                        if(!empty($baseBanner) && file_exists(APPROOT . '/public/' . $baseBanner)) : 
+                        if(!empty($baseBanner) && file_exists(PUBROOT . '/' . $baseBanner)) : 
                     ?>
                         <a href="<?php echo !empty($baseBtnUrl) ? $baseBtnUrl : '#'; ?>" target="_blank" style="display: block; width: 100%; height: 100%; position: relative; text-decoration: none;">
                             <img src="<?php echo URLROOT . '/' . $baseBanner; ?>" alt="Banner" style="width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0; border-radius: 0 5px 5px 0; opacity: 0.9;">
@@ -471,7 +471,7 @@
                     <?php else : ?>
                         <?php 
                             $logo = getSetting('site_logo');
-                            if($logo && file_exists(APPROOT . '/public/' . $logo)) : 
+                            if($logo && file_exists(PUBROOT . '/' . $logo)) : 
                         ?>
                             <img src="<?php echo URLROOT . '/' . $logo; ?>" alt="Logo" style="max-height: 100px; max-width: 80%; object-fit: contain; opacity: 0.8;">
                         <?php endif; ?>
@@ -600,7 +600,7 @@
                     <div class="page-back book-cover" style="border-radius: 10px 0 0 10px;">
                         <?php 
                             $logo = getSetting('site_logo');
-                            if($logo && file_exists(APPROOT . '/public/' . $logo)) : 
+                            if($logo && file_exists(PUBROOT . '/' . $logo)) : 
                         ?>
                             <div class="mb-4 d-flex justify-content-center w-100">
                                 <img src="<?php echo URLROOT . '/' . $logo; ?>" alt="Logo" style="max-height: 100px; max-width: 80%; object-fit: contain;">

@@ -1,6 +1,12 @@
 <?php
 
 class Sponsor extends Controller {
+    private $sponsorModel;
+    private $studentModel;
+    private $messageModel;
+    private $formModel;
+    private $db;
+
     public function __construct() {
         $this->sponsorModel = $this->model('SponsorModel');
         $this->studentModel = $this->model('StudentModel');

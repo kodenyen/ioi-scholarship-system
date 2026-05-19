@@ -1,6 +1,14 @@
 <?php
 
 class Admin extends Controller {
+    private $adminModel;
+    private $sponsorModel;
+    private $studentModel;
+    private $formModel;
+    private $assignmentModel;
+    private $messageModel;
+    private $db;
+
     public function __construct() {
         $this->adminModel = $this->model('AdminModel');
         $this->sponsorModel = $this->model('SponsorModel');
