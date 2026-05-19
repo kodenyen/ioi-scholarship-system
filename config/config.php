@@ -8,7 +8,9 @@ define('DB_PASS', 'IOImessage@20253#');
 define('SITE_NAME', 'IOI Scholarship');
 define('URLROOT', 'https://message.ioiglobal.org'); 
 define('APPROOT', dirname(dirname(__FILE__)));
-define('PUBROOT', APPROOT . '/public_html');
+
+// Use the physical 'public' folder for uploads, regardless of server folder names
+define('PUBROOT', APPROOT . '/public');
 
 // SMTP Config (for Hostinger)
 define('SMTP_HOST', 'smtp.hostinger.com');
