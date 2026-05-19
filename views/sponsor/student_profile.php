@@ -319,350 +319,309 @@
 }
 </style>
 
-<div class="portfolio-wrapper no-print">
-    <div class="container text-center no-print portfolio-title-container">
-        <h1 class="portfolio-title">Your Student Portfolio</h1>
-        <div class="title-underline"></div>
-        
-        <div class="portfolio-nav-buttons">
-            <button onclick="downloadPDF()" class="btn btn-primary shadow-sm px-4">
-                <i class="fa fa-download"></i> Download Report
-            </button>
-            <?php if(isset($data['is_preview']) && $data['is_preview']) : ?>
-                <a href="<?php echo URLROOT; ?>/admin/student_profile/<?php echo $data['student']->id; ?>" class="btn btn-outline-secondary shadow-sm px-4">
-                    <i class="fa fa-arrow-left"></i> Back to Admin
-                </a>
-            <?php else : ?>
-                <a href="<?php echo URLROOT; ?>/sponsor/dashboard?token=<?php echo $_GET['token']; ?>" class="btn btn-outline-secondary shadow-sm px-4">
-                    <i class="fa fa-chevron-left"></i> Dashboard
-                </a>
+</style>
+
+<!-- PRINTABLE VERSION (Strictly Isolated) -->
+<div id="printable-profile" class="print-only">
+    <style>
+        @media print {
+            .print-only { display: block !important; visibility: visible !important; }
+            .page-break { page-break-before: always; clear: both; display: block; height: 1px; }
+            body { background: white !important; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 0; margin: 0; }
+            @page { margin: 1.5cm; size: A4; }
+            .no-print { display: none !important; opacity: 0 !important; visibility: hidden !important; height: 0 !important; width: 0 !important; overflow: hidden !important; position: absolute !important; }
+        }
+        .print-container { width: 100%; color: #333; }
+        .print-header { text-align: center; border-bottom: 4px solid var(--book-cover-color); padding-bottom: 30px; margin-bottom: 40px; }
+        .print-section { margin-bottom: 40px; page-break-inside: avoid; }
+        .print-section h3 { color: var(--book-cover-color); border-bottom: 2px solid #f0f0f0; padding-bottom: 12px; text-transform: uppercase; font-size: 1.4rem; font-weight: 800; margin-bottom: 20px; }
+        .print-grid { display: flex; flex-wrap: wrap; gap: 20px; margin-top: 20px; }
+        .print-photo-wrapper { width: calc(50% - 10px); margin-bottom: 20px; page-break-inside: avoid; }
+        .print-photo { width: 100%; height: 280px; object-fit: cover; border-radius: 12px; border: 1px solid #eee; }
+        .print-badge { display: inline-block; padding: 6px 18px; background: #f8f9fa; border-radius: 30px; font-size: 0.95rem; font-weight: 600; margin: 5px; border: 1px solid #eee; }
+        .story-content { line-height: 1.8; font-size: 1.15rem; color: #444; text-align: justify; }
+    </style>
+
+    <div class="print-container">
+        <!-- PAGE 1: COVER & BIO -->
+        <div class="print-header">
+            <?php 
+                $logo = getSetting('site_logo');
+                if($logo && file_exists(APPROOT . '/public/' . $logo)) : 
+            ?>
+                <img src="<?php echo URLROOT . '/' . $logo; ?>" style="max-height: 60px; margin-bottom: 30px;">
             <?php endif; ?>
-        </div>
-    </div>
-
-    <!-- Printable Version (Modern Report Layout) -->
-    <div id="printable-profile" class="print-only">
-        <style>
-            @media print {
-                .print-only { display: block !important; visibility: visible !important; }
-                .page-break { page-break-before: always; clear: both; display: block; height: 1px; }
-                body { background: white !important; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 0; margin: 0; }
-                @page { margin: 2cm; size: A4; }
-                .no-print { display: none !important; }
-            }
-            .print-container { width: 100%; max-width: 800px; margin: 0 auto; color: #333; }
-            .print-header {
-                text-align: center;
-                border-bottom: 4px solid var(--book-cover-color);
-                padding-bottom: 30px;
-                margin-bottom: 40px;
-            }
-            .print-section {
-                margin-bottom: 40px;
-                page-break-inside: avoid;
-            }
-            .print-section h3 {
-                color: var(--book-cover-color);
-                border-bottom: 2px solid #f0f0f0;
-                padding-bottom: 12px;
-                text-transform: uppercase;
-                font-size: 1.4rem;
-                font-weight: 800;
-                margin-bottom: 20px;
-            }
-            .print-grid {
-                display: flex;
-                flex-wrap: wrap;
-                gap: 20px;
-                margin-top: 20px;
-            }
-            .print-photo-wrapper {
-                width: calc(50% - 10px);
-                margin-bottom: 20px;
-                page-break-inside: avoid;
-            }
-            .print-photo {
-                width: 100%;
-                height: 280px;
-                object-fit: cover;
-                border-radius: 12px;
-                border: 1px solid #eee;
-                box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-            }
-            .print-badge {
-                display: inline-block;
-                padding: 6px 18px;
-                background: #f8f9fa;
-                border-radius: 30px;
-                font-size: 0.95rem;
-                font-weight: 600;
-                margin: 5px;
-                border: 1px solid #eee;
-            }
-            .story-content {
-                line-height: 1.8;
-                font-size: 1.15rem;
-                color: #444;
-                text-align: justify;
-            }
-        </style>
-
-        <div class="print-container">
-            <!-- PAGE 1: COVER & BIO -->
-            <div class="print-header">
-                <?php 
-                    $logo = getSetting('site_logo');
-                    if($logo && file_exists(APPROOT . '/public/' . $logo)) : 
-                ?>
-                    <img src="<?php echo URLROOT . '/' . $logo; ?>" style="max-height: 60px; margin-bottom: 30px;">
-                <?php endif; ?>
-                
-                <div style="margin-bottom: 30px;">
-                    <img src="<?php echo !empty($data['student']->profile_photo) ? URLROOT . '/' . $data['student']->profile_photo : ''; ?>" style="width: 180px; height: 180px; border-radius: 50%; border: 8px solid #f8f9fa; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
-                </div>
-                
-                <h1 style="margin: 0; font-size: 3rem; font-weight: 900; color: #001219;"><?php echo $data['student']->first_name . ' ' . $data['student']->surname; ?></h1>
-                <p style="font-size: 1.3rem; color: #666; margin-top: 10px;">Official Student Portfolio | Heaven of Hope Academy</p>
-                
-                <div style="margin-top: 30px;">
-                    <span class="print-badge">Class: <?php echo $data['student']->class; ?></span>
-                    <span class="print-badge">Age: <?php echo $data['student']->age; ?> Years</span>
-                    <span class="print-badge">ID: SCH-<?php echo str_pad($data['student']->id, 4, '0', STR_PAD_LEFT); ?></span>
-                </div>
-            </div>
-
-            <div class="print-section">
-                <h3>My Story</h3>
-                <div class="story-content"><?php echo nl2br($data['student']->about); ?></div>
-            </div>
-
-            <div class="print-section">
-                <h3>Educational Goals</h3>
-                <div class="story-content"><?php echo nl2br($data['student']->educational_goals); ?></div>
-            </div>
-
-            <!-- PAGE 2: FAITH & GALLERY -->
-            <div class="page-break"></div>
             
-            <div class="print-section">
-                <h3>Faith & Prayer</h3>
-                <div style="background: #fdfdf5; padding: 30px; border-left: 6px solid var(--brand-green); border-radius: 0 15px 15px 0; margin-bottom: 25px; border: 1px solid #f0f0e0;">
-                    <h4 style="margin-top: 0; color: var(--brand-green); text-transform: uppercase; font-size: 0.9rem; letter-spacing: 1px;">Favorite Memory Verse</h4>
-                    <p style="font-style: italic; font-size: 1.4rem; color: #333; margin: 15px 0 0;">"<?php echo $data['student']->memory_verse; ?>"</p>
-                </div>
-                <div style="background: #f0f7ff; padding: 30px; border-radius: 20px; border: 2px dashed #005BFF;">
-                    <h4 style="margin-top: 0; color: #005BFF; text-transform: uppercase; font-size: 0.9rem; letter-spacing: 1px;">Current Prayer Needs</h4>
-                    <p style="font-size: 1.1rem; color: #333; margin: 15px 0 0;"><?php echo nl2br($data['student']->prayer_needs); ?></p>
-                </div>
+            <div style="margin-bottom: 30px;">
+                <img src="<?php echo !empty($data['student']->profile_photo) ? URLROOT . '/' . $data['student']->profile_photo : ''; ?>" style="width: 180px; height: 180px; border-radius: 50%; border: 8px solid #f8f9fa; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
             </div>
-
-            <div class="print-section">
-                <h3>Photo Gallery</h3>
-                <div class="print-grid">
-                    <?php foreach($data['gallery'] as $photo) : ?>
-                        <div class="print-photo-wrapper">
-                            <img src="<?php echo URLROOT . '/' . $photo->photo_path; ?>" class="print-photo">
-                            <?php if(!empty($photo->caption)) : ?>
-                                <p style="font-size: 0.9rem; text-align: center; color: #666; margin-top: 10px; font-weight: 600;"><?php echo $photo->caption; ?></p>
-                            <?php endif; ?>
-                        </div>
-                    <?php endforeach; ?>
-                </div>
-            </div>
-
-            <!-- PAGE 3: OFFICIAL RESULTS -->
-            <?php if(!empty($data['uploads'])) : ?>
-                <div class="page-break"></div>
-                <div class="print-section">
-                    <h3>Official Results & Certificates</h3>
-                    <?php foreach($data['uploads'] as $up) : ?>
-                        <div style="margin-bottom: 40px; text-align: center; page-break-inside: avoid;">
-                            <h4 style="text-align: left; background: #f8f9fa; padding: 10px 20px; border-radius: 8px; border-left: 4px solid #001219;"><?php echo $up->file_name; ?></h4>
-                            <img src="<?php echo URLROOT . '/' . $up->file_path; ?>" style="max-width: 100%; border: 2px solid #eee; border-radius: 10px; margin-top: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.05);">
-                        </div>
-                    <?php endforeach; ?>
-                </div>
-            <?php endif; ?>
-
-            <div style="margin-top: 60px; text-align: center; color: #aaa; border-top: 1px solid #eee; padding-top: 30px; page-break-inside: avoid;">
-                <p style="font-weight: 600;">Thank you for your support. Together we are changing lives.</p>
-                <p style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px;">Generated on <?php echo date('M d, Y'); ?> | IOI Global Scholarship Program</p>
+            
+            <h1 style="margin: 0; font-size: 3rem; font-weight: 900; color: #001219;"><?php echo $data['student']->first_name . ' ' . $data['student']->surname; ?></h1>
+            <p style="font-size: 1.3rem; color: #666; margin-top: 10px;">Official Student Portfolio | Heaven of Hope Academy</p>
+            
+            <div style="margin-top: 30px;">
+                <span class="print-badge">Class: <?php echo $data['student']->class; ?></span>
+                <span class="print-badge">Age: <?php echo $data['student']->age; ?> Years</span>
+                <span class="print-badge">ID: SCH-<?php echo str_pad($data['student']->id, 4, '0', STR_PAD_LEFT); ?></span>
             </div>
         </div>
-    </div>
 
-    <div class="book-viewport no-print" id="viewport">
-        <div class="book" id="book">
-            <!-- STATIC BOOK BASE (Inside Back Cover) -->
-            <div class="book-base">
-                <?php 
-                    $baseBanner = getSetting('book_base_banner');
-                    $baseBtnText = getSetting('book_base_btn_text');
-                    $baseBtnUrl = getSetting('book_base_btn_url');
-                    
-                    if(!empty($baseBanner) && file_exists(APPROOT . '/public/' . $baseBanner)) : 
-                ?>
-                    <a href="<?php echo !empty($baseBtnUrl) ? $baseBtnUrl : '#'; ?>" target="_blank" style="display: block; width: 100%; height: 100%; position: relative; text-decoration: none;">
-                        <img src="<?php echo URLROOT . '/' . $baseBanner; ?>" alt="Banner" style="width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0; border-radius: 0 5px 5px 0; opacity: 0.9;">
-                        <div style="position: absolute; bottom: 40px; left: 0; right: 0; z-index: 2; text-align: center;">
-                            <span class="btn btn-primary fw-bold px-4 py-2 rounded-pill shadow-lg" style="pointer-events: none;">
-                                <?php echo !empty($baseBtnText) ? $baseBtnText : 'Learn More'; ?>
-                            </span>
-                        </div>
+        <div class="print-section">
+            <h3>My Story</h3>
+            <div class="story-content"><?php echo nl2br($data['student']->about); ?></div>
+        </div>
+
+        <div class="print-section">
+            <h3>Educational Goals</h3>
+            <div class="story-content"><?php echo nl2br($data['student']->educational_goals); ?></div>
+        </div>
+
+        <!-- PAGE 2: FAITH & GALLERY -->
+        <div class="page-break"></div>
+        
+        <div class="print-section">
+            <h3>Faith & Prayer</h3>
+            <div style="background: #fdfdf5; padding: 30px; border-left: 6px solid var(--brand-green); border-radius: 0 15px 15px 0; margin-bottom: 25px; border: 1px solid #f0f0e0;">
+                <h4 style="margin-top: 0; color: var(--brand-green); text-transform: uppercase; font-size: 0.9rem; letter-spacing: 1px;">Favorite Memory Verse</h4>
+                <p style="font-style: italic; font-size: 1.4rem; color: #333; margin: 15px 0 0;">"<?php echo $data['student']->memory_verse; ?>"</p>
+            </div>
+            <div style="background: #f0f7ff; padding: 30px; border-radius: 20px; border: 2px dashed #005BFF;">
+                <h4 style="margin-top: 0; color: #005BFF; text-transform: uppercase; font-size: 0.9rem; letter-spacing: 1px;">Current Prayer Needs</h4>
+                <p style="font-size: 1.1rem; color: #333; margin: 15px 0 0;"><?php echo nl2br($data['student']->prayer_needs); ?></p>
+            </div>
+        </div>
+
+        <div class="print-section">
+            <h3>Photo Gallery</h3>
+            <div class="print-grid">
+                <?php foreach($data['gallery'] as $photo) : ?>
+                    <div class="print-photo-wrapper">
+                        <img src="<?php echo URLROOT . '/' . $photo->photo_path; ?>" class="print-photo">
+                        <?php if(!empty($photo->caption)) : ?>
+                            <p style="font-size: 0.9rem; text-align: center; color: #666; margin-top: 10px; font-weight: 600;"><?php echo $photo->caption; ?></p>
+                        <?php endif; ?>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        </div>
+
+        <!-- PAGE 3: OFFICIAL RESULTS -->
+        <?php if(!empty($data['uploads'])) : ?>
+            <div class="page-break"></div>
+            <div class="print-section">
+                <h3>Official Results & Certificates</h3>
+                <?php foreach($data['uploads'] as $up) : ?>
+                    <div style="margin-bottom: 40px; text-align: center; page-break-inside: avoid;">
+                        <h4 style="text-align: left; background: #f8f9fa; padding: 10px 20px; border-radius: 8px; border-left: 4px solid #001219;"><?php echo $up->file_name; ?></h4>
+                        <img src="<?php echo URLROOT . '/' . $up->file_path; ?>" style="max-width: 100%; border: 2px solid #eee; border-radius: 10px; margin-top: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.05);">
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        <?php endif; ?>
+
+        <div style="margin-top: 60px; text-align: center; color: #aaa; border-top: 1px solid #eee; padding-top: 30px; page-break-inside: avoid;">
+            <p style="font-weight: 600;">Thank you for your support. Together we are changing lives.</p>
+            <p style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px;">Generated on <?php echo date('M d, Y'); ?> | IOI Global Scholarship Program</p>
+        </div>
+    </div>
+</div>
+
+<!-- INTERACTIVE UI (Hidden during print) -->
+<div class="no-print">
+    <div class="portfolio-wrapper">
+        <div class="container text-center portfolio-title-container">
+            <h1 class="portfolio-title">Your Student Portfolio</h1>
+            <div class="title-underline"></div>
+            
+            <div class="portfolio-nav-buttons">
+                <button onclick="downloadPDF()" class="btn btn-primary shadow-sm px-4">
+                    <i class="fa fa-download"></i> Download Report
+                </button>
+                <?php if(isset($data['is_preview']) && $data['is_preview']) : ?>
+                    <a href="<?php echo URLROOT; ?>/admin/student_profile/<?php echo $data['student']->id; ?>" class="btn btn-outline-secondary shadow-sm px-4">
+                        <i class="fa fa-arrow-left"></i> Back to Admin
                     </a>
                 <?php else : ?>
-                    <?php 
-                        $logo = getSetting('site_logo');
-                        if($logo && file_exists(APPROOT . '/public/' . $logo)) : 
-                    ?>
-                        <img src="<?php echo URLROOT . '/' . $logo; ?>" alt="Logo" style="max-height: 100px; max-width: 80%; object-fit: contain; opacity: 0.8;">
-                    <?php endif; ?>
-                    <p class="text-muted small mt-3" style="font-weight: 600; text-transform: uppercase; letter-spacing: 2px;">Empowering Scholars</p>
+                    <a href="<?php echo URLROOT; ?>/sponsor/dashboard?token=<?php echo $_GET['token']; ?>" class="btn btn-outline-secondary shadow-sm px-4">
+                        <i class="fa fa-chevron-left"></i> Dashboard
+                    </a>
                 <?php endif; ?>
             </div>
-
-            <!-- PAGE 1: COVER & STORY -->
-            <div class="page" id="page1" style="z-index: 10;" onclick="flipPage(1)">
-                <div class="page-front book-cover">
-                    <img src="<?php echo !empty($data['student']->profile_photo) ? URLROOT . '/' . $data['student']->profile_photo : 'https://via.placeholder.com/200'; ?>" class="student-img-large shadow" alt="Student">
-                    <h2 class="fw-bold"><?php echo $data['student']->first_name . ' ' . $data['student']->surname; ?></h2>
-                    <p class="opacity-75">Your Student Portfolio 2026</p>
-                    <div class="mt-5 small text-uppercase" style="letter-spacing: 2px;">Click to Open</div>
-                </div>
-                <div class="page-back">
-                    <div class="page-title">My Story</div>
-                    <p style="line-height: 1.6; font-size: 0.95rem; color: #444;">
-                        <?php echo nl2br($data['student']->about); ?>
-                    </p>
-                    <div class="page-number">1</div>
-                </div>
-            </div>
-
-            <!-- PAGE 2: PROFILE & GOALS -->
-            <div class="page" id="page2" style="z-index: 9;" onclick="flipPage(2)">
-                <div class="page-front">
-                    <div class="page-title">Academic Profile</div>
-                    <table class="table table-sm mt-3">
-                        <tr><th class="text-muted small">NAME</th><td><?php echo $data['student']->first_name; ?></td></tr>
-                        <tr><th class="text-muted small">SURNAME</th><td><?php echo $data['student']->surname; ?></td></tr>
-                        <tr><th class="text-muted small">CLASS</th><td><?php echo $data['student']->class; ?></td></tr>
-                        <tr><th class="text-muted small">AGE</th><td><?php echo $data['student']->age; ?> Years</td></tr>
-                        <tr><th class="text-muted small">STATUS</th><td><span class="badge bg-success">Active</span></td></tr>
-                    </table>
-                    <div class="page-number">2</div>
-                </div>
-                <div class="page-back">
-                    <div class="page-title">Educational Goals</div>
-                    <p style="line-height: 1.6; font-size: 0.95rem;">
-                        <?php echo nl2br($data['student']->educational_goals); ?>
-                    </p>
-                    <div class="page-number">3</div>
-                </div>
-            </div>
-
-            <!-- PAGE 3: FAITH & NEEDS -->
-            <div class="page" id="page3" style="z-index: 8;" onclick="flipPage(3)">
-                <div class="page-front">
-                    <div class="page-title">Best Memory Verse</div>
-                    <div class="verse-box">
-                        "<?php echo $data['student']->memory_verse; ?>"
-                    </div>
-                    <div class="page-number">4</div>
-                </div>
-                <div class="page-back">
-                    <div class="page-title">Prayer Needs</div>
-                    <div class="prayer-box">
-                        <?php echo nl2br($data['student']->prayer_needs); ?>
-                    </div>
-                    <div class="page-number">5</div>
-                </div>
-            </div>
-
-            <!-- PAGE 4: GALLERY (LIFE AT HEAVEN OF HOPE ACADEMY) -->
-            <div class="page" id="page4" style="z-index: 7;" onclick="flipPage(4)">
-                <div class="page-front">
-                    <div class="page-title">Life at Heaven of Hope Academy</div>
-                    <div class="gallery-grid">
-                        <?php if(!empty($data['gallery'])) : ?>
-                            <?php foreach(array_slice($data['gallery'], 0, 4) as $photo) : ?>
-                                <div class="gallery-item-wrapper">
-                                    <img src="<?php echo URLROOT . '/' . $photo->photo_path; ?>" class="gallery-item">
-                                    <?php if(!empty($photo->caption)) : ?>
-                                        <div class="gallery-caption"><?php echo $photo->caption; ?></div>
-                                    <?php endif; ?>
-                                </div>
-                            <?php endforeach; ?>
-                        <?php else : ?>
-                            <p class="text-muted small">No gallery photos yet.</p>
-                        <?php endif; ?>
-                    </div>
-                    <?php if(count($data['gallery']) > 4) : ?>
-                        <small class="text-muted mt-2 d-block">+ <?php echo count($data['gallery']) - 4; ?> more photos</small>
-                    <?php endif; ?>
-                    <div class="page-number">6</div>
-                </div>
-                <div class="page-back">
-                    <div class="page-title">More Moments</div>
-                    <div class="gallery-grid mt-2">
-                        <?php if(count($data['gallery']) > 4) : ?>
-                            <?php foreach(array_slice($data['gallery'], 4, 4) as $photo) : ?>
-                                <div class="gallery-item-wrapper">
-                                    <img src="<?php echo URLROOT . '/' . $photo->photo_path; ?>" class="gallery-item">
-                                    <?php if(!empty($photo->caption)) : ?>
-                                        <div class="gallery-caption"><?php echo $photo->caption; ?></div>
-                                    <?php endif; ?>
-                                </div>
-                            <?php endforeach; ?>
-                        <?php else : ?>
-                            <p class="small text-muted text-center py-5">Photos capturing the daily life and smiles of our scholars.</p>
-                        <?php endif; ?>
-                    </div>
-                    <div class="page-number">7</div>
-                </div>
-            </div>
-
-            <!-- PAGE 5: RESULTS & BACK COVER -->
-            <div class="page" id="page5" style="z-index: 6;" onclick="flipPage(5)">
-                <div class="page-front">
-                    <div class="page-title">Official Results</div>
-                    <div class="results-gallery" style="overflow-y: auto; max-height: 400px;">
-                        <?php if(empty($data['uploads'])) : ?>
-                            <p class="text-muted small">No result images uploaded.</p>
-                        <?php else : ?>
-                            <?php foreach($data['uploads'] as $up) : ?>
-                                <div class="mb-3 border-bottom pb-2">
-                                    <small class="text-primary fw-bold d-block mb-1"><?php echo $up->file_name; ?></small>
-                                    <img src="<?php echo URLROOT . '/' . $up->file_path; ?>" class="img-fluid rounded shadow-sm" style="width: 100%;">
-                                </div>
-                            <?php endforeach; ?>
-                        <?php endif; ?>
-                    </div>
-                    <div class="page-number">8</div>
-                </div>
-                <div class="page-back book-cover" style="border-radius: 10px 0 0 10px;">
-                    <?php 
-                        $logo = getSetting('site_logo');
-                        if($logo && file_exists(APPROOT . '/public/' . $logo)) : 
-                    ?>
-                        <div class="mb-4 d-flex justify-content-center w-100">
-                            <img src="<?php echo URLROOT . '/' . $logo; ?>" alt="Logo" style="max-height: 100px; max-width: 80%; object-fit: contain;">
-                        </div>
-                    <?php endif; ?>
-                    <h3 class="fw-bold">Thank You</h3>
-                    <p class="small px-4 mt-2">Your support is building a bright future for <?php echo $data['student']->first_name; ?>.</p>
-                    
-                    <div class="mt-5 no-print">
-                        <a href="https://ioiglobal.org/thaddeus-scholarship/" target="_blank" class="btn btn-light btn-sm fw-bold px-4 py-2 shadow-sm" style="color: var(--book-cover-color); border-radius: 30px;">
-                            Support Another Student
-                        </a>
-                    </div>
-                </div>
-            </div>
-
         </div>
+
+        <div class="book-viewport" id="viewport">
+            <div class="book" id="book">
+                <!-- STATIC BOOK BASE (Inside Back Cover) -->
+                <div class="book-base">
+                    <?php 
+                        $baseBanner = getSetting('book_base_banner');
+                        $baseBtnText = getSetting('book_base_btn_text');
+                        $baseBtnUrl = getSetting('book_base_btn_url');
+                        
+                        if(!empty($baseBanner) && file_exists(APPROOT . '/public/' . $baseBanner)) : 
+                    ?>
+                        <a href="<?php echo !empty($baseBtnUrl) ? $baseBtnUrl : '#'; ?>" target="_blank" style="display: block; width: 100%; height: 100%; position: relative; text-decoration: none;">
+                            <img src="<?php echo URLROOT . '/' . $baseBanner; ?>" alt="Banner" style="width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0; border-radius: 0 5px 5px 0; opacity: 0.9;">
+                            <div style="position: absolute; bottom: 40px; left: 0; right: 0; z-index: 2; text-align: center;">
+                                <span class="btn btn-primary fw-bold px-4 py-2 rounded-pill shadow-lg" style="pointer-events: none;">
+                                    <?php echo !empty($baseBtnText) ? $baseBtnText : 'Learn More'; ?>
+                                </span>
+                            </div>
+                        </a>
+                    <?php else : ?>
+                        <?php 
+                            $logo = getSetting('site_logo');
+                            if($logo && file_exists(APPROOT . '/public/' . $logo)) : 
+                        ?>
+                            <img src="<?php echo URLROOT . '/' . $logo; ?>" alt="Logo" style="max-height: 100px; max-width: 80%; object-fit: contain; opacity: 0.8;">
+                        <?php endif; ?>
+                        <p class="text-muted small mt-3" style="font-weight: 600; text-transform: uppercase; letter-spacing: 2px;">Empowering Scholars</p>
+                    <?php endif; ?>
+                </div>
+
+                <!-- PAGE 1: COVER & STORY -->
+                <div class="page" id="page1" style="z-index: 10;" onclick="flipPage(1)">
+                    <div class="page-front book-cover">
+                        <img src="<?php echo !empty($data['student']->profile_photo) ? URLROOT . '/' . $data['student']->profile_photo : 'https://via.placeholder.com/200'; ?>" class="student-img-large shadow" alt="Student">
+                        <h2 class="fw-bold"><?php echo $data['student']->first_name . ' ' . $data['student']->surname; ?></h2>
+                        <p class="opacity-75">Your Student Portfolio 2026</p>
+                        <div class="mt-5 small text-uppercase" style="letter-spacing: 2px;">Click to Open</div>
+                    </div>
+                    <div class="page-back">
+                        <div class="page-title">My Story</div>
+                        <p style="line-height: 1.6; font-size: 0.95rem; color: #444;">
+                            <?php echo nl2br($data['student']->about); ?>
+                        </p>
+                        <div class="page-number">1</div>
+                    </div>
+                </div>
+
+                <!-- PAGE 2: PROFILE & GOALS -->
+                <div class="page" id="page2" style="z-index: 9;" onclick="flipPage(2)">
+                    <div class="page-front">
+                        <div class="page-title">Academic Profile</div>
+                        <table class="table table-sm mt-3">
+                            <tr><th class="text-muted small">NAME</th><td><?php echo $data['student']->first_name; ?></td></tr>
+                            <tr><th class="text-muted small">SURNAME</th><td><?php echo $data['student']->surname; ?></td></tr>
+                            <tr><th class="text-muted small">CLASS</th><td><?php echo $data['student']->class; ?></td></tr>
+                            <tr><th class="text-muted small">AGE</th><td><?php echo $data['student']->age; ?> Years</td></tr>
+                            <tr><th class="text-muted small">STATUS</th><td><span class="badge bg-success">Active</span></td></tr>
+                        </table>
+                        <div class="page-number">2</div>
+                    </div>
+                    <div class="page-back">
+                        <div class="page-title">Educational Goals</div>
+                        <p style="line-height: 1.6; font-size: 0.95rem;">
+                            <?php echo nl2br($data['student']->educational_goals); ?>
+                        </p>
+                        <div class="page-number">3</div>
+                    </div>
+                </div>
+
+                <!-- PAGE 3: FAITH & NEEDS -->
+                <div class="page" id="page3" style="z-index: 8;" onclick="flipPage(3)">
+                    <div class="page-front">
+                        <div class="page-title">Best Memory Verse</div>
+                        <div class="verse-box">
+                            "<?php echo $data['student']->memory_verse; ?>"
+                        </div>
+                        <div class="page-number">4</div>
+                    </div>
+                    <div class="page-back">
+                        <div class="page-title">Prayer Needs</div>
+                        <div class="prayer-box">
+                            <?php echo nl2br($data['student']->prayer_needs); ?>
+                        </div>
+                        <div class="page-number">5</div>
+                    </div>
+                </div>
+
+                <!-- PAGE 4: GALLERY (LIFE AT HEAVEN OF HOPE ACADEMY) -->
+                <div class="page" id="page4" style="z-index: 7;" onclick="flipPage(4)">
+                    <div class="page-front">
+                        <div class="page-title">Life at Heaven of Hope Academy</div>
+                        <div class="gallery-grid">
+                            <?php if(!empty($data['gallery'])) : ?>
+                                <?php foreach(array_slice($data['gallery'], 0, 4) as $photo) : ?>
+                                    <div class="gallery-item-wrapper">
+                                        <img src="<?php echo URLROOT . '/' . $photo->photo_path; ?>" class="gallery-item">
+                                        <?php if(!empty($photo->caption)) : ?>
+                                            <div class="gallery-caption"><?php echo $photo->caption; ?></div>
+                                        <?php endif; ?>
+                                    </div>
+                                <?php endforeach; ?>
+                            <?php else : ?>
+                                <p class="text-muted small">No gallery photos yet.</p>
+                            <?php endif; ?>
+                        </div>
+                        <?php if(count($data['gallery']) > 4) : ?>
+                            <small class="text-muted mt-2 d-block">+ <?php echo count($data['gallery']) - 4; ?> more photos</small>
+                        <?php endif; ?>
+                        <div class="page-number">6</div>
+                    </div>
+                    <div class="page-back">
+                        <div class="page-title">More Moments</div>
+                        <div class="gallery-grid mt-2">
+                            <?php if(count($data['gallery']) > 4) : ?>
+                                <?php foreach(array_slice($data['gallery'], 4, 4) as $photo) : ?>
+                                    <div class="gallery-item-wrapper">
+                                        <img src="<?php echo URLROOT . '/' . $photo->photo_path; ?>" class="gallery-item">
+                                        <?php if(!empty($photo->caption)) : ?>
+                                            <div class="gallery-caption"><?php echo $photo->caption; ?></div>
+                                        <?php endif; ?>
+                                    </div>
+                                <?php endforeach; ?>
+                            <?php else : ?>
+                                <p class="small text-muted text-center py-5">Photos capturing the daily life and smiles of our scholars.</p>
+                            <?php endif; ?>
+                        </div>
+                        <div class="page-number">7</div>
+                    </div>
+                </div>
+
+                <!-- PAGE 5: RESULTS & BACK COVER -->
+                <div class="page" id="page5" style="z-index: 6;" onclick="flipPage(5)">
+                    <div class="page-front">
+                        <div class="page-title">Official Results</div>
+                        <div class="results-gallery" style="overflow-y: auto; max-height: 400px;">
+                            <?php if(empty($data['uploads'])) : ?>
+                                <p class="text-muted small">No result images uploaded.</p>
+                            <?php else : ?>
+                                <?php foreach($data['uploads'] as $up) : ?>
+                                    <div class="mb-3 border-bottom pb-2">
+                                        <small class="text-primary fw-bold d-block mb-1"><?php echo $up->file_name; ?></small>
+                                        <img src="<?php echo URLROOT . '/' . $up->file_path; ?>" class="img-fluid rounded shadow-sm" style="width: 100%;">
+                                    </div>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
+                        </div>
+                        <div class="page-number">8</div>
+                    </div>
+                    <div class="page-back book-cover" style="border-radius: 10px 0 0 10px;">
+                        <?php 
+                            $logo = getSetting('site_logo');
+                            if($logo && file_exists(APPROOT . '/public/' . $logo)) : 
+                        ?>
+                            <div class="mb-4 d-flex justify-content-center w-100">
+                                <img src="<?php echo URLROOT . '/' . $logo; ?>" alt="Logo" style="max-height: 100px; max-width: 80%; object-fit: contain;">
+                            </div>
+                        <?php endif; ?>
+                        <h3 class="fw-bold">Thank You</h3>
+                        <p class="small px-4 mt-2">Your support is building a bright future for <?php echo $data['student']->first_name; ?>.</p>
+                        
+                        <div class="mt-5 no-print">
+                            <a href="https://ioiglobal.org/thaddeus-scholarship/" target="_blank" class="btn btn-light btn-sm fw-bold px-4 py-2 shadow-sm" style="color: var(--book-cover-color); border-radius: 30px;">
+                                Support Another Student
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        
+        <p class="mt-5 text-muted small"><i class="fa fa-hand-pointer-o"></i> Click pages to flip forward and backward</p>
     </div>
-    
-    <p class="mt-5 text-muted small no-print"><i class="fa fa-hand-pointer-o"></i> Click pages to flip forward and backward</p>
 </div>
 
 <script>
