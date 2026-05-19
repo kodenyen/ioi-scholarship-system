@@ -152,7 +152,7 @@ class Student extends Controller {
             if ($message_id) {
                 // Notify Sponsor of the reply
                 $this->db = new Database();
-                $this->db->query('SELECT email, name FROM sponsors WHERE id = :id');
+                $this->db->query('SELECT email, name, access_token FROM sponsors WHERE id = :id');
                 $this->db->bind(':id', $sponsor_id);
                 $sponsorObj = $this->db->single();
 
@@ -168,7 +168,7 @@ class Student extends Controller {
                                 {$messageData['content']}
                             </div>
                             <p style='margin-top: 20px;'>
-                                <a href=\"" . URLROOT . "/sponsor/login\" style='background: #005BFF; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;'>View Message</a>
+                                <a href=\"" . URLROOT . "/sponsor/dashboard?token={$sponsorObj->access_token}\" style='background: #005BFF; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;'>View Message & Reply</a>
                             </p>
                         </div>
                     ";

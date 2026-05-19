@@ -43,6 +43,12 @@ class Admin extends Controller {
             // Send Notification Email
             $message = $this->messageModel->getMessageById($id);
             if ($message) {
+                // Get sponsor access token
+                $this->db->query('SELECT access_token FROM sponsors WHERE id = :id');
+                $this->db->bind(':id', $message->receiver_id);
+                $sponsor = $this->db->single();
+                $token = $sponsor ? $sponsor->access_token : '';
+
                 $subject = "New Message from Scholar: " . $message->sender_name;
                 
                 // Format the email body
@@ -60,10 +66,10 @@ class Admin extends Controller {
                             \"{$message->content}\"
                         </div>
                         
-                        <p style='margin-bottom: 30px;'>Please log in to your dashboard to view full conversation and reply.</p>
+                        <p style='margin-bottom: 30px;'>Please click the button below to view the full conversation and reply. This link will log you in automatically.</p>
                         
                         <div style='text-align: center;'>
-                            <a href=\"" . URLROOT . "\" style='background: #005BFF; color: white; padding: 14px 35px; text-decoration: none; border-radius: 10px; font-weight: bold; display: inline-block; box-shadow: 0 4px 15px rgba(0,91,255,0.2);'>Access Dashboard</a>
+                            <a href=\"" . URLROOT . "/sponsor/dashboard?token={$token}\" style='background: #005BFF; color: white; padding: 14px 35px; text-decoration: none; border-radius: 10px; font-weight: bold; display: inline-block; box-shadow: 0 4px 15px rgba(0,91,255,0.2);'>Access Your Dashboard</a>
                         </div>
                         
                         <div style='margin-top: 40px; padding-top: 20px; border-top: 1px solid #eee; font-size: 0.8rem; color: #999; text-align: center;'>
