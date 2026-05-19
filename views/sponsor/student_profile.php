@@ -65,8 +65,8 @@
 }
 
 @media print {
-    .no-print { display: none !important; }
-    .print-only { display: block !important; }
+    .no-print { display: none !important; opacity: 0 !important; visibility: hidden !important; height: 0 !important; overflow: hidden !important; }
+    .print-only { display: block !important; visibility: visible !important; }
     body { background: white !important; }
 }
 .print-only { display: none; }
