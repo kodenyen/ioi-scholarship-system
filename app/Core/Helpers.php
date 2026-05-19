@@ -40,17 +40,83 @@ function getSetting($key) {
     return $row ? $row->setting_value : null;
 }
 
-// Send Email Utility
+// Send Email Utility using SMTP
 function sendEmail($to, $subject, $body) {
-    $fromName = getSetting('smtp_from_name') ?: SITE_NAME;
-    $fromEmail = getSetting('smtp_user') ?: 'no-reply@' . $_SERVER['HTTP_HOST'];
-    
-    $headers = "MIME-Version: 1.0" . "\r\n";
-    $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
-    $headers .= 'From: '.$fromName.' <'.$fromEmail.'>' . "\r\n";
-    
-    try {
+    // Get config from constants or database settings
+    $host = defined('SMTP_HOST') ? SMTP_HOST : getSetting('smtp_host');
+    $port = defined('SMTP_PORT') ? SMTP_PORT : getSetting('smtp_port');
+    $user = defined('SMTP_USER') ? SMTP_USER : getSetting('smtp_user');
+    $pass = defined('SMTP_PASS') ? SMTP_PASS : getSetting('smtp_pass');
+    $fromName = defined('SMTP_FROM_NAME') ? SMTP_FROM_NAME : (getSetting('smtp_from_name') ?: SITE_NAME);
+    $fromEmail = defined('SMTP_FROM') ? SMTP_FROM : (getSetting('smtp_user') ?: 'no-reply@' . $_SERVER['HTTP_HOST']);
+
+    // Check if we have minimum requirements
+    if (empty($host) || empty($user) || empty($pass)) {
+        // Fallback to mail() but it likely won't work on Hostinger without SMTP
+        $headers = "MIME-Version: 1.0" . "\r\n";
+        $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+        $headers .= 'From: '.$fromName.' <'.$fromEmail.'>' . "\r\n";
         return mail($to, $subject, $body, $headers);
+    }
+
+    $timeout = 30;
+    $localhost = $_SERVER['HTTP_HOST'] ?? 'localhost';
+    $newLine = "\r\n";
+
+    try {
+        // Connect to server
+        $socket = fsockopen(($port == 465 ? 'ssl://' : '') . $host, $port, $errno, $errstr, $timeout);
+        if (!$socket) return false;
+
+        $getResponse = function($socket) use ($newLine) {
+            $response = "";
+            while ($line = fgets($socket, 515)) {
+                $response .= $line;
+                if (substr($line, 3, 1) == " ") break;
+            }
+            return $response;
+        };
+
+        $getResponse($socket); // Connection greeting
+
+        fwrite($socket, "EHLO $localhost" . $newLine);
+        $getResponse($socket);
+
+        if ($port != 465) {
+            fwrite($socket, "STARTTLS" . $newLine);
+            $getResponse($socket);
+            stream_socket_enable_crypto($socket, true, STREAM_CRYPTO_METHOD_TLS_CLIENT);
+            fwrite($socket, "EHLO $localhost" . $newLine);
+            $getResponse($socket);
+        }
+
+        fwrite($socket, "AUTH LOGIN" . $newLine);
+        $getResponse($socket);
+        fwrite($socket, base64_encode($user) . $newLine);
+        $getResponse($socket);
+        fwrite($socket, base64_encode($pass) . $newLine);
+        $getResponse($socket);
+
+        fwrite($socket, "MAIL FROM: <$user>" . $newLine);
+        $getResponse($socket);
+        fwrite($socket, "RCPT TO: <$to>" . $newLine);
+        $getResponse($socket);
+        fwrite($socket, "DATA" . $newLine);
+        $getResponse($socket);
+
+        $headerStr = "To: $to" . $newLine;
+        $headerStr .= "From: $fromName <$fromEmail>" . $newLine;
+        $headerStr .= "Subject: $subject" . $newLine;
+        $headerStr .= "MIME-Version: 1.0" . $newLine;
+        $headerStr .= "Content-Type: text/html; charset=UTF-8" . $newLine;
+        $headerStr .= "Date: " . date('r') . $newLine;
+
+        fwrite($socket, $headerStr . $newLine . $body . $newLine . "." . $newLine);
+        $getResponse($socket);
+
+        fwrite($socket, "QUIT" . $newLine);
+        fclose($socket);
+        return true;
     } catch (Exception $e) {
         return false;
     }
