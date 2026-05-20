@@ -321,8 +321,8 @@
 /* --- Mobile Responsiveness --- */
 @media (max-width: 768px) {
     :root {
-        --book-width: 320px;
-        --book-height: 480px;
+        --book-width: 300px;
+        --book-height: 450px;
     }
 
     .portfolio-title {
@@ -330,9 +330,14 @@
         letter-spacing: 2px;
     }
 
+    .book-viewport {
+        /* Reduce perspective on mobile for better fit */
+        perspective: 1500px;
+    }
+
     .book-viewport.is-open {
-        /* On mobile, we don't shift as much to keep it centered in portrait */
-        transform: translateX(0) scale(0.9);
+        /* Centering: shift by half width and scale down to fit two pages on screen */
+        transform: translateX(calc(var(--book-width) / 2.2)) scale(0.65);
     }
 
     .page-front, .page-back {
@@ -345,29 +350,32 @@
     }
 
     .student-img-large {
-        width: 140px;
-        height: 140px;
+        width: 120px;
+        height: 120px;
         margin-bottom: 20px;
+        border-width: 6px;
     }
 
     .gallery-item {
-        height: 80px;
+        height: 70px;
     }
 
     .verse-box, .prayer-box {
         padding: 15px;
-        font-size: 0.9rem;
+        font-size: 0.85rem;
+        margin: 15px 0;
     }
 
     .portfolio-wrapper {
-        padding: 20px 10px;
+        padding: 10px 5px;
+        min-height: 80vh;
     }
 }
 
 @media (max-width: 480px) {
     :root {
-        --book-width: 280px;
-        --book-height: 420px;
+        --book-width: 260px;
+        --book-height: 390px;
     }
 
     .portfolio-title {
@@ -377,12 +385,19 @@
     .portfolio-nav-buttons {
         flex-direction: column;
         width: 100%;
-        max-width: 250px;
-        margin: 0 auto 30px;
+        max-width: 200px;
+        margin: 0 auto 20px;
+        gap: 10px;
     }
 
     .book-viewport.is-open {
-        transform: translateX(0) scale(0.85);
+        /* Even more aggressive scale for small phones */
+        transform: translateX(calc(var(--book-width) / 2.5)) scale(0.6);
+    }
+    
+    .page-number {
+        bottom: 10px;
+        right: 15px;
     }
 }
 </style>
