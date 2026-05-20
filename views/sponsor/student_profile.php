@@ -417,38 +417,48 @@
 
 @media (max-width: 480px) {
     :root {
-        --book-width: 260px;
-        --book-height: 390px;
+        --book-width: 250px;
+        --book-height: 375px;
     }
 
     .portfolio-title {
-        font-size: 1.6rem;
-        letter-spacing: 3px;
+        font-size: 1.4rem;
+        letter-spacing: 2px;
     }
 
     .portfolio-nav-buttons {
         flex-direction: column;
         width: 100%;
-        max-width: 280px;
+        max-width: 220px;
         margin: 0 auto 20px;
-        gap: 12px;
-        padding: 0 20px;
+        gap: 8px;
+        padding: 0;
     }
 
     .btn-download, .btn-back-nav {
         width: 100% !important;
         justify-content: center;
-        padding: 14px !important;
+        padding: 10px !important;
+        font-size: 0.8rem !important;
     }
 
     .book-viewport.is-open {
-        /* Even more aggressive scale for small phones */
-        transform: translateX(calc(var(--book-width) / 2.5)) scale(0.6);
+        /* Centering the spine exactly */
+        transform: translateX(calc(var(--book-width) / 2)) scale(0.6);
     }
     
     .page-number {
         bottom: 10px;
         right: 15px;
+    }
+
+    .page-front, .page-back {
+        padding: 15px;
+    }
+
+    .page-title {
+        font-size: 0.9rem;
+        margin-bottom: 10px;
     }
 }
 </style>
