@@ -20,38 +20,81 @@
 }
 
 .portfolio-title-container {
-    margin-bottom: 50px;
+    margin-bottom: 60px;
     position: relative;
+    padding-top: 20px;
 }
 
 .portfolio-title {
     font-family: var(--title-font);
     font-weight: 900;
-    font-size: 3.5rem;
+    font-size: 3.8rem;
     color: #005BFF;
     text-transform: uppercase;
-    letter-spacing: 4px;
-    margin-bottom: 10px;
-    background: linear-gradient(to right, var(--book-cover-color), #005BFF, var(--book-cover-color));
+    letter-spacing: 6px;
+    margin-bottom: 15px;
+    background: linear-gradient(135deg, var(--book-cover-color) 0%, #005BFF 50%, var(--book-cover-color) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.05);
+    text-shadow: 4px 4px 10px rgba(0,0,0,0.08);
     display: inline-block;
 }
 
 .title-underline {
-    width: 100px;
-    height: 4px;
-    background: var(--book-cover-color);
+    width: 120px;
+    height: 5px;
+    background: linear-gradient(to right, var(--book-cover-color), #005BFF);
     margin: 0 auto;
-    border-radius: 2px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,91,255,0.2);
 }
 
 .portfolio-nav-buttons {
-    margin-top: 20px;
+    margin-top: 35px;
     display: flex;
     justify-content: center;
-    gap: 15px;
+    gap: 20px;
+}
+
+.btn-download {
+    background: linear-gradient(135deg, #005BFF 0%, #0046cc 100%);
+    color: white !important;
+    border: none !important;
+    padding: 12px 30px !important;
+    border-radius: 50px !important;
+    font-weight: 700 !important;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 0.9rem;
+    box-shadow: 0 10px 20px rgba(0,91,255,0.25);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.btn-download:hover {
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 0 15px 30px rgba(0,91,255,0.35);
+    background: linear-gradient(135deg, #0066FF 0%, #005BFF 100%);
+}
+
+.btn-back-nav {
+    background: white;
+    color: #444 !important;
+    border: 1px solid #ddd !important;
+    padding: 12px 25px !important;
+    border-radius: 50px !important;
+    font-weight: 600 !important;
+    font-size: 0.9rem;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    transition: all 0.3s ease !important;
+}
+
+.btn-back-nav:hover {
+    background: #f8f9fa;
+    border-color: #ccc !important;
+    transform: translateY(-2px);
 }
 
 .btn-primary {
@@ -379,15 +422,23 @@
     }
 
     .portfolio-title {
-        font-size: 1.5rem;
+        font-size: 1.6rem;
+        letter-spacing: 3px;
     }
 
     .portfolio-nav-buttons {
         flex-direction: column;
         width: 100%;
-        max-width: 200px;
+        max-width: 280px;
         margin: 0 auto 20px;
-        gap: 10px;
+        gap: 12px;
+        padding: 0 20px;
+    }
+
+    .btn-download, .btn-back-nav {
+        width: 100% !important;
+        justify-content: center;
+        padding: 14px !important;
     }
 
     .book-viewport.is-open {
@@ -517,15 +568,15 @@
             <div class="title-underline"></div>
             
             <div class="portfolio-nav-buttons">
-                <button onclick="downloadPDF()" class="btn btn-primary shadow-sm px-4">
-                    <i class="fa fa-download"></i> Download Report
+                <button onclick="downloadPDF()" class="btn btn-download">
+                    <i class="fa fa-file-pdf"></i> Download Report
                 </button>
                 <?php if(isset($data['is_preview']) && $data['is_preview']) : ?>
-                    <a href="<?php echo URLROOT; ?>/admin/student_profile/<?php echo $data['student']->id; ?>" class="btn btn-outline-secondary shadow-sm px-4">
+                    <a href="<?php echo URLROOT; ?>/admin/student_profile/<?php echo $data['student']->id; ?>" class="btn btn-back-nav">
                         <i class="fa fa-arrow-left"></i> Back to Admin
                     </a>
                 <?php else : ?>
-                    <a href="<?php echo URLROOT; ?>/sponsor/dashboard?token=<?php echo $_GET['token']; ?>" class="btn btn-outline-secondary shadow-sm px-4">
+                    <a href="<?php echo URLROOT; ?>/sponsor/dashboard?token=<?php echo $_GET['token']; ?>" class="btn btn-back-nav">
                         <i class="fa fa-chevron-left"></i> Dashboard
                     </a>
                 <?php endif; ?>
