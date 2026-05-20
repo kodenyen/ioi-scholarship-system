@@ -317,6 +317,74 @@
 .badge.bg-success {
     background-color: var(--book-cover-color) !important;
 }
+
+/* --- Mobile Responsiveness --- */
+@media (max-width: 768px) {
+    :root {
+        --book-width: 320px;
+        --book-height: 480px;
+    }
+
+    .portfolio-title {
+        font-size: 1.8rem;
+        letter-spacing: 2px;
+    }
+
+    .book-viewport.is-open {
+        /* On mobile, we don't shift as much to keep it centered in portrait */
+        transform: translateX(0) scale(0.9);
+    }
+
+    .page-front, .page-back {
+        padding: 20px;
+    }
+
+    .page-title {
+        font-size: 1rem;
+        margin-bottom: 15px;
+    }
+
+    .student-img-large {
+        width: 140px;
+        height: 140px;
+        margin-bottom: 20px;
+    }
+
+    .gallery-item {
+        height: 80px;
+    }
+
+    .verse-box, .prayer-box {
+        padding: 15px;
+        font-size: 0.9rem;
+    }
+
+    .portfolio-wrapper {
+        padding: 20px 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    :root {
+        --book-width: 280px;
+        --book-height: 420px;
+    }
+
+    .portfolio-title {
+        font-size: 1.5rem;
+    }
+
+    .portfolio-nav-buttons {
+        flex-direction: column;
+        width: 100%;
+        max-width: 250px;
+        margin: 0 auto 30px;
+    }
+
+    .book-viewport.is-open {
+        transform: translateX(0) scale(0.85);
+    }
+}
 </style>
 
 </style>
@@ -620,7 +688,10 @@
             </div>
         </div>
         
-        <p class="mt-5 text-muted small"><i class="fa fa-hand-pointer-o"></i> Click pages to flip forward and backward</p>
+        <p class="mt-5 text-muted small no-print">
+            <span class="d-none d-md-inline"><i class="fa fa-hand-pointer-o"></i> Click pages to flip forward and backward</span>
+            <span class="d-inline d-md-none"><i class="fa fa-hand-pointer"></i> Tap pages to flip through the portfolio</span>
+        </p>
     </div>
 </div>
 
