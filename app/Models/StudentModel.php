@@ -107,6 +107,29 @@ class StudentModel {
         return $this->db->single();
     }
 
+    public function getUnassignedStudents($limit = null, $offset = null) {
+        $sql = 'SELECT * FROM students WHERE id NOT IN (SELECT student_id FROM sponsor_student) ORDER BY created_at DESC';
+        
+        if ($limit !== null && $offset !== null) {
+            $sql .= ' LIMIT :limit OFFSET :offset';
+        }
+
+        $this->db->query($sql);
+        
+        if ($limit !== null && $offset !== null) {
+            $this->db->bind(':limit', $limit);
+            $this->db->bind(':offset', $offset);
+        }
+        
+        return $this->db->resultSet();
+    }
+
+    public function getUnassignedStudentCount() {
+        $this->db->query('SELECT COUNT(*) as count FROM students WHERE id NOT IN (SELECT student_id FROM sponsor_student)');
+        $row = $this->db->single();
+        return $row->count;
+    }
+
     public function getStudentByToken($token) {
         $this->db->query('SELECT * FROM students WHERE access_token = :token');
         $this->db->bind(':token', $token);

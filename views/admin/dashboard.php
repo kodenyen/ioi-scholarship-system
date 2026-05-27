@@ -64,6 +64,7 @@
     .icon-pending { background: #fff4e6; color: #f08c00; }
     .icon-sponsors { background: #e7f5ff; color: #1c7ed6; }
     .icon-students { background: #ebfbee; color: #2b8a3e; }
+    .icon-requests { background: #fff9db; color: #f08c00; }
 
     .stat-value {
         font-weight: 800;
@@ -150,16 +151,17 @@
     .delay-1 { animation-delay: 0.1s; }
     .delay-2 { animation-delay: 0.2s; }
     .delay-3 { animation-delay: 0.3s; }
+    .delay-4 { animation-delay: 0.4s; }
 </style>
 
 <div class="dashboard-header animate-up">
-    <h1 class="dashboard-title">Admin Dashboard</h1>
+    <h1 class="dashboard-title">Admin Dashboard (Updated)</h1>
     <p class="text-muted">Welcome back, <strong><?php echo $_SESSION['admin_name']; ?></strong>. Here's what's happening today.</p>
 </div>
 
 <div class="row">
     <!-- Pending Messages -->
-    <div class="col-md-4 mb-4 animate-up delay-1">
+    <div class="col-md-3 mb-4 animate-up delay-1">
         <div class="stat-card">
             <div class="stat-icon icon-pending">
                 <i class="fa-solid fa-envelope-open-text"></i>
@@ -171,7 +173,7 @@
     </div>
 
     <!-- Total Sponsors -->
-    <div class="col-md-4 mb-4 animate-up delay-2">
+    <div class="col-md-3 mb-4 animate-up delay-2">
         <div class="stat-card">
             <div class="stat-icon icon-sponsors">
                 <i class="fa-solid fa-hand-holding-heart"></i>
@@ -183,7 +185,7 @@
     </div>
 
     <!-- Total Students -->
-    <div class="col-md-4 mb-4 animate-up delay-3">
+    <div class="col-md-3 mb-4 animate-up delay-3">
         <div class="stat-card">
             <div class="stat-icon icon-students">
                 <i class="fa-solid fa-graduation-cap"></i>
@@ -191,6 +193,18 @@
             <div class="stat-value"><?php echo $data['student_count']; ?></div>
             <div class="stat-label">Total Students</div>
             <a href="<?php echo URLROOT; ?>/admin/students" class="stretched-link"></a>
+        </div>
+    </div>
+
+    <!-- Scholarship Requests -->
+    <div class="col-md-3 mb-4 animate-up delay-4">
+        <div class="stat-card" style="border-bottom: 4px solid var(--warning);">
+            <div class="stat-icon icon-requests">
+                <i class="fa-solid fa-file-signature"></i>
+            </div>
+            <div class="stat-value"><?php echo isset($data['unassigned_count']) ? $data['unassigned_count'] : '0'; ?></div>
+            <div class="stat-label">Scholarship Requests</div>
+            <a href="<?php echo URLROOT; ?>/admin/scholarship_requests" class="stretched-link"></a>
         </div>
     </div>
 </div>

@@ -55,9 +55,11 @@
                         <div class="mb-4">
                             <label class="form-label">Student / Beneficiary</label>
                             <select name="student_id" class="form-select">
-                                <option value="" disabled selected>Choose a student...</option>
+                                <option value="" disabled <?php echo empty($data['preselected_student']) ? 'selected' : ''; ?>>Choose a student...</option>
                                 <?php foreach($data['students'] as $student) : ?>
-                                    <option value="<?php echo $student->id; ?>"><?php echo $student->first_name . ' ' . $student->surname; ?></option>
+                                    <option value="<?php echo $student->id; ?>" <?php echo ($data['preselected_student'] == $student->id) ? 'selected' : ''; ?>>
+                                        <?php echo $student->first_name . ' ' . $student->surname; ?>
+                                    </option>
                                 <?php endforeach; ?>
                             </select>
                         </div>

@@ -168,10 +168,14 @@ class Admin extends Controller {
         $assignments = $this->assignmentModel->getAssignments();
         $sponsors = $this->sponsorModel->getSponsors();
         $students = $this->studentModel->getStudents();
+        
+        $preselectedStudent = isset($_GET['student_id']) ? (int)$_GET['student_id'] : null;
+
         $data = [
             'assignments' => $assignments,
             'sponsors' => $sponsors,
-            'students' => $students
+            'students' => $students,
+            'preselected_student' => $preselectedStudent
         ];
         $this->view('admin/assignments/index', $data);
     }
@@ -354,6 +358,29 @@ class Admin extends Controller {
         ];
         $this->view('admin/students/index', $data);
     }
+
+    public function scholarship_requests() {
+        if (!isLoggedIn()) redirect('admin/login');
+
+        // Pagination
+        $limit = 10;
+        $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+        $offset = ($page - 1) * $limit;
+
+        $totalUnassigned = $this->studentModel->getUnassignedStudentCount();
+        $totalPages = ceil($totalUnassigned / $limit);
+
+        $students = $this->studentModel->getUnassignedStudents($limit, $offset);
+
+        $data = [
+            'students' => $students,
+            'currentPage' => $page,
+            'totalPages' => $totalPages,
+            'totalCount' => $totalUnassigned
+        ];
+        $this->view('admin/students/scholarship_requests', $data);
+    }
+
     public function student_profile($id) {
         if (!isLoggedIn()) redirect('admin/login');
 
@@ -687,8 +714,6 @@ class Admin extends Controller {
         }
 
         // Fetch counts for dashboard stats
-        $this->db = new Database();
-        
         $this->db->query('SELECT COUNT(*) as count FROM messages WHERE status = "pending"');
         $pendingCount = $this->db->single()->count;
 
@@ -698,11 +723,14 @@ class Admin extends Controller {
         $this->db->query('SELECT COUNT(*) as count FROM students');
         $studentCount = $this->db->single()->count;
 
+        $unassignedCount = $this->studentModel->getUnassignedStudentCount();
+
         $data = [
             'title' => 'Admin Dashboard',
             'pending_count' => $pendingCount,
             'sponsor_count' => $sponsorCount,
-            'student_count' => $studentCount
+            'student_count' => $studentCount,
+            'unassigned_count' => $unassignedCount
         ];
         $this->view('admin/dashboard', $data);
     }
