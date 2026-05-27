@@ -1,9 +1,9 @@
-# Ignore all user-uploaded files
-public/uploads/gallery/*
-public/uploads/profile_photos/*
-public/uploads/results/*
-public/uploads/sponsor_photos/*
-public/uploads/system/*
+# Allow uploaded files to be tracked by git
+# public/uploads/gallery/*
+# public/uploads/profile_photos/*
+# public/uploads/results/*
+# public/uploads/sponsor_photos/*
+# public/uploads/system/*
 
 # But keep the directories
 !public/uploads/gallery/.gitkeep
