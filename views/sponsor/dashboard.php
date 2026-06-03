@@ -10,8 +10,8 @@
     
     .student-card { background: white; border: none; border-radius: 24px; box-shadow: 0 8px 30px rgba(0,0,0,0.05); overflow: hidden; transition: all 0.3s ease; border: 1px solid rgba(0,0,0,0.02); }
     .student-card:hover { transform: translateY(-5px); box-shadow: 0 12px 40px rgba(0,0,0,0.08); }
-    .card-banner { height: 100px; background: linear-gradient(135deg, #2b9348 0%, #005BFF 100%); position: relative; }
-    .card-avatar-wrapper { width: 90px; height: 90px; border-radius: 24px; background: white; padding: 5px; position: absolute; bottom: -45px; left: 24px; box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
+    .card-banner { height: 100px; background: linear-gradient(90deg, #2b9348 0%, #005BFF 100%); position: relative; }
+    .card-avatar-wrapper { width: 100px; height: 100px; border-radius: 25px; background: white; padding: 6px; position: absolute; bottom: -50px; left: 30px; box-shadow: 0 10px 25px rgba(0,0,0,0.12); }
     .card-avatar-img { width: 100%; height: 100%; border-radius: 20px; object-fit: cover; }
     .card-avatar-placeholder { width: 100%; height: 100%; border-radius: 20px; background: #f8f9fa; color: #2b9348; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; font-weight: 800; }
     

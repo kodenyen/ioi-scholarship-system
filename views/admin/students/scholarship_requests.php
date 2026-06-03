@@ -10,10 +10,10 @@
     
     .data-card { background: white; border: none; border-radius: 24px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); overflow: hidden; height: 100%; transition: all 0.3s ease; border: 1px solid rgba(0,0,0,0.02); }
     .data-card:hover { transform: translateY(-5px); box-shadow: 0 12px 30px rgba(0,0,0,0.08); }
-    .card-banner { height: 80px; background: linear-gradient(135deg, #ffb703 0%, #fb8500 100%); position: relative; }
+    .card-banner { height: 80px; background: linear-gradient(90deg, #2b9348 0%, #005BFF 100%); position: relative; }
     .avatar-wrapper { width: 80px; height: 80px; border-radius: 20px; background: white; padding: 5px; position: absolute; bottom: -40px; left: 24px; box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
     .avatar-img { width: 100%; height: 100%; border-radius: 15px; object-fit: cover; }
-    .avatar-placeholder { width: 100%; height: 100%; border-radius: 15px; background: #f8f9fa; color: #fb8500; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: 800; }
+    .avatar-placeholder { width: 100%; height: 100%; border-radius: 15px; background: #f8f9fa; color: #2b9348; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: 800; }
     
     .card-content { padding: 55px 24px 24px; }
     .data-name { font-weight: 700; font-size: 1.2rem; color: #001219; margin-bottom: 0.2rem; }
