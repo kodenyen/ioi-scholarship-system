@@ -81,8 +81,14 @@
                                 <a href="<?php echo URLROOT; ?>/admin/assignments?student_id=<?php echo $student->id; ?>" class="btn-assign">
                                     <i class="fa-solid fa-link me-2"></i> Assign a Sponsor
                                 </a>
+                                <button type="button" class="btn btn-success fw-bold rounded-pill py-2" style="background-color: #2b9348 !important; border: none !important;" onclick="openInterestModal(<?php echo $student->id; ?>, '<?php echo $student->first_name . ' ' . $student->surname; ?>')">
+                                    <i class="fa-solid fa-hand-holding-heart me-2"></i> Sponsor This Student
+                                </button>
+                                <a href="<?php echo URLROOT; ?>/pages/portfolio/<?php echo $student->id; ?>" class="btn-profile" target="_blank">
+                                    <i class="fa-solid fa-book-open me-2"></i> View Portfolio
+                                </a>
                                 <a href="<?php echo URLROOT; ?>/admin/student_profile/<?php echo $student->id; ?>" class="btn-profile">
-                                    <i class="fa-solid fa-user me-2"></i> View Profile
+                                    <i class="fa-solid fa-user me-2"></i> Admin View Profile
                                 </a>
                             </div>
                         </div>
@@ -119,5 +125,42 @@
         <?php endif; ?>
     <?php endif; ?>
 </div>
+
+<!-- Interest Modal -->
+<div class="modal fade" id="interestModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" style="border-radius: 24px; border: none;">
+            <div class="modal-header border-0 pb-0">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="<?php echo URLROOT; ?>/pages/interested_sponsorship" method="POST">
+                <div class="modal-body p-4">
+                    <h4 class="fw-bold text-center mb-4">Sponsorship Interest</h4>
+                    <input type="hidden" name="student_id" id="modal_student_id">
+                    <p class="text-muted text-center mb-4">You are interested in sponsoring <strong id="modal_student_name"></strong>. Please leave your details.</p>
+                    
+                    <div class="mb-3">
+                        <input type="text" name="sponsor_name" class="form-control" placeholder="Your Full Name" required style="border-radius: 12px; padding: 12px;">
+                    </div>
+                    <div class="mb-3">
+                        <input type="email" name="sponsor_email" class="form-control" placeholder="Your Email" required style="border-radius: 12px; padding: 12px;">
+                    </div>
+                    <div class="mb-3">
+                        <textarea name="message" class="form-control" rows="3" placeholder="Additional notes..." style="border-radius: 12px; padding: 12px;"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-success w-100 rounded-pill py-3 fw-bold mt-2" style="background: #2b9348; border: none;">Send Interest</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    function openInterestModal(id, name) {
+        document.getElementById('modal_student_id').value = id;
+        document.getElementById('modal_student_name').innerText = name;
+        new bootstrap.Modal(document.getElementById('interestModal')).show();
+    }
+</script>
 
 <?php require APPROOT . '/views/layouts/footer.php'; ?>
