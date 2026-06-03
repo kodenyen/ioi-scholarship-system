@@ -725,14 +725,40 @@ class Admin extends Controller {
 
         $unassignedCount = $this->studentModel->getUnassignedStudentCount();
 
+        // Count interested sponsors
+        $this->db->query('SELECT COUNT(*) as count FROM interested_sponsorships WHERE status = "pending"');
+        $interestedCount = $this->db->single()->count;
+
         $data = [
             'title' => 'Admin Dashboard',
             'pending_count' => $pendingCount,
             'sponsor_count' => $sponsorCount,
             'student_count' => $studentCount,
-            'unassigned_count' => $unassignedCount
+            'unassigned_count' => $unassignedCount,
+            'interested_count' => $interestedCount
         ];
         $this->view('admin/dashboard', $data);
+    }
+
+    public function interests() {
+        if (!isLoggedIn()) redirect('admin/login');
+
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $id = $_POST['id'];
+            $this->db->query('UPDATE interested_sponsorships SET status = "reviewed" WHERE id = :id');
+            $this->db->bind(':id', $id);
+            $this->db->execute();
+            flash('interest_message', 'Interest marked as reviewed');
+            redirect('admin/interests');
+        }
+
+        $this->db->query('SELECT i.*, s.first_name, s.surname FROM interested_sponsorships i JOIN students s ON i.student_id = s.id ORDER BY i.created_at DESC');
+        $interests = $this->db->resultSet();
+
+        $data = [
+            'interests' => $interests
+        ];
+        $this->view('admin/interests/index', $data);
     }
 
     public function settings() {

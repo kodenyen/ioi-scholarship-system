@@ -161,7 +161,7 @@
 
 <div class="row">
     <!-- Pending Messages -->
-    <div class="col-md-3 mb-4 animate-up delay-1">
+    <div class="col-md-4 col-lg mb-4 animate-up delay-1">
         <div class="stat-card">
             <div class="stat-icon icon-pending">
                 <i class="fa-solid fa-envelope-open-text"></i>
@@ -172,8 +172,20 @@
         </div>
     </div>
 
+    <!-- Interested Sponsors -->
+    <div class="col-md-4 col-lg mb-4 animate-up delay-1">
+        <div class="stat-card" style="border-bottom: 4px solid var(--success);">
+            <div class="stat-icon" style="background: #ebfbee; color: #2b8a3e;">
+                <i class="fa-solid fa-heart-circle-plus"></i>
+            </div>
+            <div class="stat-value"><?php echo $data['interested_count']; ?></div>
+            <div class="stat-label">Interested Sponsors</div>
+            <a href="<?php echo URLROOT; ?>/admin/interests" class="stretched-link"></a>
+        </div>
+    </div>
+
     <!-- Total Sponsors -->
-    <div class="col-md-3 mb-4 animate-up delay-2">
+    <div class="col-md-4 col-lg mb-4 animate-up delay-2">
         <div class="stat-card">
             <div class="stat-icon icon-sponsors">
                 <i class="fa-solid fa-hand-holding-heart"></i>
@@ -185,7 +197,7 @@
     </div>
 
     <!-- Total Students -->
-    <div class="col-md-3 mb-4 animate-up delay-3">
+    <div class="col-md-4 col-lg mb-4 animate-up delay-3">
         <div class="stat-card">
             <div class="stat-icon icon-students">
                 <i class="fa-solid fa-graduation-cap"></i>
@@ -197,8 +209,8 @@
     </div>
 
     <!-- Scholarship Requests -->
-    <div class="col-md-3 mb-4 animate-up delay-4">
-        <div class="stat-card" style="border-bottom: 4px solid var(--warning);">
+    <div class="col-md-4 col-lg mb-4 animate-up delay-4">
+        <div class="stat-card">
             <div class="stat-icon icon-requests">
                 <i class="fa-solid fa-file-signature"></i>
             </div>
