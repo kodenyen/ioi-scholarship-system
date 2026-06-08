@@ -25,8 +25,8 @@
     .card-actions { display: grid; grid-template-columns: 1fr; gap: 10px; margin-top: auto; }
     .btn-assign { background: #005BFF; color: white; border-radius: 12px; padding: 12px; font-weight: 700; text-align: center; text-decoration: none; transition: all 0.2s; border: none; }
     .btn-assign:hover { background: #4FA242; color: white; transform: scale(1.02); }
-    .btn-profile { background: #f8f9fa; color: #444; border: 1px solid #eee; border-radius: 12px; padding: 10px; font-weight: 600; font-size: 0.9rem; text-align: center; text-decoration: none; transition: all 0.2s; }
-    .btn-profile:hover { border-color: #005BFF; color: #005BFF; }
+    .btn-profile { background: #f8f9fa !important; color: #444 !important; border: 1px solid #eee !important; border-radius: 12px !important; padding: 12px !important; font-weight: 600 !important; font-size: 0.9rem !important; text-align: center !important; text-decoration: none !important; transition: all 0.2s !important; display: block !important; width: 100% !important; }
+    .btn-profile:hover { border-color: #005BFF !important; color: #005BFF !important; background: white !important; }
 </style>
 
 <div class="container py-4">
