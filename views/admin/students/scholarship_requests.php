@@ -81,7 +81,7 @@
                                 <button type="button" class="btn btn-success fw-bold rounded-pill py-2" style="background-color: #2b9348 !important; border: none !important;" onclick="openInterestModal(<?php echo $student->id; ?>, '<?php echo $student->first_name . ' ' . $student->surname; ?>')">
                                     <i class="fa-solid fa-hand-holding-heart me-2"></i> Sponsor This Student
                                 </button>
-                                <a href="<?php echo URLROOT; ?>/pages/portfolio/<?php echo $student->id; ?>" class="btn-profile">
+                                <a href="<?php echo URLROOT; ?>/pages/portfolio/<?php echo $student->id; ?>" class="btn-profile" target="_blank">
                                     <i class="fa-solid fa-book-open me-2"></i> View Portfolio
                                 </a>
                             </div>

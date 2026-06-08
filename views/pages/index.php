@@ -152,18 +152,6 @@
                 </div>
                 <i class="fa-solid fa-chevron-right ms-auto opacity-25"></i>
             </a>
-
-            <!-- Public Scholarship Requests -->
-            <a href="<?php echo URLROOT; ?>/pages/requests" class="portal-option-item mt-4" style="background: #fff9db; border-color: #fab005;">
-                <div class="portal-icon" style="background: #fff4e6; color: #f08c00;">
-                    <i class="fa-solid fa-earth-africa"></i>
-                </div>
-                <div class="portal-text">
-                    <h6>Public Scholars Gallery</h6>
-                    <p>Browse students awaiting sponsorship.</p>
-                </div>
-                <i class="fa-solid fa-chevron-right ms-auto opacity-25"></i>
-            </a>
         </div>
     </div>
 </div>
