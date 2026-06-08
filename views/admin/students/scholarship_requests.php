@@ -1,5 +1,4 @@
 <?php require APPROOT . '/views/layouts/header.php'; ?>
-<h1 style="color: red; background: yellow; text-align: center; padding: 20px;">DEBUG: VERSION 4 - BUTTON SHOULD BE HERE</h1>
 
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -9,25 +8,38 @@
     .page-header { margin-bottom: 2rem; }
     .page-title { font-weight: 800; font-size: 2.2rem; color: #001219; letter-spacing: -1px; margin: 0; }
     
-    .data-card { background: white; border: none; border-radius: 24px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); overflow: hidden; height: 100%; transition: all 0.3s ease; border: 1px solid rgba(0,0,0,0.02); }
+    .data-card { background: white; border: none; border-radius: 24px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); overflow: hidden; height: 100%; transition: all 0.3s ease; border: 1px solid rgba(0,0,0,0.02); display: flex; flex-direction: column; }
     .data-card:hover { transform: translateY(-5px); box-shadow: 0 12px 30px rgba(0,0,0,0.08); }
     .card-banner { height: 80px; background: linear-gradient(90deg, #2b9348 0%, #005BFF 100%); position: relative; }
     .avatar-wrapper { width: 80px; height: 80px; border-radius: 20px; background: white; padding: 5px; position: absolute; bottom: -40px; left: 24px; box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
     .avatar-img { width: 100%; height: 100%; border-radius: 15px; object-fit: cover; }
     .avatar-placeholder { width: 100%; height: 100%; border-radius: 15px; background: #f8f9fa; color: #2b9348; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: 800; }
     
-    .card-content { padding: 55px 24px 24px; }
+    .card-content { padding: 55px 24px 24px; flex: 1; display: flex; flex-direction: column; }
     .data-name { font-weight: 700; font-size: 1.2rem; color: #001219; margin-bottom: 0.2rem; }
     .data-meta { font-size: 0.85rem; color: #6c757d; margin-bottom: 1.2rem; display: flex; align-items: center; gap: 8px; }
     .badge-class { padding: 4px 10px; border-radius: 6px; background: #fff9db; color: #f08c00; font-weight: 700; font-size: 0.7rem; text-transform: uppercase; }
     
     .student-about { font-size: 0.85rem; color: #555; line-height: 1.6; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; margin-bottom: 1.5rem; }
     
-    .card-actions { display: grid; grid-template-columns: 1fr; gap: 10px; margin-top: auto; }
-    .btn-assign { background: #005BFF; color: white; border-radius: 12px; padding: 12px; font-weight: 700; text-align: center; text-decoration: none; transition: all 0.2s; border: none; }
-    .btn-assign:hover { background: #4FA242; color: white; transform: scale(1.02); }
-    .btn-profile { background: #f8f9fa !important; color: #444 !important; border: 1px solid #eee !important; border-radius: 12px !important; padding: 12px !important; font-weight: 600 !important; font-size: 0.9rem !important; text-align: center !important; text-decoration: none !important; transition: all 0.2s !important; display: block !important; width: 100% !important; }
-    .btn-profile:hover { border-color: #005BFF !important; color: #005BFF !important; background: white !important; }
+    .card-actions { margin-top: auto; display: flex; flex-direction: column; gap: 10px; }
+    
+    .btn-profile { 
+        background: #ffffff !important; 
+        color: #005BFF !important; 
+        border: 2px solid #005BFF !important; 
+        border-radius: 12px !important; 
+        padding: 12px !important; 
+        font-weight: 700 !important; 
+        font-size: 0.9rem !important; 
+        text-align: center !important; 
+        text-decoration: none !important; 
+        transition: all 0.2s !important; 
+        display: block !important;
+        width: 100% !important;
+        box-shadow: 0 4px 10px rgba(0,91,255,0.1) !important;
+    }
+    .btn-profile:hover { background: #005BFF !important; color: white !important; }
 </style>
 
 <div class="container py-4">
