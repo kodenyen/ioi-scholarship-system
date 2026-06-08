@@ -33,12 +33,12 @@
     <div class="page-header animate-up">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="<?php echo URLROOT; ?>/admin/dashboard">Dashboard</a></li>
+                <li class="breadcrumb-item"><a href="<?php echo URLROOT; ?>">Home</a></li>
                 <li class="breadcrumb-item active">Scholarship Requests</li>
             </ol>
         </nav>
-        <h1 class="page-title">Scholarship Requests</h1>
-        <p class="text-muted m-0">Students currently awaiting a sponsor assignment (Total: <?php echo $data['totalCount']; ?>).</p>
+        <h1 class="page-title">Change a Life Today</h1>
+        <p class="text-muted m-0">Browse our scholars awaiting sponsorship and start a journey of impact (Total: <?php echo $data['totalCount']; ?>).</p>
     </div>
 
     <?php flash('student_message'); ?>
@@ -50,7 +50,7 @@
             </div>
             <h3>All Students Assigned!</h3>
             <p class="text-muted">There are no students currently awaiting sponsorship.</p>
-            <a href="<?php echo URLROOT; ?>/admin/students" class="btn btn-primary mt-3" style="border-radius: 12px; padding: 10px 25px;">View All Students</a>
+            <a href="<?php echo URLROOT; ?>" class="btn btn-primary mt-3" style="border-radius: 12px; padding: 10px 25px;">Back to Home</a>
         </div>
     <?php else : ?>
         <div class="row g-4">
@@ -78,17 +78,11 @@
                             <p class="student-about"><?php echo $student->about; ?></p>
 
                             <div class="card-actions">
-                                <a href="<?php echo URLROOT; ?>/admin/assignments?student_id=<?php echo $student->id; ?>" class="btn-assign">
-                                    <i class="fa-solid fa-link me-2"></i> Assign a Sponsor
-                                </a>
                                 <button type="button" class="btn btn-success fw-bold rounded-pill py-2" style="background-color: #2b9348 !important; border: none !important;" onclick="openInterestModal(<?php echo $student->id; ?>, '<?php echo $student->first_name . ' ' . $student->surname; ?>')">
                                     <i class="fa-solid fa-hand-holding-heart me-2"></i> Sponsor This Student
                                 </button>
-                                <a href="<?php echo URLROOT; ?>/pages/portfolio/<?php echo $student->id; ?>" class="btn-profile" target="_blank">
+                                <a href="<?php echo URLROOT; ?>/pages/portfolio/<?php echo $student->id; ?>" class="btn-profile">
                                     <i class="fa-solid fa-book-open me-2"></i> View Portfolio
-                                </a>
-                                <a href="<?php echo URLROOT; ?>/admin/student_profile/<?php echo $student->id; ?>" class="btn-profile">
-                                    <i class="fa-solid fa-user me-2"></i> Admin View Profile
                                 </a>
                             </div>
                         </div>
@@ -102,21 +96,21 @@
             <nav class="mt-5 animate-up">
                 <ul class="pagination justify-content-center">
                     <li class="page-item <?php echo ($data['currentPage'] <= 1) ? 'disabled' : ''; ?>">
-                        <a class="page-link shadow-sm border-0 px-3" href="<?php echo URLROOT; ?>/admin/scholarship_requests?page=<?php echo $data['currentPage'] - 1; ?>" style="border-radius: 10px 0 0 10px;">
+                        <a class="page-link shadow-sm border-0 px-3" href="?page=<?php echo $data['currentPage'] - 1; ?>" style="border-radius: 10px 0 0 10px;">
                             <i class="fa-solid fa-chevron-left me-1"></i> Previous
                         </a>
                     </li>
                     
                     <?php for($i = 1; $i <= $data['totalPages']; $i++) : ?>
                         <li class="page-item <?php echo ($data['currentPage'] == $i) ? 'active' : ''; ?>">
-                            <a class="page-link shadow-sm border-0 px-3 mx-1 <?php echo ($data['currentPage'] == $i) ? 'bg-primary text-white' : 'bg-white text-dark'; ?>" href="<?php echo URLROOT; ?>/admin/scholarship_requests?page=<?php echo $i; ?>" style="border-radius: 8px;">
+                            <a class="page-link shadow-sm border-0 px-3 mx-1 <?php echo ($data['currentPage'] == $i) ? 'bg-primary text-white' : 'bg-white text-dark'; ?>" href="?page=<?php echo $i; ?>" style="border-radius: 8px;">
                                 <?php echo $i; ?>
                             </a>
                         </li>
                     <?php endfor; ?>
 
                     <li class="page-item <?php echo ($data['currentPage'] >= $data['totalPages']) ? 'disabled' : ''; ?>">
-                        <a class="page-link shadow-sm border-0 px-3" href="<?php echo URLROOT; ?>/admin/scholarship_requests?page=<?php echo $data['currentPage'] + 1; ?>" style="border-radius: 0 10px 10px 0;">
+                        <a class="page-link shadow-sm border-0 px-3" href="?page=<?php echo $data['currentPage'] + 1; ?>" style="border-radius: 0 10px 10px 0;">
                             Next <i class="fa-solid fa-chevron-right ms-1"></i>
                         </a>
                     </li>

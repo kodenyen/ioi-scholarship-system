@@ -19,6 +19,26 @@ class Admin extends Controller {
         $this->messageModel = $this->model('MessageModel');
     }
 
+    public function scholarship_requests() {
+        // Pagination
+        $limit = 12;
+        $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+        $offset = ($page - 1) * $limit;
+
+        $totalUnassigned = $this->studentModel->getUnassignedStudentCount();
+        $totalPages = ceil($totalUnassigned / $limit);
+
+        $students = $this->studentModel->getUnassignedStudents($limit, $offset);
+
+        $data = [
+            'students' => $students,
+            'currentPage' => $page,
+            'totalPages' => $totalPages,
+            'totalCount' => $totalUnassigned
+        ];
+        $this->view('admin/students/scholarship_requests', $data);
+    }
+
     public function index() {
         if (!isLoggedIn()) {
             redirect('admin/login');
@@ -360,10 +380,8 @@ class Admin extends Controller {
     }
 
     public function scholarship_requests() {
-        if (!isLoggedIn()) redirect('admin/login');
-
         // Pagination
-        $limit = 10;
+        $limit = 12;
         $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
         $offset = ($page - 1) * $limit;
 

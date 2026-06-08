@@ -36,6 +36,26 @@ class Pages extends Controller {
         $this->view('pages/scholarships', $data);
     }
 
+    public function requests() {
+        // Pagination
+        $limit = 12;
+        $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+        $offset = ($page - 1) * $limit;
+
+        $totalUnassigned = $this->studentModel->getUnassignedStudentCount();
+        $totalPages = ceil($totalUnassigned / $limit);
+
+        $students = $this->studentModel->getUnassignedStudents($limit, $offset);
+
+        $data = [
+            'students' => $students,
+            'currentPage' => $page,
+            'totalPages' => $totalPages,
+            'totalCount' => $totalUnassigned
+        ];
+        $this->view('admin/students/scholarship_requests', $data);
+    }
+
     public function portfolio($id) {
         $student = $this->studentModel->getStudentById($id);
         if (!$student) redirect('pages/scholarships');

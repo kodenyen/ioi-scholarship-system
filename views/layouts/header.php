@@ -351,6 +351,9 @@
 
                     <!-- DONATE BUTTON -->
                     <li class="nav-item">
+                        <a href="<?php echo URLROOT; ?>/pages/requests" class="nav-link">SCHOLAR GALLERY</a>
+                    </li>
+                    <li class="nav-item">
                         <a href="<?php echo getSetting('donate_url'); ?>" target="_blank" class="nav-link btn-donate">DONATE</a>
                     </li>
                 </ul>
