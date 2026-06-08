@@ -82,7 +82,7 @@
                                     <i class="fa-solid fa-hand-holding-heart me-2"></i> Sponsor This Student
                                 </button>
                                 <a href="<?php echo URLROOT; ?>/pages/portfolio/<?php echo $student->id; ?>" class="btn-profile" target="_blank">
-                                    <i class="fa-solid fa-book-open me-2"></i> View Portfolio
+                                    <i class="fa-solid fa-book-open me-2"></i> View Student Portfolio
                                 </a>
                             </div>
                         </div>

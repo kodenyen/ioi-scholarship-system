@@ -83,8 +83,8 @@
                                 <button type="button" class="btn-sponsor" onclick="openInterestModal(<?php echo $student->id; ?>, '<?php echo $student->first_name . ' ' . $student->surname; ?>')">
                                     <i class="fa-solid fa-hand-holding-heart me-2"></i> Sponsor This Student
                                 </button>
-                                <a href="<?php echo URLROOT; ?>/pages/portfolio/<?php echo $student->id; ?>" class="btn-portfolio">
-                                    <i class="fa-solid fa-book-open me-2"></i> View Portfolio
+                                <a href="<?php echo URLROOT; ?>/pages/portfolio/<?php echo $student->id; ?>" class="btn-portfolio" target="_blank">
+                                    <i class="fa-solid fa-book-open me-2"></i> View Student Portfolio
                                 </a>
                             </div>
                         </div>
