@@ -379,26 +379,6 @@ class Admin extends Controller {
         $this->view('admin/students/index', $data);
     }
 
-    public function scholarship_requests() {
-        // Pagination
-        $limit = 12;
-        $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-        $offset = ($page - 1) * $limit;
-
-        $totalUnassigned = $this->studentModel->getUnassignedStudentCount();
-        $totalPages = ceil($totalUnassigned / $limit);
-
-        $students = $this->studentModel->getUnassignedStudents($limit, $offset);
-
-        $data = [
-            'students' => $students,
-            'currentPage' => $page,
-            'totalPages' => $totalPages,
-            'totalCount' => $totalUnassigned
-        ];
-        $this->view('admin/students/scholarship_requests', $data);
-    }
-
     public function student_profile($id) {
         if (!isLoggedIn()) redirect('admin/login');
 
