@@ -121,15 +121,36 @@ class Pages extends Controller {
                     </div>
                 ";
 
-                // Send to every admin found in the system
+                // Gather all valid recipients
+                $recipients = [];
+
+                // 1. Add all system admins
                 if(!empty($admins)) {
                     foreach($admins as $admin) {
-                        sendEmail($admin->email, $subject, $body);
+                        // Skip the default dummy email from the README
+                        if($admin->email !== 'admin@ioi.com' && filter_var($admin->email, FILTER_VALIDATE_EMAIL)) {
+                            $recipients[] = $admin->email;
+                        }
                     }
-                } else {
-                    // Fallback to contact email if no admin records found
-                    $adminEmail = getSetting('contact_email') ?: 'admin@ioi.com';
-                    sendEmail($adminEmail, $subject, $body);
+                }
+
+                // 2. Add the public contact email from settings
+                $contactEmail = getSetting('contact_email');
+                if($contactEmail && filter_var($contactEmail, FILTER_VALIDATE_EMAIL)) {
+                    $recipients[] = $contactEmail;
+                }
+
+                // 3. Ultimate Fallback: The authenticated SMTP User account
+                if(defined('SMTP_USER') && filter_var(SMTP_USER, FILTER_VALIDATE_EMAIL)) {
+                    $recipients[] = SMTP_USER;
+                }
+
+                // Remove duplicates to prevent spamming the same address
+                $recipients = array_unique($recipients);
+
+                // Send the email to all unique recipients
+                foreach($recipients as $email) {
+                    sendEmail($email, $subject, $body);
                 }
 
                 flash('scholarship_message', 'Thank you for your interest! The admin will contact you shortly.');
