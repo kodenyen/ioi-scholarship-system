@@ -2,10 +2,12 @@
 
 class Pages extends Controller {
     private $studentModel;
+    private $adminModel;
     private $db;
 
     public function __construct() {
         $this->studentModel = $this->model('StudentModel');
+        $this->adminModel = $this->model('AdminModel');
         $this->db = new Database();
     }
 
@@ -94,9 +96,10 @@ class Pages extends Controller {
             $this->db->bind(':message', $data['message']);
 
             if ($this->db->execute()) {
-                // Notify Admin
+                // Notify All Admins
                 $student = $this->studentModel->getStudentById($data['student_id']);
-                $adminEmail = getSetting('contact_email') ?: 'admin@ioi.com';
+                $admins = $this->adminModel->getAdmins();
+                
                 $subject = "New Interested Sponsor for " . $student->first_name . " " . $student->surname;
                 $body = "
                     <div style='font-family: Arial, sans-serif; padding: 20px; border: 1px solid #eee; border-radius: 10px;'>
@@ -110,14 +113,24 @@ class Pages extends Controller {
                         </ul>
                         <p><strong>Message:</strong></p>
                         <div style='background: #f9f9f9; padding: 15px; border-left: 4px solid #2b9348;'>
-                            {$data['message']}
+                            " . nl2br($data['message']) . "
                         </div>
                         <p style='margin-top: 20px;'>
                             <a href=\"" . URLROOT . "/admin/dashboard\" style='background: #2b9348; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;'>View in Admin Dashboard</a>
                         </p>
                     </div>
                 ";
-                sendEmail($adminEmail, $subject, $body);
+
+                // Send to every admin found in the system
+                if(!empty($admins)) {
+                    foreach($admins as $admin) {
+                        sendEmail($admin->email, $subject, $body);
+                    }
+                } else {
+                    // Fallback to contact email if no admin records found
+                    $adminEmail = getSetting('contact_email') ?: 'admin@ioi.com';
+                    sendEmail($adminEmail, $subject, $body);
+                }
 
                 flash('scholarship_message', 'Thank you for your interest! The admin will contact you shortly.');
                 redirect('pages/scholarships');
