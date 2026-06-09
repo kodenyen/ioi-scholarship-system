@@ -50,13 +50,17 @@ function sendEmail($to, $subject, $body) {
     $fromName = getSetting('smtp_from_name') ?: (defined('SMTP_FROM_NAME') ? SMTP_FROM_NAME : SITE_NAME);
     $fromEmail = getSetting('smtp_user') ?: (defined('SMTP_FROM') && SMTP_FROM !== 'your-email@domain.com' ? SMTP_FROM : 'no-reply@' . $_SERVER['HTTP_HOST']);
 
-    // Check if we have minimum requirements
-    if (empty($host) || empty($user) || empty($pass)) {
-        // Fallback to mail() but it likely won't work on Hostinger without SMTP
+    // Fallback mail function
+    $sendViaMail = function() use ($to, $subject, $body, $fromName, $fromEmail) {
         $headers = "MIME-Version: 1.0" . "\r\n";
         $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
         $headers .= 'From: '.$fromName.' <'.$fromEmail.'>' . "\r\n";
         return mail($to, $subject, $body, $headers);
+    };
+
+    // Check if we have minimum requirements for SMTP
+    if (empty($host) || empty($user) || empty($pass)) {
+        return $sendViaMail();
     }
 
     $timeout = 30;
@@ -65,8 +69,8 @@ function sendEmail($to, $subject, $body) {
 
     try {
         // Connect to server
-        $socket = fsockopen(($port == 465 ? 'ssl://' : '') . $host, $port, $errno, $errstr, $timeout);
-        if (!$socket) return false;
+        $socket = @fsockopen(($port == 465 ? 'ssl://' : '') . $host, $port, $errno, $errstr, $timeout);
+        if (!$socket) return $sendViaMail();
 
         $getResponse = function($socket) use ($newLine) {
             $response = "";
@@ -95,9 +99,15 @@ function sendEmail($to, $subject, $body) {
         fwrite($socket, base64_encode($user) . $newLine);
         $getResponse($socket);
         fwrite($socket, base64_encode($pass) . $newLine);
-        $getResponse($socket);
+        $authResponse = $getResponse($socket);
+        
+        // If authentication fails, fallback to mail
+        if(strpos($authResponse, '235') === false) {
+            fclose($socket);
+            return $sendViaMail();
+        }
 
-        fwrite($socket, "MAIL FROM: <$user>" . $newLine);
+        fwrite($socket, "MAIL FROM: <$fromEmail>" . $newLine);
         $getResponse($socket);
         fwrite($socket, "RCPT TO: <$to>" . $newLine);
         $getResponse($socket);
@@ -118,7 +128,7 @@ function sendEmail($to, $subject, $body) {
         fclose($socket);
         return true;
     } catch (Exception $e) {
-        return false;
+        return $sendViaMail();
     }
 }
 
@@ -138,20 +148,15 @@ function getMenuItems($parentId = null) {
 
 /**
  * Robust URL helper for assets and uploads
- * Handles URL root and encoding for spaces
  */
 function asset($path) {
     if (empty($path)) return '';
     // If it's already a full URL, return it
     if (strpos($path, 'http') === 0) return $path;
     
-    // Ensure path is clean and correctly encoded for URLs (like spaces)
+    // Simply prepend URLROOT to ensure paths aren't broken by aggressive encoding
     $path = ltrim($path, '/');
-    $parts = explode('/', $path);
-    $encodedParts = array_map('rawurlencode', $parts);
-    $encodedPath = implode('/', $encodedParts);
-    
-    return URLROOT . '/' . $encodedPath;
+    return URLROOT . '/' . $path;
 }
 
 /**
