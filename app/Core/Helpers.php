@@ -42,13 +42,13 @@ function getSetting($key) {
 
 // Send Email Utility using SMTP
 function sendEmail($to, $subject, $body) {
-    // Get config from constants or database settings
-    $host = defined('SMTP_HOST') ? SMTP_HOST : getSetting('smtp_host');
-    $port = defined('SMTP_PORT') ? SMTP_PORT : getSetting('smtp_port');
-    $user = defined('SMTP_USER') ? SMTP_USER : getSetting('smtp_user');
-    $pass = defined('SMTP_PASS') ? SMTP_PASS : getSetting('smtp_pass');
-    $fromName = defined('SMTP_FROM_NAME') ? SMTP_FROM_NAME : (getSetting('smtp_from_name') ?: SITE_NAME);
-    $fromEmail = defined('SMTP_FROM') ? SMTP_FROM : (getSetting('smtp_user') ?: 'no-reply@' . $_SERVER['HTTP_HOST']);
+    // Get config from database settings first, then fallback to constants
+    $host = getSetting('smtp_host') ?: (defined('SMTP_HOST') && SMTP_HOST !== 'smtp.hostinger.com' ? SMTP_HOST : 'smtp.hostinger.com');
+    $port = getSetting('smtp_port') ?: (defined('SMTP_PORT') ? SMTP_PORT : 465);
+    $user = getSetting('smtp_user') ?: (defined('SMTP_USER') && SMTP_USER !== 'your-email@domain.com' ? SMTP_USER : '');
+    $pass = getSetting('smtp_pass') ?: (defined('SMTP_PASS') && SMTP_PASS !== 'your-password' ? SMTP_PASS : '');
+    $fromName = getSetting('smtp_from_name') ?: (defined('SMTP_FROM_NAME') ? SMTP_FROM_NAME : SITE_NAME);
+    $fromEmail = getSetting('smtp_user') ?: (defined('SMTP_FROM') && SMTP_FROM !== 'your-email@domain.com' ? SMTP_FROM : 'no-reply@' . $_SERVER['HTTP_HOST']);
 
     // Check if we have minimum requirements
     if (empty($host) || empty($user) || empty($pass)) {
