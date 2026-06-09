@@ -73,6 +73,12 @@
     gap: 10px;
 }
 
+.btn-download:hover {
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 0 15px 30px rgba(0,91,255,0.35);
+    background: linear-gradient(135deg, #0066FF 0%, #005BFF 100%);
+}
+
 .btn-back-nav {
     background: white;
     color: #444 !important;
@@ -85,10 +91,28 @@
     transition: all 0.3s ease !important;
 }
 
-.btn-primary {
-    background-color: #005BFF !important;
-    border-color: #005BFF !important;
+.btn-back-nav:hover {
+    background: #f8f9fa;
+    border-color: #ccc !important;
+    transform: translateY(-2px);
 }
+
+@media print {
+    .no-print, .portfolio-wrapper, .book-viewport, .book, .page, .book-base { 
+        display: none !important; 
+        opacity: 0 !important; 
+        visibility: hidden !important; 
+        height: 0 !important; 
+        width: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        position: absolute !important;
+        top: -9999px !important;
+    }
+    .print-only { display: block !important; visibility: visible !important; }
+    body { background: white !important; }
+}
+.print-only { display: none; }
 
 .portfolio-wrapper {
     display: flex;
@@ -137,6 +161,28 @@
     border: 1px solid var(--page-border);
 }
 
+.book-base::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(0,0,0,0.03) 3px);
+    pointer-events: none;
+}
+
+.book::before {
+    content: '';
+    position: absolute;
+    width: 50px;
+    height: 100%;
+    left: -25px;
+    background: var(--book-spine-color);
+    transform: rotateY(-90deg);
+    transform-origin: right;
+    box-shadow: inset -10px 0 30px rgba(0,0,0,0.5), 
+                inset 10px 0 10px rgba(255,255,255,0.1);
+    border-radius: 5px 0 0 5px;
+}
+
 .page {
     width: 100%; height: 100%;
     position: absolute; top: 0; left: 0;
@@ -147,6 +193,7 @@
     cursor: pointer;
     user-select: none;
     border-radius: 0 5px 5px 0;
+    box-shadow: inset 10px 0 30px rgba(0,0,0,0.05);
 }
 
 .page-front, .page-back {
@@ -164,10 +211,19 @@
     transform: rotateY(180deg);
     background: linear-gradient(to right, var(--page-bg) 0%, #f7f7e9 100%);
     border-radius: 5px 0 0 5px;
+    box-shadow: inset -10px 0 30px rgba(0,0,0,0.05);
 }
 
 .page.flipped {
     transform: rotateY(-178deg) translateZ(1px);
+}
+
+.page.flipped .page-back::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: linear-gradient(to left, rgba(0,0,0,0.05) 0%, transparent 100%);
+    pointer-events: none;
 }
 
 .book-cover {
@@ -176,13 +232,23 @@
     text-align: center;
     justify-content: center;
     border-radius: 0 10px 10px 0;
+    border: none;
+    box-shadow: inset 5px 0 10px rgba(255,255,255,0.2), inset -5px 0 10px rgba(0,0,0,0.2);
+}
+
+.book-cover::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 15px; width: 2px; height: 100%;
+    background: rgba(255,255,255,0.1);
 }
 
 .student-img-large {
-    width: 200px; height: 200px;
+    width: 220px; height: 220px;
     object-fit: cover; border-radius: 50%;
     border: 10px solid rgba(255,255,255,0.2);
     margin: 0 auto 30px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.3);
 }
 
 .page-title {
@@ -193,6 +259,7 @@
     font-weight: 800;
     text-transform: uppercase;
     font-size: 1.2rem;
+    letter-spacing: 2px;
 }
 
 .page-number {
@@ -200,133 +267,280 @@
     font-size: 0.8rem; color: #a0a090; font-weight: bold;
 }
 
+.page-back .page-number { left: 30px; right: auto; }
+
 .gallery-grid {
     display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;
 }
 
-.gallery-item {
-    height: 110px; width: 100%;
-    object-fit: cover; border-radius: 5px;
+.gallery-item-wrapper {
+    background: white; padding: 3px; border: 1px solid var(--page-border); border-radius: 5px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
 
+.gallery-item {
+    height: 110px; width: 100%; object-fit: cover; border-radius: 3px; transition: transform 0.3s; display: block;
+}
+
+.gallery-caption {
+    font-size: 0.6rem; color: #666; text-align: center; padding-top: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-family: var(--body-font);
+}
+
+.gallery-item:hover { transform: scale(1.05); }
+
 .verse-box {
-    background: #fdfdf5; padding: 25px;
-    border-left: 5px solid var(--book-cover-color);
-    font-style: italic; margin: 25px 0; border-radius: 0 10px 10px 0;
+    background: #fdfdf5; padding: 25px; border-left: 5px solid var(--book-cover-color); font-style: italic; margin: 25px 0; border-radius: 0 10px 10px 0; font-size: 1.1rem; line-height: 1.6; color: #444;
 }
 
 .prayer-box {
-    background: #f0f7f2; padding: 25px; border-radius: 12px;
-    border: 2px dashed var(--book-cover-color);
+    background: #f0f7f2; padding: 25px; border-radius: 12px; border: 2px dashed var(--book-cover-color); color: #1e6632;
 }
 
-.modal-content { border-radius: 24px; border: none; }
-.form-control { border-radius: 12px; padding: 12px; }
+.badge.bg-success { background-color: var(--book-cover-color) !important; }
 
 @media (max-width: 768px) {
     :root { --book-width: 300px; --book-height: 450px; }
     .book-viewport.is-open { transform: translateX(calc(var(--book-width) / 2.2)) scale(0.65); }
     .portfolio-title { font-size: 1.8rem; }
+    .page-front, .page-back { padding: 20px; }
+    .page-title { font-size: 1rem; margin-bottom: 15px; }
+    .student-img-large { width: 120px; height: 120px; margin-bottom: 20px; border-width: 6px; }
+    .gallery-item { height: 70px; }
+}
+
+@media (max-width: 480px) {
+    :root { --book-width: 250px; --book-height: 375px; }
+    .portfolio-title { font-size: 1.4rem; }
+    .portfolio-nav-buttons { flex-direction: column; width: 100%; max-width: 220px; margin: 0 auto 20px; gap: 8px; }
+    .btn-download, .btn-back-nav { width: 100% !important; justify-content: center; }
 }
 </style>
 
-<div class="portfolio-wrapper">
-    <div class="container text-center portfolio-title-container">
-        <h1 class="portfolio-title">Student Portfolio</h1>
-        <div class="title-underline"></div>
+<!-- PRINTABLE VERSION (Strictly Isolated) -->
+<div id="printable-profile" class="print-only">
+    <style>
+        @media print {
+            .print-only { display: block !important; visibility: visible !important; }
+            .page-break { page-break-before: always; clear: both; display: block; height: 1px; }
+            body { background: white !important; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 0; margin: 0; }
+            @page { margin: 1.5cm; size: A4; }
+            .no-print { display: none !important; opacity: 0 !important; visibility: hidden !important; height: 0 !important; width: 0 !important; overflow: hidden !important; position: absolute !important; }
+        }
+        .print-container { width: 100%; color: #333; }
+        .print-header { text-align: center; border-bottom: 4px solid var(--book-cover-color); padding-bottom: 30px; margin-bottom: 40px; }
+        .print-section { margin-bottom: 40px; page-break-inside: avoid; }
+        .print-section h3 { color: var(--book-cover-color); border-bottom: 2px solid #f0f0f0; padding-bottom: 12px; text-transform: uppercase; font-size: 1.4rem; font-weight: 800; margin-bottom: 20px; }
+        .print-grid { display: flex; flex-wrap: wrap; gap: 20px; margin-top: 20px; }
+        .print-photo-wrapper { width: calc(50% - 10px); margin-bottom: 20px; page-break-inside: avoid; }
+        .print-photo { width: 100%; height: 280px; object-fit: cover; border-radius: 12px; border: 1px solid #eee; }
+        .print-badge { display: inline-block; padding: 6px 18px; background: #f8f9fa; border-radius: 30px; font-size: 0.95rem; font-weight: 600; margin: 5px; border: 1px solid #eee; }
+        .story-content { line-height: 1.8; font-size: 1.15rem; color: #444; text-align: justify; }
+    </style>
+
+    <div class="print-container">
+        <!-- PAGE 1: COVER & BIO -->
+        <div class="print-header">
+            <?php 
+                $logo = getSetting('site_logo');
+                if($logo) : 
+            ?>
+                <img src="<?php echo asset($logo); ?>" style="max-height: 60px; margin-bottom: 30px;">
+            <?php endif; ?>
+            
+            <div style="margin-bottom: 30px;">
+                <img src="<?php echo !empty($data['student']->profile_photo) ? asset($data['student']->profile_photo) : ''; ?>" style="width: 180px; height: 180px; border-radius: 50%; border: 8px solid #f8f9fa; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
+            </div>
+            
+            <h1 style="margin: 0; font-size: 3rem; font-weight: 900; color: #001219;"><?php echo $data['student']->first_name . ' ' . $data['student']->surname; ?></h1>
+            <p style="font-size: 1.3rem; color: #666; margin-top: 10px;">Official Student Portfolio | Heaven of Hope Academy</p>
+            
+            <div style="margin-top: 30px;">
+                <span class="print-badge">Class: <?php echo $data['student']->class; ?></span>
+                <span class="print-badge">Age: <?php echo $data['student']->age; ?> Years</span>
+                <span class="print-badge">ID: SCH-<?php echo str_pad($data['student']->id, 4, '0', STR_PAD_LEFT); ?></span>
+            </div>
+        </div>
+
+        <div class="print-section">
+            <h3>My Story</h3>
+            <div class="story-content"><?php echo nl2br($data['student']->about); ?></div>
+        </div>
+
+        <div class="print-section">
+            <h3>Educational Goals</h3>
+            <div class="story-content"><?php echo nl2br($data['student']->educational_goals); ?></div>
+        </div>
+
+        <!-- PAGE 2: FAITH & GALLERY -->
+        <div class="page-break"></div>
         
-        <div class="portfolio-nav-buttons">
-            <a href="<?php echo URLROOT; ?>/pages/scholarships" class="btn btn-back-nav">
-                <i class="fa fa-chevron-left"></i> Back to Scholars
-            </a>
-            <button class="btn btn-download" onclick="window.print()">
-                <i class="fa fa-print"></i> Print Portfolio
-            </button>
+        <div class="print-section">
+            <h3>Faith & Prayer</h3>
+            <div style="background: #fdfdf5; padding: 30px; border-left: 6px solid #2b9348; border-radius: 0 15px 15px 0; margin-bottom: 25px; border: 1px solid #f0f0e0;">
+                <h4 style="margin-top: 0; color: #2b9348; text-transform: uppercase; font-size: 0.9rem; letter-spacing: 1px;">Favorite Memory Verse</h4>
+                <p style="font-style: italic; font-size: 1.4rem; color: #333; margin: 15px 0 0;">"<?php echo $data['student']->memory_verse; ?>"</p>
+            </div>
+            <div style="background: #f0f7ff; padding: 30px; border-radius: 20px; border: 2px dashed #005BFF;">
+                <h4 style="margin-top: 0; color: #005BFF; text-transform: uppercase; font-size: 0.9rem; letter-spacing: 1px;">Current Prayer Needs</h4>
+                <p style="font-size: 1.1rem; color: #333; margin: 15px 0 0;"><?php echo nl2br($data['student']->prayer_needs); ?></p>
+            </div>
+        </div>
+
+        <div class="print-section">
+            <h3>Photo Gallery</h3>
+            <div class="print-grid">
+                <?php foreach($data['gallery'] as $photo) : ?>
+                    <div class="print-photo-wrapper">
+                        <img src="<?php echo asset($photo->photo_path); ?>" class="print-photo">
+                        <?php if(!empty($photo->caption)) : ?>
+                            <p style="font-size: 0.9rem; text-align: center; color: #666; margin-top: 10px; font-weight: 600;"><?php echo $photo->caption; ?></p>
+                        <?php endif; ?>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        </div>
+
+        <!-- PAGE 3: OFFICIAL RESULTS -->
+        <?php if(!empty($data['uploads'])) : ?>
+            <div class="page-break"></div>
+            <div class="print-section">
+                <h3>Official Results & Certificates</h3>
+                <?php foreach($data['uploads'] as $up) : ?>
+                    <div style="margin-bottom: 40px; text-align: center; page-break-inside: avoid;">
+                        <h4 style="text-align: left; background: #f8f9fa; padding: 10px 20px; border-radius: 8px; border-left: 4px solid #001219;"><?php echo $up->file_name; ?></h4>
+                        <img src="<?php echo asset($up->file_path); ?>" style="max-width: 100%; border: 2px solid #eee; border-radius: 10px; margin-top: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.05);">
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        <?php endif; ?>
+
+        <div style="margin-top: 60px; text-align: center; color: #aaa; border-top: 1px solid #eee; padding-top: 30px; page-break-inside: avoid;">
+            <p style="font-weight: 600;">Thank you for your interest. Together we are changing lives.</p>
+            <p style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px;">Generated on <?php echo date('M d, Y'); ?> | IOI Global Scholarship Program</p>
         </div>
     </div>
+</div>
 
-    <div class="book-viewport" id="viewport">
-        <div class="book" id="book">
-            <div class="book-base">
-                <p class="text-muted small">Empowering Scholars at</p>
-                <h4 class="fw-bold text-success">Heaven of Hope</h4>
+<!-- INTERACTIVE UI (Hidden during print) -->
+<div class="no-print">
+    <div class="portfolio-wrapper">
+        <div class="container text-center portfolio-title-container">
+            <h1 class="portfolio-title">Student Portfolio</h1>
+            <div class="title-underline"></div>
+            
+            <div class="portfolio-nav-buttons">
+                <a href="<?php echo URLROOT; ?>/pages/scholarships" class="btn btn-back-nav">
+                    <i class="fa fa-chevron-left"></i> Back to Scholars
+                </a>
+                <button onclick="downloadPDF()" class="btn btn-download">
+                    <i class="fa fa-file-pdf"></i> DOWNLOAD PORTFOLIO
+                </button>
             </div>
+        </div>
 
-            <!-- PAGE 1: COVER & STORY -->
-            <div class="page" id="page1" style="z-index: 10;" onclick="flipPage(1)">
-                <div class="page-front book-cover">
-                    <img src="<?php echo !empty($data['student']->profile_photo) ? asset($data['student']->profile_photo) : 'https://via.placeholder.com/200'; ?>" class="student-img-large shadow" alt="Student">
-                    <h2 class="fw-bold"><?php echo $data['student']->first_name . ' ' . $data['student']->surname; ?></h2>
-                    <p class="opacity-75">Student Portfolio</p>
-                    <div class="mt-5 small text-uppercase" style="letter-spacing: 2px;">Click to Open</div>
+        <div class="book-viewport" id="viewport">
+            <div class="book" id="book">
+                <div class="book-base">
+                    <?php 
+                        $logo = getSetting('site_logo');
+                        if($logo) : 
+                    ?>
+                        <img src="<?php echo asset($logo); ?>" alt="Logo" style="max-height: 100px; max-width: 80%; object-fit: contain; opacity: 0.8;">
+                    <?php endif; ?>
+                    <p class="text-muted small mt-3" style="font-weight: 600; text-transform: uppercase; letter-spacing: 2px;">Empowering Scholars</p>
                 </div>
-                <div class="page-back">
-                    <div class="page-title">My Story</div>
-                    <p style="line-height: 1.6; font-size: 0.95rem; color: #444;">
-                        <?php echo nl2br($data['student']->about); ?>
-                    </p>
-                    <div class="page-number">1</div>
-                </div>
-            </div>
 
-            <!-- PAGE 2: PROFILE & GOALS -->
-            <div class="page" id="page2" style="z-index: 9;" onclick="flipPage(2)">
-                <div class="page-front">
-                    <div class="page-title">Academic Profile</div>
-                    <table class="table table-sm mt-3">
-                        <tr><th class="text-muted small">NAME</th><td><?php echo $data['student']->first_name; ?></td></tr>
-                        <tr><th class="text-muted small">CLASS</th><td><?php echo $data['student']->class; ?></td></tr>
-                        <tr><th class="text-muted small">AGE</th><td><?php echo $data['student']->age; ?> Years</td></tr>
-                    </table>
-                    <div class="page-number">2</div>
-                </div>
-                <div class="page-back">
-                    <div class="page-title">Educational Goals</div>
-                    <p style="line-height: 1.6; font-size: 0.95rem;">
-                        <?php echo nl2br($data['student']->educational_goals); ?>
-                    </p>
-                    <div class="page-number">3</div>
-                </div>
-            </div>
-
-            <!-- PAGE 3: GALLERY -->
-            <div class="page" id="page3" style="z-index: 8;" onclick="flipPage(3)">
-                <div class="page-front">
-                    <div class="page-title">Gallery</div>
-                    <div class="gallery-grid">
-                        <?php foreach(array_slice($data['gallery'], 0, 4) as $photo) : ?>
-                            <img src="<?php echo asset($photo->photo_path); ?>" class="gallery-item">
-                        <?php endforeach; ?>
+                <!-- PAGE 1: COVER & STORY -->
+                <div class="page" id="page1" style="z-index: 10;" onclick="flipPage(1)">
+                    <div class="page-front book-cover">
+                        <img src="<?php echo !empty($data['student']->profile_photo) ? asset($data['student']->profile_photo) : 'https://via.placeholder.com/200'; ?>" class="student-img-large shadow" alt="Student">
+                        <h2 class="fw-bold"><?php echo $data['student']->first_name . ' ' . $data['student']->surname; ?></h2>
+                        <p class="opacity-75">Scholar Portfolio</p>
+                        <div class="mt-5 small text-uppercase" style="letter-spacing: 2px;">Click to Open</div>
                     </div>
-                    <div class="page-number">4</div>
-                </div>
-                <div class="page-back">
-                    <div class="page-title">Faith & Prayer</div>
-                    <div class="verse-box">"<?php echo $data['student']->memory_verse; ?>"</div>
-                    <div class="prayer-box"><?php echo nl2br($data['student']->prayer_needs); ?></div>
-                    <div class="page-number">5</div>
-                </div>
-            </div>
-
-            <!-- PAGE 4: BACK COVER -->
-            <div class="page" id="page4" style="z-index: 7;" onclick="flipPage(4)">
-                <div class="page-front">
-                    <div class="page-title">Results</div>
-                    <div style="overflow-y: auto; max-height: 400px;">
-                        <?php foreach($data['uploads'] as $up) : ?>
-                            <img src="<?php echo asset($up->file_path); ?>" class="img-fluid rounded mb-2">
-                        <?php endforeach; ?>
+                    <div class="page-back">
+                        <div class="page-title">My Story</div>
+                        <p style="line-height: 1.6; font-size: 0.95rem; color: #444;">
+                            <?php echo nl2br($data['student']->about); ?>
+                        </p>
+                        <div class="page-number">1</div>
                     </div>
                 </div>
-                <div class="page-back book-cover">
-                    <h3 class="fw-bold">Make a Difference</h3>
-                    <p class="small px-4 mt-3">You can help <?php echo $data['student']->first_name; ?> achieve their dreams by becoming a sponsor.</p>
-                    <button class="btn btn-light fw-bold rounded-pill px-4 mt-4" onclick="openInterestModal(<?php echo $data['student']->id; ?>, '<?php echo $data['student']->first_name . ' ' . $data['student']->surname; ?>')" style="color: var(--book-cover-color);">
-                        Sponsor This Student
-                    </button>
+
+                <!-- PAGE 2: PROFILE & GOALS -->
+                <div class="page" id="page2" style="z-index: 9;" onclick="flipPage(2)">
+                    <div class="page-front">
+                        <div class="page-title">Academic Profile</div>
+                        <table class="table table-sm mt-3">
+                            <tr><th class="text-muted small">NAME</th><td><?php echo $data['student']->first_name; ?></td></tr>
+                            <tr><th class="text-muted small">SURNAME</th><td><?php echo $data['student']->surname; ?></td></tr>
+                            <tr><th class="text-muted small">CLASS</th><td><?php echo $data['student']->class; ?></td></tr>
+                            <tr><th class="text-muted small">AGE</th><td><?php echo $data['student']->age; ?> Years</td></tr>
+                            <tr><th class="text-muted small">STATUS</th><td><span class="badge bg-success">Awaiting Sponsor</span></td></tr>
+                        </table>
+                        <div class="page-number">2</div>
+                    </div>
+                    <div class="page-back">
+                        <div class="page-title">Educational Goals</div>
+                        <p style="line-height: 1.6; font-size: 0.95rem;">
+                            <?php echo nl2br($data['student']->educational_goals); ?>
+                        </p>
+                        <div class="page-number">3</div>
+                    </div>
+                </div>
+
+                <!-- PAGE 3: GALLERY -->
+                <div class="page" id="page3" style="z-index: 8;" onclick="flipPage(3)">
+                    <div class="page-front">
+                        <div class="page-title">Gallery</div>
+                        <div class="gallery-grid">
+                            <?php foreach(array_slice($data['gallery'], 0, 4) as $photo) : ?>
+                                <div class="gallery-item-wrapper">
+                                    <img src="<?php echo asset($photo->photo_path); ?>" class="gallery-item">
+                                    <?php if(!empty($photo->caption)) : ?>
+                                        <div class="gallery-caption"><?php echo $photo->caption; ?></div>
+                                    <?php endif; ?>
+                                </div>
+                            <?php endforeach; ?>
+                        </div>
+                        <div class="page-number">4</div>
+                    </div>
+                    <div class="page-back">
+                        <div class="page-title">Faith & Prayer</div>
+                        <div class="verse-box">"<?php echo $data['student']->memory_verse; ?>"</div>
+                        <div class="prayer-box"><?php echo nl2br($data['student']->prayer_needs); ?></div>
+                        <div class="page-number">5</div>
+                    </div>
+                </div>
+
+                <!-- PAGE 4: RESULTS & BACK COVER -->
+                <div class="page" id="page4" style="z-index: 7;" onclick="flipPage(4)">
+                    <div class="page-front">
+                        <div class="page-title">Official Results</div>
+                        <div style="overflow-y: auto; max-height: 400px;">
+                            <?php foreach($data['uploads'] as $up) : ?>
+                                <div class="mb-3 border-bottom pb-2">
+                                    <small class="text-primary fw-bold d-block mb-1"><?php echo $up->file_name; ?></small>
+                                    <img src="<?php echo asset($up->file_path); ?>" class="img-fluid rounded shadow-sm" style="width: 100%;">
+                                </div>
+                            <?php endforeach; ?>
+                        </div>
+                        <div class="page-number">6</div>
+                    </div>
+                    <div class="page-back book-cover" style="border-radius: 10px 0 0 10px;">
+                        <h3 class="fw-bold">Make a Difference</h3>
+                        <p class="small px-4 mt-3">You can help <?php echo $data['student']->first_name; ?> achieve their dreams by becoming a sponsor.</p>
+                        <button class="btn btn-light fw-bold rounded-pill px-4 mt-4" onclick="openInterestModal(<?php echo $data['student']->id; ?>, '<?php echo $data['student']->first_name . ' ' . $data['student']->surname; ?>')" style="color: var(--book-cover-color);">
+                            Sponsor This Student
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
+        
+        <p class="mt-5 text-muted small no-print">
+            <span class="d-none d-md-inline"><i class="fa fa-hand-pointer-o"></i> Click pages to flip forward and backward</span>
+            <span class="d-inline d-md-none"><i class="fa fa-hand-pointer"></i> Tap pages to flip through the portfolio</span>
+        </p>
     </div>
 </div>
 
@@ -362,14 +576,32 @@
 <script>
 const sound = document.getElementById('pageFlipSound');
 const viewport = document.getElementById('viewport');
+const totalPages = 4;
 
 function flipPage(pageNum) {
     const page = document.getElementById('page' + pageNum);
+    if (!page) return;
+
     if (sound) { sound.currentTime = 0; sound.play().catch(e => {}); }
+
     page.classList.toggle('flipped');
+
     if (pageNum === 1) {
         if (page.classList.contains('flipped')) viewport.classList.add('is-open');
         else viewport.classList.remove('is-open');
+    }
+
+    updateZIndices();
+}
+
+function updateZIndices() {
+    for (let i = 1; i <= totalPages; i++) {
+        const page = document.getElementById('page' + i);
+        if (page.classList.contains('flipped')) {
+            page.style.zIndex = i;
+        } else {
+            page.style.zIndex = (totalPages - i) + 1 + 5;
+        }
     }
 }
 
@@ -378,6 +610,12 @@ function openInterestModal(id, name) {
     document.getElementById('modal_student_name').innerText = name;
     new bootstrap.Modal(document.getElementById('interestModal')).show();
 }
+
+function downloadPDF() {
+    window.print();
+}
+
+updateZIndices();
 </script>
 
 <?php require APPROOT . '/views/layouts/footer.php'; ?>
