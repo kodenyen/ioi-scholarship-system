@@ -441,12 +441,29 @@
             <div class="book" id="book">
                 <div class="book-base">
                     <?php 
-                        $logo = getSetting('site_logo');
-                        if($logo) : 
+                        $baseBanner = getSetting('book_base_banner');
+                        $baseBtnText = getSetting('book_base_btn_text');
+                        $baseBtnUrl = getSetting('book_base_btn_url');
+                        
+                        if(!empty($baseBanner)) : 
                     ?>
-                        <img src="<?php echo asset($logo); ?>" alt="Logo" style="max-height: 100px; max-width: 80%; object-fit: contain; opacity: 0.8;">
+                        <a href="<?php echo !empty($baseBtnUrl) ? $baseBtnUrl : '#'; ?>" target="_blank" style="display: block; width: 100%; height: 100%; position: relative; text-decoration: none;">
+                            <img src="<?php echo asset($baseBanner); ?>" alt="Banner" style="width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0; border-radius: 0 5px 5px 0; opacity: 0.9;">
+                            <div style="position: absolute; bottom: 40px; left: 0; right: 0; z-index: 2; text-align: center;">
+                                <span class="btn btn-primary fw-bold px-4 py-2 rounded-pill shadow-lg" style="pointer-events: none;">
+                                    <?php echo !empty($baseBtnText) ? $baseBtnText : 'Learn More'; ?>
+                                </span>
+                            </div>
+                        </a>
+                    <?php else : ?>
+                        <?php 
+                            $logo = getSetting('site_logo');
+                            if($logo) : 
+                        ?>
+                            <img src="<?php echo asset($logo); ?>" alt="Logo" style="max-height: 100px; max-width: 80%; object-fit: contain; opacity: 0.8;">
+                        <?php endif; ?>
+                        <p class="text-muted small mt-3" style="font-weight: 600; text-transform: uppercase; letter-spacing: 2px;">Empowering Scholars</p>
                     <?php endif; ?>
-                    <p class="text-muted small mt-3" style="font-weight: 600; text-transform: uppercase; letter-spacing: 2px;">Empowering Scholars</p>
                 </div>
 
                 <!-- PAGE 1: COVER & STORY -->
