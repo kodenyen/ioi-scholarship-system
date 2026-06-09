@@ -255,7 +255,7 @@
             <!-- PAGE 1: COVER & STORY -->
             <div class="page" id="page1" style="z-index: 10;" onclick="flipPage(1)">
                 <div class="page-front book-cover">
-                    <img src="<?php echo !empty($data['student']->profile_photo) ? URLROOT . '/' . $data['student']->profile_photo : 'https://via.placeholder.com/200'; ?>" class="student-img-large shadow" alt="Student">
+                    <img src="<?php echo !empty($data['student']->profile_photo) ? asset($data['student']->profile_photo) : 'https://via.placeholder.com/200'; ?>" class="student-img-large shadow" alt="Student">
                     <h2 class="fw-bold"><?php echo $data['student']->first_name . ' ' . $data['student']->surname; ?></h2>
                     <p class="opacity-75">Student Portfolio</p>
                     <div class="mt-5 small text-uppercase" style="letter-spacing: 2px;">Click to Open</div>
@@ -295,7 +295,7 @@
                     <div class="page-title">Gallery</div>
                     <div class="gallery-grid">
                         <?php foreach(array_slice($data['gallery'], 0, 4) as $photo) : ?>
-                            <img src="<?php echo URLROOT . '/' . $photo->photo_path; ?>" class="gallery-item">
+                            <img src="<?php echo asset($photo->photo_path); ?>" class="gallery-item">
                         <?php endforeach; ?>
                     </div>
                     <div class="page-number">4</div>
@@ -314,7 +314,7 @@
                     <div class="page-title">Results</div>
                     <div style="overflow-y: auto; max-height: 400px;">
                         <?php foreach($data['uploads'] as $up) : ?>
-                            <img src="<?php echo URLROOT . '/' . $up->file_path; ?>" class="img-fluid rounded mb-2">
+                            <img src="<?php echo asset($up->file_path); ?>" class="img-fluid rounded mb-2">
                         <?php endforeach; ?>
                     </div>
                 </div>

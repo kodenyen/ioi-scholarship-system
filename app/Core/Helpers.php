@@ -135,3 +135,37 @@ function getMenuItems($parentId = null) {
     
     return $items;
 }
+
+/**
+ * Robust URL helper for assets and uploads
+ * Handles URL root and encoding for spaces
+ */
+function asset($path) {
+    if (empty($path)) return '';
+    // If it's already a full URL, return it
+    if (strpos($path, 'http') === 0) return $path;
+    
+    // Ensure path is clean and correctly encoded for URLs (like spaces)
+    $path = ltrim($path, '/');
+    $parts = explode('/', $path);
+    $encodedParts = array_map('rawurlencode', $parts);
+    $encodedPath = implode('/', $encodedParts);
+    
+    return URLROOT . '/' . $encodedPath;
+}
+
+/**
+ * Robust File Path helper for server-side checks
+ * Detects if public folder is needed or if we are already in it
+ */
+function storage($path = '') {
+    // Check if PUBROOT exists and contains the file
+    $fullPath = PUBROOT . '/' . ltrim($path, '/');
+    if (file_exists($fullPath)) return $fullPath;
+    
+    // Fallback: maybe the public folder is the root (common on some hostings)
+    $fallbackPath = APPROOT . '/' . ltrim($path, '/');
+    if (file_exists($fallbackPath)) return $fallbackPath;
+    
+    return $fullPath; // Return the standard path if both fail
+}

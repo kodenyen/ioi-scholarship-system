@@ -55,7 +55,7 @@
                     <div class="card-banner">
                         <div class="avatar-wrapper">
                             <?php if(!empty($sponsor->profile_photo)) : ?>
-                                <img src="<?php echo URLROOT . '/' . $sponsor->profile_photo; ?>" alt="Sponsor" class="avatar-img">
+                                <img src="<?php echo asset($sponsor->profile_photo); ?>" alt="Sponsor" class="avatar-img">
                             <?php else : ?>
                                 <div class="avatar-placeholder">
                                     <?php echo substr($sponsor->name, 0, 1); ?>

@@ -4,7 +4,7 @@
         <div class="card shadow-sm">
             <div class="card-header bg-primary text-white d-flex align-items-center">
                 <?php if(!empty($data['student']->profile_photo)) : ?>
-                    <img src="<?php echo URLROOT . '/' . $data['student']->profile_photo; ?>" alt="Profile Photo" class="rounded-circle me-3" style="width: 50px; height: 50px; object-fit: cover; border: 2px solid white;">
+                    <img src="<?php echo asset($data['student']->profile_photo); ?>" alt="Profile Photo" class="rounded-circle me-3" style="width: 50px; height: 50px; object-fit: cover; border: 2px solid white;">
                 <?php endif; ?>
                 <h4 class="mb-0">Message to <?php echo $data['student']->first_name . ' ' . $data['student']->surname; ?></h4>
             </div>

@@ -74,7 +74,7 @@
         <div class="profile-banner-admin">
             <div class="profile-avatar-admin">
                 <?php if(!empty($data['student']->profile_photo)) : ?>
-                    <img src="<?php echo URLROOT . '/' . $data['student']->profile_photo; ?>" alt="Student" class="profile-avatar-img">
+                    <img src="<?php echo asset($data['student']->profile_photo); ?>" alt="Student" class="profile-avatar-img">
                 <?php else : ?>
                     <div class="profile-avatar-placeholder">
                         <?php echo substr($data['student']->first_name, 0, 1); ?>
@@ -219,7 +219,7 @@
                         <div class="admin-gallery-grid">
                             <?php foreach($data['gallery'] as $photo) : ?>
                                 <div class="gallery-card-admin">
-                                    <img src="<?php echo URLROOT . '/' . $photo->photo_path; ?>" class="gallery-img-admin">
+                                    <img src="<?php echo asset($photo->photo_path); ?>" class="gallery-img-admin">
                                     <div class="gallery-overlay-admin">
                                         <form action="<?php echo URLROOT; ?>/admin/delete_gallery_photo/<?php echo $photo->id; ?>/<?php echo $data['student']->id; ?>" method="post" onsubmit="return confirm('Delete this photo?')">
                                             <button type="submit" class="delete-btn-overlay"><i class="fa-solid fa-trash-can"></i></button>
@@ -263,7 +263,7 @@
                                             <td class="text-muted small"><?php echo date('M d, Y', strtotime($result->created_at)); ?></td>
                                             <td class="text-end">
                                                 <div class="d-flex justify-content-end gap-2">
-                                                    <a href="<?php echo URLROOT . '/' . $result->file_path; ?>" target="_blank" class="btn btn-sm btn-light border"><i class="fa-solid fa-external-link"></i></a>
+                                                    <a href="<?php echo asset($result->file_path); ?>" target="_blank" class="btn btn-sm btn-light border"><i class="fa-solid fa-external-link"></i></a>
                                                     <form action="<?php echo URLROOT; ?>/admin/delete_result/<?php echo $result->id; ?>/<?php echo $data['student']->id; ?>" method="post" onsubmit="return confirm('Delete this result?')">
                                                         <button type="submit" class="btn btn-sm btn-outline-danger"><i class="fa-solid fa-trash-can"></i></button>
                                                     </form>

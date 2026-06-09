@@ -106,7 +106,7 @@
                     <div class="card-banner">
                         <div class="avatar-wrapper">
                             <?php if(!empty($student->profile_photo)) : ?>
-                                <img src="<?php echo URLROOT . '/' . $student->profile_photo; ?>" alt="Student" class="avatar-img">
+                                <img src="<?php echo asset($student->profile_photo); ?>" alt="Student" class="avatar-img">
                             <?php else : ?>
                                 <div class="avatar-placeholder">
                                     <?php echo substr($student->first_name, 0, 1) . substr($student->surname, 0, 1); ?>

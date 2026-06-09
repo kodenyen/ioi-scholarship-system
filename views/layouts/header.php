@@ -219,8 +219,8 @@
                 <?php 
                     $logo = getSetting('site_logo');
                     if($logo) : 
-            ?>
-                <img src="<?php echo URLROOT . '/' . $logo; ?>" alt="IOI Logo">
+                ?>
+                <img src="<?php echo asset($logo); ?>" alt="Logo">
                 <?php else : ?>
                     <span class="fw-800 fs-4 text-dark"><?php echo SITE_NAME; ?></span>
                 <?php endif; ?>
@@ -350,9 +350,6 @@
                     <?php endif; ?>
 
                     <!-- DONATE BUTTON -->
-                    <li class="nav-item">
-                        <a href="<?php echo URLROOT; ?>/pages/requests" class="nav-link">SCHOLAR GALLERY</a>
-                    </li>
                     <li class="nav-item">
                         <a href="<?php echo getSetting('donate_url'); ?>" target="_blank" class="nav-link btn-donate">DONATE</a>
                     </li>

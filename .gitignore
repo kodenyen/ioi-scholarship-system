@@ -1,9 +1,9 @@
-# Allow uploaded files to be tracked by git
-# public/uploads/gallery/*
-# public/uploads/profile_photos/*
-# public/uploads/results/*
-# public/uploads/sponsor_photos/*
-# public/uploads/system/*
+# Ignore uploaded files to prevent them from being wiped on push/deploy
+public/uploads/gallery/*
+public/uploads/profile_photos/*
+public/uploads/results/*
+public/uploads/sponsor_photos/*
+public/uploads/system/*
 
 # But keep the directories
 !public/uploads/gallery/.gitkeep

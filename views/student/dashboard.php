@@ -40,7 +40,7 @@
                 <div class="card-body text-center p-4">
                     <div class="profile-avatar-wrapper">
                         <?php if(!empty($data['student']->profile_photo)) : ?>
-                            <img src="<?php echo URLROOT . '/' . $data['student']->profile_photo; ?>" alt="Me" class="profile-avatar-img">
+                            <img src="<?php echo asset($data['student']->profile_photo); ?>" alt="Me" class="profile-avatar-img">
                         <?php else : ?>
                             <div class="profile-avatar-placeholder">
                                 <?php echo substr($data['student']->first_name, 0, 1); ?>

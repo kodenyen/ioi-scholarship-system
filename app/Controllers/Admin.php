@@ -246,7 +246,7 @@ class Admin extends Controller {
             // Handle file upload
             if(!empty($_FILES['profile_photo']['name'])) {
                 $filename = time() . '_' . $_FILES['profile_photo']['name'];
-                $target_dir = PUBROOT . '/uploads/sponsor_photos/';
+                $target_dir = storage('uploads/sponsor_photos/');
                 if(!is_dir($target_dir)) mkdir($target_dir, 0777, true);
                 $target_file = $target_dir . basename($filename);
                 if(move_uploaded_file($_FILES['profile_photo']['tmp_name'], $target_file)) {
@@ -300,13 +300,14 @@ class Admin extends Controller {
             // Handle file upload
             if(!empty($_FILES['profile_photo']['name'])) {
                 $filename = time() . '_' . $_FILES['profile_photo']['name'];
-                $target_dir = PUBROOT . '/uploads/sponsor_photos/';
+                $target_dir = storage('uploads/sponsor_photos/');
                 if(!is_dir($target_dir)) mkdir($target_dir, 0777, true);
                 $target_file = $target_dir . basename($filename);
                 if(move_uploaded_file($_FILES['profile_photo']['tmp_name'], $target_file)) {
                     // Delete old photo
-                    if(!empty($sponsor->profile_photo) && file_exists(PUBROOT . '/' . $sponsor->profile_photo)) {
-                        unlink(PUBROOT . '/' . $sponsor->profile_photo);
+                    $oldPhotoPath = storage($sponsor->profile_photo);
+                    if(!empty($sponsor->profile_photo) && file_exists($oldPhotoPath)) {
+                        unlink($oldPhotoPath);
                     }
                     $data['profile_photo'] = 'uploads/sponsor_photos/' . $filename;
                 }
@@ -417,7 +418,7 @@ class Admin extends Controller {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             if(!empty($_FILES['result_file']['name'])) {
                 $filename = time() . '_' . $_FILES['result_file']['name'];
-                $target_dir = PUBROOT . '/uploads/results/';
+                $target_dir = storage('uploads/results/');
                 if(!is_dir($target_dir)) mkdir($target_dir, 0777, true);
                 $target_file = $target_dir . basename($filename);
                 
@@ -441,7 +442,7 @@ class Admin extends Controller {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             if(!empty($_FILES['gallery_photo']['name'])) {
                 $filename = time() . '_' . $_FILES['gallery_photo']['name'];
-                $target_dir = PUBROOT . '/uploads/gallery/';
+                $target_dir = storage('uploads/gallery/');
                 if(!is_dir($target_dir)) mkdir($target_dir, 0777, true);
                 $target_file = $target_dir . basename($filename);
                 
@@ -470,8 +471,9 @@ class Admin extends Controller {
         $this->db->bind(':id', $upload_id);
         $file = $this->db->single();
 
-        if($file && file_exists(PUBROOT . '/' . $file->file_path)) {
-            unlink(PUBROOT . '/' . $file->file_path);
+        $filePath = storage($file->file_path);
+        if($file && file_exists($filePath)) {
+            unlink($filePath);
         }
 
         $this->db->query('DELETE FROM student_uploads WHERE id = :id');
@@ -530,7 +532,7 @@ class Admin extends Controller {
             // Handle file upload
             if(!empty($_FILES['profile_photo']['name'])) {
                 $filename = time() . '_' . $_FILES['profile_photo']['name'];
-                $target_dir = PUBROOT . '/uploads/profile_photos/';
+                $target_dir = storage('uploads/profile_photos/');
                 if(!is_dir($target_dir)) mkdir($target_dir, 0777, true);
                 $target_file = $target_dir . basename($filename);
                 if(move_uploaded_file($_FILES['profile_photo']['tmp_name'], $target_file)) {
@@ -594,13 +596,13 @@ class Admin extends Controller {
             // Handle file upload
             if(!empty($_FILES['profile_photo']['name'])) {
                 $filename = time() . '_' . $_FILES['profile_photo']['name'];
-                $target_dir = PUBROOT . '/uploads/profile_photos/';
+                $target_dir = storage('uploads/profile_photos/');
                 if(!is_dir($target_dir)) mkdir($target_dir, 0777, true);
                 $target_file = $target_dir . basename($filename);
                 if(move_uploaded_file($_FILES['profile_photo']['tmp_name'], $target_file)) {
-                    // Delete old photo
-                    if(!empty($student->profile_photo) && file_exists(PUBROOT . '/' . $student->profile_photo)) {
-                        unlink(PUBROOT . '/' . $student->profile_photo);
+                    $oldPhotoPath = storage($student->profile_photo);
+                    if(!empty($student->profile_photo) && file_exists($oldPhotoPath)) {
+                        unlink($oldPhotoPath);
                     }
                     $data['profile_photo'] = 'uploads/profile_photos/' . $filename;
                 }
@@ -766,15 +768,16 @@ class Admin extends Controller {
             // Handle logo upload
             if(!empty($_FILES['site_logo']['name'])) {
                 $filename = 'logo_' . time() . '_' . $_FILES['site_logo']['name'];
-                $target_dir = PUBROOT . '/uploads/system/';
+                $target_dir = storage('uploads/system/');
                 if(!is_dir($target_dir)) mkdir($target_dir, 0777, true);
                 $target_file = $target_dir . basename($filename);
                 
                 if(move_uploaded_file($_FILES['site_logo']['tmp_name'], $target_file)) {
                     // Delete old logo if exists
                     $oldLogo = getSetting('site_logo');
-                    if($oldLogo && file_exists(PUBROOT . '/' . $oldLogo)) {
-                        unlink(PUBROOT . '/' . $oldLogo);
+                    $oldLogoPath = storage($oldLogo);
+                    if($oldLogo && file_exists($oldLogoPath)) {
+                        unlink($oldLogoPath);
                     }
                     $this->adminModel->updateSetting('site_logo', 'uploads/system/' . $filename);
                     flash('settings_message', 'Logo updated successfully');
@@ -794,7 +797,7 @@ class Admin extends Controller {
             // Handle book base banner upload
             if(!empty($_FILES['book_base_banner']['name'])) {
                 $filename = 'banner_' . time() . '_' . $_FILES['book_base_banner']['name'];
-                $target_dir = PUBROOT . '/uploads/system/';
+                $target_dir = storage('uploads/system/');
                 if(!is_dir($target_dir)) mkdir($target_dir, 0777, true);
                 $target_file = $target_dir . basename($filename);
 

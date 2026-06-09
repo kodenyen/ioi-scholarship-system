@@ -59,7 +59,7 @@
                             <div class="card-banner">
                                 <div class="card-avatar-wrapper">
                                     <?php if(!empty($student->profile_photo)) : ?>
-                                        <img src="<?php echo URLROOT . '/' . $student->profile_photo; ?>" alt="Student" class="card-avatar-img">
+                                        <img src="<?php echo asset($student->profile_photo); ?>" alt="Student" class="card-avatar-img">
                                     <?php else : ?>
                                         <div class="card-avatar-placeholder">
                                             <?php echo substr($student->first_name, 0, 1) . substr($student->surname, 0, 1); ?>

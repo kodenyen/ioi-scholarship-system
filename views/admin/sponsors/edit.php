@@ -38,7 +38,7 @@
                     <form action="<?php echo URLROOT; ?>/admin/edit_sponsor/<?php echo $data['id']; ?>" method="post" enctype="multipart/form-data">
                         <div class="text-center">
                             <?php if(!empty($data['profile_photo'])) : ?>
-                                <img src="<?php echo URLROOT . '/' . $data['profile_photo']; ?>" alt="Avatar" class="edit-avatar-preview">
+                                <img src="<?php echo asset($data['profile_photo']); ?>" alt="Avatar" class="edit-avatar-preview">
                             <?php endif; ?>
                         </div>
 

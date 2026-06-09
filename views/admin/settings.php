@@ -70,8 +70,8 @@
                         <div class="col-md-6">
                             <label class="form-label fw-bold small text-uppercase mb-3">Organization Logo</label>
                             <div class="logo-preview-box">
-                                <?php if(!empty($data['site_logo']) && file_exists(PUBROOT . '/' . $data['site_logo'])) : ?>
-                                    <img src="<?php echo URLROOT . '/' . $data['site_logo']; ?>" class="logo-img-preview" id="logoPreview">
+                                <?php if(!empty($data['site_logo'])) : ?>
+                                    <img src="<?php echo asset($data['site_logo']); ?>" class="logo-img-preview" id="logoPreview">
                                     <button type="submit" name="delete_logo" class="btn-delete-logo" onclick="return confirm('Remove logo?')">
                                         <i class="fa-solid fa-trash-can"></i>
                                     </button>
@@ -97,9 +97,9 @@
                             <div class="logo-preview-box" style="height: 140px;">
                                 <?php 
                                     $banner = getSetting('book_base_banner');
-                                    if(!empty($banner) && file_exists(PUBROOT . '/' . $banner)) : 
+                                    if(!empty($banner)) : 
                                 ?>
-                                    <img src="<?php echo URLROOT . '/' . $banner; ?>" class="logo-img-preview" id="bannerPreview">
+                                    <img src="<?php echo asset($banner); ?>" class="logo-img-preview" id="bannerPreview">
                                     <button type="submit" name="delete_banner" class="btn-delete-logo" onclick="return confirm('Remove banner?')">
                                         <i class="fa-solid fa-trash-can"></i>
                                     </button>

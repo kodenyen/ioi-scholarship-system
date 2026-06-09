@@ -1,5 +1,4 @@
 <?php require APPROOT . '/views/layouts/header.php'; ?>
-<h1 style="color: red; background: yellow; text-align: center; padding: 20px;">DEBUG: SCHOLARSHIPS VIEW - VERSION 1</h1>
 
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -63,7 +62,7 @@
                         <div class="card-banner">
                             <div class="avatar-wrapper">
                                 <?php if(!empty($student->profile_photo)) : ?>
-                                    <img src="<?php echo URLROOT . '/' . $student->profile_photo; ?>" alt="Student" class="avatar-img">
+                                    <img src="<?php echo asset($student->profile_photo); ?>" alt="Student" class="avatar-img">
                                 <?php else : ?>
                                     <div class="avatar-placeholder">
                                         <?php echo substr($student->first_name, 0, 1) . substr($student->surname, 0, 1); ?>

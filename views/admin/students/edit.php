@@ -67,7 +67,7 @@
                                 <label class="form-label">Profile Photo</label>
                                 <?php if(!empty($data['profile_photo'])) : ?>
                                     <div class="mb-2">
-                                        <img src="<?php echo URLROOT . '/' . $data['profile_photo']; ?>" class="rounded-3 shadow-sm" style="max-height: 100px;">
+                                        <img src="<?php echo asset($data['profile_photo']); ?>" class="rounded-3 shadow-sm" style="max-height: 100px;">
                                     </div>
                                 <?php endif; ?>
                                 <input type="file" name="profile_photo" class="form-control" accept="image/*">

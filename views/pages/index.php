@@ -106,9 +106,9 @@
         <div class="portal-branding">
             <?php 
                 $logo = getSetting('site_logo');
-                if($logo && file_exists(PUBROOT . '/' . $logo)) : 
+                if($logo) : 
             ?>
-                <img src="<?php echo URLROOT . '/' . $logo; ?>" alt="Logo">
+                <img src="<?php echo asset($logo); ?>" alt="Logo">
             <?php endif; ?>
             <h1>Secure Portal</h1>
             <p class="opacity-75 lead">Welcome to the IOI Global Scholarship Management System. Please select your portal to continue.</p>

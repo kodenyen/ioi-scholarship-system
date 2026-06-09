@@ -491,13 +491,13 @@
         <div class="print-header">
             <?php 
                 $logo = getSetting('site_logo');
-                if($logo && file_exists(PUBROOT . '/' . $logo)) : 
+                if($logo) : 
             ?>
-                <img src="<?php echo URLROOT . '/' . $logo; ?>" style="max-height: 60px; margin-bottom: 30px;">
+                <img src="<?php echo asset($logo); ?>" style="max-height: 60px; margin-bottom: 30px;">
             <?php endif; ?>
             
             <div style="margin-bottom: 30px;">
-                <img src="<?php echo !empty($data['student']->profile_photo) ? URLROOT . '/' . $data['student']->profile_photo : ''; ?>" style="width: 180px; height: 180px; border-radius: 50%; border: 8px solid #f8f9fa; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
+                <img src="<?php echo !empty($data['student']->profile_photo) ? asset($data['student']->profile_photo) : ''; ?>" style="width: 180px; height: 180px; border-radius: 50%; border: 8px solid #f8f9fa; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
             </div>
             
             <h1 style="margin: 0; font-size: 3rem; font-weight: 900; color: #001219;"><?php echo $data['student']->first_name . ' ' . $data['student']->surname; ?></h1>
@@ -540,7 +540,7 @@
             <div class="print-grid">
                 <?php foreach($data['gallery'] as $photo) : ?>
                     <div class="print-photo-wrapper">
-                        <img src="<?php echo URLROOT . '/' . $photo->photo_path; ?>" class="print-photo">
+                        <img src="<?php echo asset($photo->photo_path); ?>" class="print-photo">
                         <?php if(!empty($photo->caption)) : ?>
                             <p style="font-size: 0.9rem; text-align: center; color: #666; margin-top: 10px; font-weight: 600;"><?php echo $photo->caption; ?></p>
                         <?php endif; ?>
@@ -602,10 +602,10 @@
                         $baseBtnText = getSetting('book_base_btn_text');
                         $baseBtnUrl = getSetting('book_base_btn_url');
                         
-                        if(!empty($baseBanner) && file_exists(PUBROOT . '/' . $baseBanner)) : 
+                        if(!empty($baseBanner)) : 
                     ?>
                         <a href="<?php echo !empty($baseBtnUrl) ? $baseBtnUrl : '#'; ?>" target="_blank" style="display: block; width: 100%; height: 100%; position: relative; text-decoration: none;">
-                            <img src="<?php echo URLROOT . '/' . $baseBanner; ?>" alt="Banner" style="width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0; border-radius: 0 5px 5px 0; opacity: 0.9;">
+                            <img src="<?php echo asset($baseBanner); ?>" alt="Banner" style="width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0; border-radius: 0 5px 5px 0; opacity: 0.9;">
                             <div style="position: absolute; bottom: 40px; left: 0; right: 0; z-index: 2; text-align: center;">
                                 <span class="btn btn-primary fw-bold px-4 py-2 rounded-pill shadow-lg" style="pointer-events: none;">
                                     <?php echo !empty($baseBtnText) ? $baseBtnText : 'Learn More'; ?>
@@ -615,9 +615,9 @@
                     <?php else : ?>
                         <?php 
                             $logo = getSetting('site_logo');
-                            if($logo && file_exists(PUBROOT . '/' . $logo)) : 
+                            if($logo) : 
                         ?>
-                            <img src="<?php echo URLROOT . '/' . $logo; ?>" alt="Logo" style="max-height: 100px; max-width: 80%; object-fit: contain; opacity: 0.8;">
+                            <img src="<?php echo asset($logo); ?>" alt="Logo" style="max-height: 100px; max-width: 80%; object-fit: contain; opacity: 0.8;">
                         <?php endif; ?>
                         <p class="text-muted small mt-3" style="font-weight: 600; text-transform: uppercase; letter-spacing: 2px;">Empowering Scholars</p>
                     <?php endif; ?>
@@ -626,7 +626,7 @@
                 <!-- PAGE 1: COVER & STORY -->
                 <div class="page" id="page1" style="z-index: 10;" onclick="flipPage(1)">
                     <div class="page-front book-cover">
-                        <img src="<?php echo !empty($data['student']->profile_photo) ? URLROOT . '/' . $data['student']->profile_photo : 'https://via.placeholder.com/200'; ?>" class="student-img-large shadow" alt="Student">
+                        <img src="<?php echo !empty($data['student']->profile_photo) ? asset($data['student']->profile_photo) : 'https://via.placeholder.com/200'; ?>" class="student-img-large shadow" alt="Student">
                         <h2 class="fw-bold"><?php echo $data['student']->first_name . ' ' . $data['student']->surname; ?></h2>
                         <p class="opacity-75">Your Student Portfolio 2026</p>
                         <div class="mt-5 small text-uppercase" style="letter-spacing: 2px;">Click to Open</div>
@@ -688,7 +688,7 @@
                             <?php if(!empty($data['gallery'])) : ?>
                                 <?php foreach(array_slice($data['gallery'], 0, 4) as $photo) : ?>
                                     <div class="gallery-item-wrapper">
-                                        <img src="<?php echo URLROOT . '/' . $photo->photo_path; ?>" class="gallery-item">
+                                        <img src="<?php echo asset($photo->photo_path); ?>" class="gallery-item">
                                         <?php if(!empty($photo->caption)) : ?>
                                             <div class="gallery-caption"><?php echo $photo->caption; ?></div>
                                         <?php endif; ?>
@@ -709,7 +709,7 @@
                             <?php if(count($data['gallery']) > 4) : ?>
                                 <?php foreach(array_slice($data['gallery'], 4, 4) as $photo) : ?>
                                     <div class="gallery-item-wrapper">
-                                        <img src="<?php echo URLROOT . '/' . $photo->photo_path; ?>" class="gallery-item">
+                                        <img src="<?php echo asset($photo->photo_path); ?>" class="gallery-item">
                                         <?php if(!empty($photo->caption)) : ?>
                                             <div class="gallery-caption"><?php echo $photo->caption; ?></div>
                                         <?php endif; ?>
@@ -734,7 +734,7 @@
                                 <?php foreach($data['uploads'] as $up) : ?>
                                     <div class="mb-3 border-bottom pb-2">
                                         <small class="text-primary fw-bold d-block mb-1"><?php echo $up->file_name; ?></small>
-                                        <img src="<?php echo URLROOT . '/' . $up->file_path; ?>" class="img-fluid rounded shadow-sm" style="width: 100%;">
+                                        <img src="<?php echo asset($up->file_path); ?>" class="img-fluid rounded shadow-sm" style="width: 100%;">
                                     </div>
                                 <?php endforeach; ?>
                             <?php endif; ?>
@@ -744,10 +744,10 @@
                     <div class="page-back book-cover" style="border-radius: 10px 0 0 10px;">
                         <?php 
                             $logo = getSetting('site_logo');
-                            if($logo && file_exists(PUBROOT . '/' . $logo)) : 
+                            if($logo) : 
                         ?>
                             <div class="mb-4 d-flex justify-content-center w-100">
-                                <img src="<?php echo URLROOT . '/' . $logo; ?>" alt="Logo" style="max-height: 100px; max-width: 80%; object-fit: contain;">
+                                <img src="<?php echo asset($logo); ?>" alt="Logo" style="max-height: 100px; max-width: 80%; object-fit: contain;">
                             </div>
                         <?php endif; ?>
                         <h3 class="fw-bold">Thank You</h3>
