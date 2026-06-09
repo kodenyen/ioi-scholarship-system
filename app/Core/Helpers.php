@@ -42,39 +42,53 @@ function getSetting($key) {
 
 // Send Email Utility using SMTP
 function sendEmail($to, $subject, $body) {
-    // Get config from database settings first, then fallback to constants
-    $host = getSetting('smtp_host') ?: (defined('SMTP_HOST') && SMTP_HOST !== 'smtp.hostinger.com' ? SMTP_HOST : 'smtp.hostinger.com');
-    $port = getSetting('smtp_port') ?: (defined('SMTP_PORT') ? SMTP_PORT : 465);
-    $user = getSetting('smtp_user') ?: (defined('SMTP_USER') && SMTP_USER !== 'your-email@domain.com' ? SMTP_USER : '');
-    $pass = getSetting('smtp_pass') ?: (defined('SMTP_PASS') && SMTP_PASS !== 'your-password' ? SMTP_PASS : '');
-    $fromName = getSetting('smtp_from_name') ?: (defined('SMTP_FROM_NAME') ? SMTP_FROM_NAME : SITE_NAME);
+    // Strictly use the verified constants to avoid any database typos
+    $host = defined('SMTP_HOST') ? SMTP_HOST : 'smtp.hostinger.com';
+    $port = defined('SMTP_PORT') ? SMTP_PORT : 465;
+    $user = defined('SMTP_USER') ? SMTP_USER : 'scholarship@message.ioiglobal.org';
+    $pass = defined('SMTP_PASS') ? SMTP_PASS : 'IOIglobal@20243#';
     
     // Hostinger strictly requires the FROM address to match the authenticated USER
     $fromEmail = $user;
+    $fromName = getSetting('smtp_from_name') ?: (defined('SMTP_FROM_NAME') ? SMTP_FROM_NAME : SITE_NAME);
+
+    $logError = function($msg) {
+        // Log to the root folder (outside app/) so it's easy to find
+        file_put_contents(dirname(APPROOT) . '/smtp_error.log', date('Y-m-d H:i:s') . " - " . $msg . "\n", FILE_APPEND);
+    };
 
     // Fallback mail function
-    $sendViaMail = function() use ($to, $subject, $body, $fromName, $fromEmail) {
+    $sendViaMail = function() use ($to, $subject, $body, $fromName, $fromEmail, $logError) {
         $headers = "MIME-Version: 1.0" . "\r\n";
         $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
         $headers .= 'From: '.$fromName.' <'.$fromEmail.'>' . "\r\n";
-        return mail($to, $subject, $body, $headers);
+        $headers .= "Message-ID: <" . md5(uniqid(time())) . "@" . ($_SERVER['HTTP_HOST'] ?? 'localhost') . ">\r\n";
+        $headers .= "X-Mailer: PHP/" . phpversion() . "\r\n";
+        
+        // The -f flag is critical for Hostinger to not silently drop the email
+        $success = mail($to, $subject, $body, $headers, "-f$fromEmail");
+        if(!$success) $logError("Fallback mail() function failed to send to $to");
+        return $success;
     };
 
-    // Check if we have minimum requirements for SMTP
     if (empty($host) || empty($user) || empty($pass)) {
+        $logError("SMTP Credentials missing, using fallback.");
         return $sendViaMail();
     }
 
-    $timeout = 30;
+    $timeout = 15;
     $localhost = $_SERVER['HTTP_HOST'] ?? 'localhost';
     $newLine = "\r\n";
 
     try {
         // Connect to server
         $socket = @fsockopen(($port == 465 ? 'ssl://' : '') . $host, $port, $errno, $errstr, $timeout);
-        if (!$socket) return $sendViaMail();
+        if (!$socket) {
+            $logError("Socket connection failed: $errstr ($errno)");
+            return $sendViaMail();
+        }
 
-        $getResponse = function($socket) use ($newLine) {
+        $getResponse = function($socket) {
             $response = "";
             while ($line = fgets($socket, 515)) {
                 $response .= $line;
@@ -106,13 +120,21 @@ function sendEmail($to, $subject, $body) {
         // If authentication fails, fallback to mail
         if(strpos($authResponse, '235') === false) {
             fclose($socket);
+            $logError("SMTP Auth failed: " . trim($authResponse));
             return $sendViaMail();
         }
 
         fwrite($socket, "MAIL FROM: <$fromEmail>" . $newLine);
         $getResponse($socket);
+        
         fwrite($socket, "RCPT TO: <$to>" . $newLine);
-        $getResponse($socket);
+        $rcptResponse = $getResponse($socket);
+        if(strpos($rcptResponse, '250') === false) {
+            fclose($socket);
+            $logError("SMTP RCPT failed for $to: " . trim($rcptResponse));
+            return $sendViaMail();
+        }
+
         fwrite($socket, "DATA" . $newLine);
         $getResponse($socket);
 
@@ -124,12 +146,19 @@ function sendEmail($to, $subject, $body) {
         $headerStr .= "Date: " . date('r') . $newLine;
 
         fwrite($socket, $headerStr . $newLine . $body . $newLine . "." . $newLine);
-        $getResponse($socket);
+        $dataResponse = $getResponse($socket);
 
         fwrite($socket, "QUIT" . $newLine);
         fclose($socket);
+        
+        if(strpos($dataResponse, '250') === false) {
+            $logError("SMTP Data phase failed: " . trim($dataResponse));
+            return $sendViaMail();
+        }
+        
         return true;
     } catch (Exception $e) {
+        $logError("SMTP Exception: " . $e->getMessage());
         return $sendViaMail();
     }
 }
