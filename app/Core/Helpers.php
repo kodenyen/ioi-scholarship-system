@@ -48,7 +48,9 @@ function sendEmail($to, $subject, $body) {
     $user = getSetting('smtp_user') ?: (defined('SMTP_USER') && SMTP_USER !== 'your-email@domain.com' ? SMTP_USER : '');
     $pass = getSetting('smtp_pass') ?: (defined('SMTP_PASS') && SMTP_PASS !== 'your-password' ? SMTP_PASS : '');
     $fromName = getSetting('smtp_from_name') ?: (defined('SMTP_FROM_NAME') ? SMTP_FROM_NAME : SITE_NAME);
-    $fromEmail = getSetting('smtp_user') ?: (defined('SMTP_FROM') && SMTP_FROM !== 'your-email@domain.com' ? SMTP_FROM : 'no-reply@' . $_SERVER['HTTP_HOST']);
+    
+    // Hostinger strictly requires the FROM address to match the authenticated USER
+    $fromEmail = $user;
 
     // Fallback mail function
     $sendViaMail = function() use ($to, $subject, $body, $fromName, $fromEmail) {
