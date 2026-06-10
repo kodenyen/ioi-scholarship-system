@@ -179,6 +179,7 @@ function getMenuItems($parentId = null) {
 
 /**
  * Robust URL helper for assets and uploads
+ * Handles spaces in filenames and ensures correct URL structure
  */
 function asset($path) {
     if (empty($path)) return '';
@@ -187,7 +188,13 @@ function asset($path) {
     
     // Simply prepend URLROOT to ensure paths aren't broken by aggressive encoding
     $path = ltrim($path, '/');
-    return URLROOT . '/' . $path;
+    
+    // Encode parts to handle spaces and special characters while preserving slashes
+    $parts = explode('/', $path);
+    $encodedParts = array_map('rawurlencode', $parts);
+    $encodedPath = implode('/', $encodedParts);
+    
+    return URLROOT . '/' . $encodedPath;
 }
 
 /**
