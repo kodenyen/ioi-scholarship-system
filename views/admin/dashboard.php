@@ -174,7 +174,7 @@
 
     <!-- Interested Sponsors -->
     <div class="col-md-4 col-lg mb-4 animate-up delay-1">
-        <div class="stat-card" style="border-bottom: 4px solid var(--success);">
+        <div class="stat-card">
             <div class="stat-icon" style="background: #ebfbee; color: #2b8a3e;">
                 <i class="fa-solid fa-heart-circle-plus"></i>
             </div>

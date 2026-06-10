@@ -108,7 +108,12 @@ class StudentModel {
     }
 
     public function getUnassignedStudents($limit = null, $offset = null) {
-        $sql = 'SELECT * FROM students WHERE id NOT IN (SELECT student_id FROM sponsor_student) ORDER BY created_at DESC';
+        // Exclude assigned students and determine if a pending interest exists
+        $sql = 'SELECT s.*, 
+                (SELECT COUNT(*) FROM interested_sponsorships i WHERE i.student_id = s.id AND i.status = "pending" AND i.is_archived = 0) as has_interest 
+                FROM students s 
+                WHERE s.id NOT IN (SELECT student_id FROM sponsor_student) 
+                ORDER BY s.created_at DESC';
         
         if ($limit !== null && $offset !== null) {
             $sql .= ' LIMIT :limit OFFSET :offset';

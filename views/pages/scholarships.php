@@ -58,7 +58,16 @@
         <div class="row g-4">
             <?php foreach($data['students'] as $student) : ?>
                 <div class="col-md-6 col-lg-4 animate-up">
-                    <div class="data-card">
+                    <div class="data-card position-relative">
+                        <!-- High Visibility Interest Badge -->
+                        <?php if(isset($student->has_interest) && $student->has_interest > 0) : ?>
+                            <div class="position-absolute top-0 end-0 mt-3 me-3" style="z-index: 10;">
+                                <span class="badge bg-warning text-dark fw-bold px-3 py-2 shadow-sm rounded-pill border border-warning">
+                                    <i class="fa-solid fa-star text-danger me-1"></i> Interest Indicated
+                                </span>
+                            </div>
+                        <?php endif; ?>
+
                         <div class="card-banner">
                             <div class="avatar-wrapper">
                                 <?php if(!empty($student->profile_photo)) : ?>
