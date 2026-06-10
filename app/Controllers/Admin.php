@@ -726,7 +726,7 @@ class Admin extends Controller {
         $unassignedCount = $this->studentModel->getUnassignedStudentCount();
 
         // Count interested sponsors
-        $this->db->query('SELECT COUNT(*) as count FROM interested_sponsorships WHERE status = "pending"');
+        $this->db->query('SELECT COUNT(*) as count FROM interested_sponsorships WHERE status = "pending" AND is_archived = 0');
         $interestedCount = $this->db->single()->count;
 
         $data = [
@@ -752,13 +752,28 @@ class Admin extends Controller {
             redirect('admin/interests');
         }
 
-        $this->db->query('SELECT i.*, s.first_name, s.surname FROM interested_sponsorships i JOIN students s ON i.student_id = s.id ORDER BY i.created_at DESC');
+        $this->db->query('SELECT i.*, s.first_name, s.surname FROM interested_sponsorships i JOIN students s ON i.student_id = s.id WHERE i.is_archived = 0 ORDER BY i.created_at DESC');
         $interests = $this->db->resultSet();
 
         $data = [
             'interests' => $interests
         ];
         $this->view('admin/interests/index', $data);
+    }
+
+    public function archive_interest($id) {
+        if (!isLoggedIn()) redirect('admin/login');
+
+        $this->db->query('UPDATE interested_sponsorships SET is_archived = 1 WHERE id = :id');
+        $this->db->bind(':id', $id);
+        
+        if ($this->db->execute()) {
+            flash('interest_message', 'Interest successfully archived.');
+        } else {
+            flash('interest_message', 'Failed to archive interest.', 'alert alert-danger');
+        }
+        
+        redirect('admin/interests');
     }
 
     public function settings() {

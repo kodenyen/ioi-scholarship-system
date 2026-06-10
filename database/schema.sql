@@ -105,6 +105,19 @@ CREATE TABLE IF NOT EXISTS student_uploads (
     FOREIGN KEY (student_id) REFERENCES students(id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
+-- Interested Sponsorships
+CREATE TABLE IF NOT EXISTS interested_sponsorships (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    student_id INT NOT NULL,
+    sponsor_name VARCHAR(255) NOT NULL,
+    sponsor_email VARCHAR(255) NOT NULL,
+    message TEXT,
+    status ENUM('pending', 'reviewed') DEFAULT 'pending',
+    is_archived TINYINT(1) DEFAULT 0,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (student_id) REFERENCES students(id) ON DELETE CASCADE
+) ENGINE=InnoDB;
+
 -- Settings Table
 CREATE TABLE IF NOT EXISTS settings (
     setting_key VARCHAR(50) PRIMARY KEY,

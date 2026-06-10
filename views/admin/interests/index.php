@@ -64,6 +64,12 @@
                                     <i class="fa fa-check-circle me-2"></i> Mark as Reviewed
                                 </button>
                             </form>
+                        <?php else : ?>
+                            <form action="<?php echo URLROOT; ?>/admin/archive_interest/<?php echo $interest->id; ?>" method="POST" class="mt-auto">
+                                <button type="submit" class="btn btn-outline-danger w-100 rounded-pill fw-bold btn-sm" onclick="return confirm('Archive this interest? It will no longer appear on this page.');">
+                                    <i class="fa fa-archive me-1"></i> Archive
+                                </button>
+                            </form>
                         <?php endif; ?>
                     </div>
                 </div>
