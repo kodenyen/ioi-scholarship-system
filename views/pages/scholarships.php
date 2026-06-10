@@ -43,8 +43,6 @@
 </div>
 
 <div class="container py-5">
-    <?php flash('scholarship_message'); ?>
-
     <?php if(isset($_SESSION['scholarship_message'])) : ?>
         <script>
             setTimeout(function() {
@@ -52,6 +50,8 @@
             }, 3000);
         </script>
     <?php endif; ?>
+
+    <?php flash('scholarship_message'); ?>
 
     <?php if(empty($data['students'])) : ?>
         <div class="text-center py-5 animate-up">
