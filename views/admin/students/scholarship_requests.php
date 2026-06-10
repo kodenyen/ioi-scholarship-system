@@ -46,7 +46,6 @@
     <div class="page-header animate-up">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="<?php echo URLROOT; ?>">Home</a></li>
                 <li class="breadcrumb-item active">Scholarship Requests</li>
             </ol>
         </nav>
