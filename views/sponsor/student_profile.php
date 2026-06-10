@@ -379,8 +379,8 @@
     }
 
     .book-viewport.is-open {
-        /* Centering: shift by half width and scale down to fit two pages on screen */
-        transform: translateX(calc(var(--book-width) / 2.2)) scale(0.65);
+        /* Centering: scale first, then translate exactly half width */
+        transform: scale(0.65) translateX(calc(var(--book-width) / 2));
     }
 
     .page-front, .page-back {
@@ -444,7 +444,7 @@
 
     .book-viewport.is-open {
         /* Centering the spine exactly */
-        transform: translateX(calc(var(--book-width) / 2)) scale(0.6);
+        transform: scale(0.6) translateX(calc(var(--book-width) / 2));
     }
     
     .page-number {

@@ -299,7 +299,7 @@
 
 @media (max-width: 768px) {
     :root { --book-width: 300px; --book-height: 450px; }
-    .book-viewport.is-open { transform: translateX(calc(var(--book-width) / 2.2)) scale(0.65); }
+    .book-viewport.is-open { transform: scale(0.65) translateX(calc(var(--book-width) / 2)); }
     .portfolio-title { font-size: 1.8rem; }
     .page-front, .page-back { padding: 20px; }
     .page-title { font-size: 1rem; margin-bottom: 15px; }
@@ -309,6 +309,7 @@
 
 @media (max-width: 480px) {
     :root { --book-width: 250px; --book-height: 375px; }
+    .book-viewport.is-open { transform: scale(0.6) translateX(calc(var(--book-width) / 2)); }
     .portfolio-title { font-size: 1.4rem; }
     .portfolio-nav-buttons { flex-direction: column; width: 100%; max-width: 220px; margin: 0 auto 20px; gap: 8px; }
     .btn-download, .btn-back-nav { width: 100% !important; justify-content: center; }
