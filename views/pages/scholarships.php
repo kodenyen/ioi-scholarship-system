@@ -45,6 +45,14 @@
 <div class="container py-5">
     <?php flash('scholarship_message'); ?>
 
+    <?php if(isset($_SESSION['scholarship_message'])) : ?>
+        <script>
+            setTimeout(function() {
+                window.location.href = "https://ioiglobal.org/thaddeus-scholarship/";
+            }, 3000);
+        </script>
+    <?php endif; ?>
+
     <?php if(empty($data['students'])) : ?>
         <div class="text-center py-5 animate-up">
             <div class="mb-4">
