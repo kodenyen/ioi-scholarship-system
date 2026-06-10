@@ -135,6 +135,7 @@ INSERT INTO settings (setting_key, setting_value) VALUES
 ('book_base_banner', ''),
 ('book_base_btn_text', 'Learn More'),
 ('book_base_btn_url', 'https://ioiglobal.org'),
+('sponsor_another_url', 'https://message.ioiglobal.org/pages/scholarships'),
 ('smtp_host', 'smtp.hostinger.com'),
 ('smtp_port', '465'),
 ('smtp_user', 'your-email@domain.com'),

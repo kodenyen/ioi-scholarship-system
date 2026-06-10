@@ -754,7 +754,7 @@
                         <p class="small px-4 mt-2">Your support is building a bright future for <?php echo $data['student']->first_name; ?>.</p>
                         
                         <div class="mt-5 no-print">
-                            <a href="https://ioiglobal.org/thaddeus-scholarship/" target="_blank" class="btn btn-light btn-sm fw-bold px-4 py-2 shadow-sm" style="color: var(--book-cover-color); border-radius: 30px;">
+                            <a href="<?php echo getSetting('sponsor_another_url') ?: URLROOT . '/pages/scholarships'; ?>" target="_blank" class="btn btn-light btn-sm fw-bold px-4 py-2 shadow-sm" style="color: var(--book-cover-color); border-radius: 30px;">
                                 Support Another Student
                             </a>
                         </div>

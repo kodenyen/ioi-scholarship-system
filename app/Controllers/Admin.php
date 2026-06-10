@@ -838,7 +838,7 @@ class Admin extends Controller {
             // Handle other settings
             $text_keys = [
                 'top_bar_text', 'contact_phone', 'contact_email', 'donate_url',
-                'book_base_btn_text', 'book_base_btn_url',
+                'book_base_btn_text', 'book_base_btn_url', 'sponsor_another_url',
                 'smtp_host', 'smtp_port', 'smtp_user', 'smtp_pass', 'smtp_encryption', 'smtp_from_name'
             ];
             foreach($text_keys as $key) {

@@ -144,6 +144,11 @@
                             <label class="form-label fw-bold small text-uppercase">Donate Button Link</label>
                             <input type="url" name="donate_url" class="form-control" value="<?php echo $data['donate_url']; ?>">
                         </div>
+                        <div class="col-md-12">
+                            <label class="form-label fw-bold small text-uppercase">Sponsor Another Student URL</label>
+                            <input type="url" name="sponsor_another_url" class="form-control" value="<?php echo getSetting('sponsor_another_url') ?: URLROOT . '/pages/scholarships'; ?>">
+                            <div class="form-text">The link used for the 'Support Another Student' button at the back of the active student flipbook.</div>
+                        </div>
                     </div>
                 </div>
 
