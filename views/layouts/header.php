@@ -183,7 +183,57 @@
             .btn-donate { margin-left: 0; margin-top: 15px; display: inline-block; width: 100%; text-align: center; }
             .top-info-bar { text-align: center; }
             .top-info-bar .contact-item { margin: 5px 10px; font-size: 0.75rem; }
-            .dropdown-submenu > .dropdown-menu { left: 0; position: static; margin-left: 15px; box-shadow: none; border-left: 2px solid #eee; }
+            .dropdown-submenu > .dropdown-menu { left: 0; position: static; margin-left: 15px; box-shadow: none; border-left: 2px solid rgba(43, 147, 72, 0.2); }
+            
+            /* Enhanced Mobile Menu Styling */
+            .navbar-collapse {
+                background: white;
+                padding: 20px;
+                border-radius: 12px;
+                box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+                margin-top: 15px;
+                position: absolute;
+                width: calc(100% - 30px); /* Account for container padding */
+                left: 15px;
+                z-index: 1000;
+                border: 1px solid #f0f0f0;
+            }
+            .navbar-nav {
+                width: 100%;
+            }
+            .nav-item {
+                border-bottom: 1px solid #f8f9fa;
+                width: 100%;
+            }
+            .nav-item:last-child {
+                border-bottom: none;
+            }
+            .nav-link {
+                padding: 12px 5px !important;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+            .dropdown-menu {
+                background: #fdfdf5; /* Subtle tint for nested items */
+                border: none;
+                border-radius: 8px;
+                margin-top: 5px !important;
+                padding: 10px;
+                box-shadow: inset 0 2px 10px rgba(0,0,0,0.02);
+            }
+            .dropdown-item {
+                color: #444 !important;
+                border-bottom: 1px solid #eee;
+            }
+            .dropdown-item:last-child {
+                border-bottom: none;
+            }
+            .dropdown-item:hover {
+                background-color: #f0f7f2;
+                color: #2b9348 !important;
+                padding-left: 20px;
+            }
         }
     </style>
 </head>
