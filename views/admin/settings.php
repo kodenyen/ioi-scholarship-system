@@ -9,21 +9,21 @@
     
     .settings-container { display: grid; grid-template-columns: 280px 1fr; gap: 2rem; margin-top: 2rem; }
     
-    .settings-nav { background: white; border-radius: 24px; padding: 1rem; box-shadow: 0 8px 30px rgba(0,0,0,0.05); height: fit-content; position: sticky; top: 100px; }
-    .settings-nav-item { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-radius: 12px; color: #6c757d; font-weight: 600; text-decoration: none; transition: all 0.2s; margin-bottom: 5px; cursor: pointer; border: none; background: none; width: 100%; text-align: left; }
+    .settings-nav { background: white; border-radius: 24px; padding: 1rem; box-shadow: 0 8px 30px rgba(0,0,0,0.05); height: fit-content; position: sticky; top: 100px; z-index: 100; }
+    .settings-nav-item { display: flex; align-items: center; gap: 12px; padding: 14px 20px; border-radius: 12px; color: #6c757d; font-weight: 600; text-decoration: none; transition: all 0.2s; margin-bottom: 8px; cursor: pointer; border: none; background: none; width: 100%; text-align: left; font-size: 0.95rem; }
     .settings-nav-item:hover { background: #f8f9fa; color: #005BFF; }
-    .settings-nav-item.active { background: #e7f5ff; color: #005BFF; }
+    .settings-nav-item.active { background: #e7f5ff; color: #005BFF; border-left: 4px solid #005BFF; border-radius: 4px 12px 12px 4px; }
     
-    .settings-card { background: white; border-radius: 24px; box-shadow: 0 8px 30px rgba(0,0,0,0.05); padding: 2.5rem; border: 1px solid rgba(0,0,0,0.02); }
+    .settings-card { background: white; border-radius: 24px; box-shadow: 0 8px 30px rgba(0,0,0,0.05); padding: 2.5rem; border: 1px solid rgba(0,0,0,0.02); min-height: 400px; }
     .settings-section-title { font-weight: 700; font-size: 1.25rem; color: #001219; margin-bottom: 2rem; border-bottom: 1px solid #f0f0f0; padding-bottom: 1rem; display: flex; align-items: center; gap: 10px; }
     
     .logo-preview-box { width: 100%; max-width: 400px; height: 180px; border-radius: 20px; background: #f8f9fa; border: 2px dashed #dee2e6; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; margin-bottom: 1.5rem; transition: all 0.3s; }
     .logo-preview-box:hover { border-color: #005BFF; background: #f0f7ff; }
     .logo-img-preview { max-width: 80%; max-height: 80%; object-fit: contain; }
     
-    .btn-save-settings { background: #001219; color: white; border: none; border-radius: 12px; padding: 14px 30px; font-weight: 700; transition: all 0.3s; width: 100%; }
-    @media (min-width: 768px) { .btn-save-settings { width: auto; } }
-    .btn-save-settings:hover { background: #005BFF; transform: translateY(-2px); }
+    .btn-save-settings { background: #001219; color: white; border: none; border-radius: 12px; padding: 16px 30px; font-weight: 700; transition: all 0.3s; width: 100%; font-size: 1rem; }
+    @media (min-width: 768px) { .btn-save-settings { width: auto; min-width: 200px; } }
+    .btn-save-settings:hover { background: #005BFF; transform: translateY(-2px); box-shadow: 0 10px 20px rgba(0,91,255,0.2); }
     
     .btn-delete-logo { position: absolute; top: 15px; right: 15px; background: rgba(208,0,0,0.1); color: #d00000; border: none; width: 35px; height: 35px; border-radius: 10px; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
     .btn-delete-logo:hover { background: #d00000; color: white; }
@@ -37,12 +37,15 @@
             display: flex; 
             overflow-x: auto; 
             white-space: nowrap; 
-            padding: 0.75rem; 
-            gap: 10px;
-            scrollbar-width: none; /* Firefox */
+            padding: 0.5rem; 
+            gap: 8px;
+            background: #fff;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            -webkit-overflow-scrolling: touch;
         }
-        .settings-nav::-webkit-scrollbar { display: none; } /* Chrome/Safari */
-        .settings-nav-item { margin-bottom: 0; flex: 0 0 auto; padding: 10px 18px; }
+        .settings-nav-item { margin-bottom: 0; flex: 0 0 auto; padding: 12px 20px; font-size: 0.9rem; width: auto; border-left: none; }
+        .settings-nav-item.active { border-left: none; border-bottom: 3px solid #005BFF; border-radius: 0; }
         .settings-card { padding: 1.5rem; border-radius: 20px; }
         .page-title { font-size: 1.75rem; }
     }
@@ -50,7 +53,8 @@
     @media (max-width: 576px) {
         .settings-section-title { font-size: 1.1rem; margin-bottom: 1.5rem; }
         .logo-preview-box { height: 150px; }
-        .form-control, .form-select { padding: 12px; border-radius: 10px; }
+        .form-control, .form-select { padding: 14px; border-radius: 12px; border: 1px solid #e0e0e0; }
+        .form-control:focus { box-shadow: 0 0 0 4px rgba(0,91,255,0.1); border-color: #005BFF; }
     }
 </style>
 
@@ -65,17 +69,17 @@
     <div class="settings-container">
         <!-- Sidebar/Top Navigation -->
         <div class="settings-nav animate-up delay-1">
-            <button class="settings-nav-item active" onclick="showSection('branding', this)">
-                <i class="fa-solid fa-palette"></i> Branding
+            <button type="button" class="settings-nav-item active" onclick="showSection('branding', this)">
+                <i class="fa-solid fa-palette"></i> Branding & Logo
             </button>
             <a href="<?php echo URLROOT; ?>/admin/menu_manager" class="settings-nav-item">
-                <i class="fa-solid fa-bars"></i> Menus
+                <i class="fa-solid fa-bars"></i> Menu Manager
             </a>
-            <button class="settings-nav-item" onclick="showSection('email', this)">
-                <i class="fa-solid fa-envelope"></i> SMTP
+            <button type="button" class="settings-nav-item" onclick="showSection('email', this)">
+                <i class="fa-solid fa-envelope"></i> Email/SMTP
             </button>
-            <button class="settings-nav-item" onclick="showSection('admins', this)">
-                <i class="fa-solid fa-user-shield"></i> Admins
+            <button type="button" class="settings-nav-item" onclick="showSection('admins', this)">
+                <i class="fa-solid fa-user-shield"></i> Admin Management
             </button>
         </div>
 
@@ -84,7 +88,7 @@
             <form action="<?php echo URLROOT; ?>/admin/settings" method="post" enctype="multipart/form-data">
                 
                 <!-- Branding Section -->
-                <div id="section-branding">
+                <div id="section-branding" class="settings-tab-content">
                     <div class="settings-section-title">
                         <i class="fa-solid fa-circle-nodes text-primary"></i> Platform Branding
                     </div>
@@ -176,7 +180,7 @@
                 </div>
 
                 <!-- Email/SMTP Section -->
-                <div id="section-email" class="d-none">
+                <div id="section-email" class="settings-tab-content d-none">
                     <div class="settings-section-title">
                         <i class="fa-solid fa-envelope-circle-check text-primary"></i> SMTP Configuration
                     </div>
@@ -214,7 +218,7 @@
                 </div>
 
                 <!-- Admin Management Section -->
-                <div id="section-admins" class="d-none">
+                <div id="section-admins" class="settings-tab-content d-none">
                     <div class="settings-section-title d-flex justify-content-between align-items-center">
                         <div class="text-truncate me-2"><i class="fa-solid fa-user-shield text-primary"></i> Administrators</div>
                         <button type="button" class="btn btn-sm btn-primary px-3 rounded-pill" data-bs-toggle="modal" data-bs-target="#addAdminModal">
@@ -267,7 +271,7 @@
 
                 <div class="mt-5 pt-4 border-top">
                     <button type="submit" class="btn btn-save-settings">
-                        <i class="fa-solid fa-check-double me-2"></i> Save Changes
+                        <i class="fa-solid fa-check-double me-2"></i> Save All Changes
                     </button>
                 </div>
             </form>
@@ -276,18 +280,30 @@
 </div>
 
 <script>
-    function showSection(section, btn) {
-        document.getElementById('section-branding').classList.add('d-none');
-        document.getElementById('section-email').classList.add('d-none');
-        document.getElementById('section-admins').classList.add('d-none');
-        document.getElementById('section-' + section).classList.remove('d-none');
+    function showSection(sectionId, btn) {
+        // Hide all content areas
+        document.querySelectorAll('.settings-tab-content').forEach(content => {
+            content.classList.add('d-none');
+        });
         
-        document.querySelectorAll('.settings-nav-item').forEach(el => el.classList.remove('active'));
-        btn.classList.add('active');
-
-        // On mobile, scroll the active item into view
-        if(window.innerWidth < 992) {
-            btn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+        // Show the target section
+        const targetSection = document.getElementById('section-' + sectionId);
+        if (targetSection) {
+            targetSection.classList.remove('d-none');
+        }
+        
+        // Update navigation active state
+        document.querySelectorAll('.settings-nav-item').forEach(el => {
+            el.classList.remove('active');
+        });
+        
+        if (btn) {
+            btn.classList.add('active');
+            
+            // On mobile, scroll the active item into view
+            if(window.innerWidth < 992) {
+                btn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+            }
         }
     }
 
