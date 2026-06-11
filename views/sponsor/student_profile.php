@@ -432,16 +432,17 @@
         width: 100%;
         max-width: 320px; /* Increase max-width slightly for row */
         margin: 50px auto 20px; /* Explicitly add margin-top for mobile */
-        gap: 10px;
-        padding: 0 10px;
+        gap: 6px; /* Reduced gap to give buttons more width */
+        padding: 0 5px; /* Reduced padding */
     }
 
     .btn-download, .btn-back-nav {
         width: auto !important;
         flex: 1; /* Make them equal width */
         justify-content: center;
-        padding: 8px 12px !important; /* Reduced padding */
-        font-size: 0.7rem !important; /* Smaller font */
+        padding: 8px 4px !important; /* Minimum padding for text fit */
+        font-size: 0.65rem !important; /* Smaller font to fit text */
+        letter-spacing: 0 !important; /* Remove letter spacing on mobile */
         min-width: 0; /* Allow shrinking */
         white-space: nowrap; /* Prevent wrapping */
     }
