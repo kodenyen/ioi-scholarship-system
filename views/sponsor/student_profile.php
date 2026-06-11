@@ -50,7 +50,7 @@
 }
 
 .portfolio-nav-buttons {
-    margin-top: 55px; /* Increased from 35px */
+    margin-top: 80px; /* Increased to move buttons further down */
     display: flex;
     justify-content: center;
     gap: 20px;
@@ -60,16 +60,17 @@
     background: linear-gradient(135deg, #005BFF 0%, #0046cc 100%);
     color: white !important;
     border: none !important;
-    padding: 12px 30px !important;
+    padding: 14px 28px !important; /* Adjusted padding for better fit */
     border-radius: 50px !important;
     font-weight: 700 !important;
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 0.5px; /* Reduced letter-spacing to fit text better */
     font-size: 0.9rem;
     box-shadow: 0 10px 20px rgba(0,91,255,0.25);
     transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 10px;
 }
 
