@@ -50,7 +50,7 @@
 }
 
 .portfolio-nav-buttons {
-    margin-top: 35px;
+    margin-top: 55px; /* Increased from 35px */
     display: flex;
     justify-content: center;
     gap: 20px;
