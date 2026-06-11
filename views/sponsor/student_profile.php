@@ -431,7 +431,7 @@
         flex-direction: row; /* Change to row to fit side-by-side */
         width: 100%;
         max-width: 320px; /* Increase max-width slightly for row */
-        margin: 0 auto 20px;
+        margin: 50px auto 20px; /* Explicitly add margin-top for mobile */
         gap: 10px;
         padding: 0 10px;
     }
