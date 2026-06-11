@@ -339,7 +339,7 @@
             <div class="small fw-600 mb-2 mb-md-0">
                 <?php 
                     $topText = getSetting('top_bar_text');
-                    $topText = str_replace([' to ', ' for '], [' <i>to</i> ', ' <i>for</i> '], $topText);
+                    $topText = str_replace([' to ', ' for '], [' <i>to</i>&nbsp; ', ' <i>for</i>&nbsp; '], $topText);
                     echo $topText; 
                 ?>
             </div>
