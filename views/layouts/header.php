@@ -130,11 +130,6 @@
             border-bottom: none;
         }
 
-        /* Remove faint border from User account dropdowns (Admin, Student, etc) */
-        .ms-lg-3 .dropdown-menu li {
-            border-bottom: none !important;
-        }
-
         .dropdown-item:hover {
             background-color: rgba(255, 255, 255, 0.1);
             color: white !important;
