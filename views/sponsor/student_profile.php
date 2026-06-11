@@ -427,19 +427,27 @@
     }
 
     .portfolio-nav-buttons {
-        flex-direction: column;
+        flex-direction: row; /* Change to row to fit side-by-side */
         width: 100%;
-        max-width: 220px;
+        max-width: 320px; /* Increase max-width slightly for row */
         margin: 0 auto 20px;
-        gap: 8px;
-        padding: 0;
+        gap: 10px;
+        padding: 0 10px;
     }
 
     .btn-download, .btn-back-nav {
-        width: 100% !important;
+        width: auto !important;
+        flex: 1; /* Make them equal width */
         justify-content: center;
-        padding: 10px !important;
-        font-size: 0.8rem !important;
+        padding: 8px 12px !important; /* Reduced padding */
+        font-size: 0.7rem !important; /* Smaller font */
+        min-width: 0; /* Allow shrinking */
+        white-space: nowrap; /* Prevent wrapping */
+    }
+
+    .btn-download i, .btn-back-nav i {
+        font-size: 0.8rem;
+        margin-right: 2px;
     }
 
     .book-viewport.is-open {
