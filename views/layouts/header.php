@@ -177,6 +177,15 @@
             color: white !important;
         }
 
+        /* User Actions Visibility */
+        .main-navbar .nav-item.dropdown .nav-link.bg-light {
+            color: #000 !important;
+            font-weight: 700;
+        }
+        .main-navbar .nav-item.dropdown .nav-link.bg-light::after {
+            color: #000 !important;
+        }
+
         /* Mobile specific adjustments */
         @media (max-width: 991.98px) {
             .nav-link.active::after { display: none; }
