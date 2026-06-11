@@ -130,7 +130,7 @@ class Admin extends Controller {
         if (!isLoggedIn()) redirect('admin/login');
 
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+            $_POST = filter_input_array(INPUT_POST, FILTER_DEFAULT);
             $data = [
                 'label' => trim($_POST['label']),
                 'type' => trim($_POST['type']),
@@ -233,7 +233,7 @@ class Admin extends Controller {
         if (!isLoggedIn()) redirect('admin/login');
 
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+            $_POST = filter_input_array(INPUT_POST, FILTER_DEFAULT);
             $data = [
                 'name' => trim($_POST['name']),
                 'email' => trim($_POST['email']),
@@ -280,7 +280,7 @@ class Admin extends Controller {
         if (!isLoggedIn()) redirect('admin/login');
 
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+            $_POST = filter_input_array(INPUT_POST, FILTER_DEFAULT);
             $sponsor = $this->sponsorModel->getSponsorById($id);
             $data = [
                 'id' => $id,
@@ -512,7 +512,7 @@ class Admin extends Controller {
         if (!isLoggedIn()) redirect('admin/login');
 
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+            $_POST = filter_input_array(INPUT_POST, FILTER_DEFAULT);
             $data = [
                 'first_name' => trim($_POST['first_name']),
                 'surname' => trim($_POST['surname']),
@@ -569,7 +569,7 @@ class Admin extends Controller {
         if (!isLoggedIn()) redirect('admin/login');
 
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+            $_POST = filter_input_array(INPUT_POST, FILTER_DEFAULT);
             $student = $this->studentModel->getStudentById($id);
             $data = [
                 'id' => $id,
@@ -659,7 +659,7 @@ class Admin extends Controller {
 
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             // Process form
-            $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+            $_POST = filter_input_array(INPUT_POST, FILTER_DEFAULT);
 
             $data = [
                 'email' => trim($_POST['email']),
@@ -926,7 +926,7 @@ class Admin extends Controller {
     public function add_admin() {
         if (!isLoggedIn()) redirect('admin/login');
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+            $_POST = filter_input_array(INPUT_POST, FILTER_DEFAULT);
             $data = [
                 'name' => trim($_POST['name']),
                 'email' => trim($_POST['email']),
@@ -942,7 +942,7 @@ class Admin extends Controller {
     public function edit_admin($id) {
         if (!isLoggedIn()) redirect('admin/login');
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+            $_POST = filter_input_array(INPUT_POST, FILTER_DEFAULT);
             $data = [
                 'id' => $id,
                 'name' => trim($_POST['name']),

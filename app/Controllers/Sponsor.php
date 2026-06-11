@@ -90,7 +90,7 @@ class Sponsor extends Controller {
         }
 
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+            $_POST = filter_input_array(INPUT_POST, FILTER_DEFAULT);
             $data = [
                 'email' => trim($_POST['email']),
                 'password' => trim($_POST['password']),
@@ -128,7 +128,7 @@ class Sponsor extends Controller {
         if (!$sponsor) die('Access Denied');
 
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+            $_POST = filter_input_array(INPUT_POST, FILTER_DEFAULT);
             
             $messageData = [
                 'sender_type' => 'sponsor',

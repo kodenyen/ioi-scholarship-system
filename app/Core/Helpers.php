@@ -186,7 +186,8 @@ function asset($path) {
     // If it's already a full URL, return it
     if (strpos($path, 'http') === 0) return $path;
     
-    // Simply prepend URLROOT to ensure paths aren't broken by aggressive encoding
+    // Clean URLROOT and path
+    $root = rtrim(URLROOT, '/');
     $path = ltrim($path, '/');
     
     // Encode parts to handle spaces and special characters while preserving slashes
@@ -194,7 +195,7 @@ function asset($path) {
     $encodedParts = array_map('rawurlencode', $parts);
     $encodedPath = implode('/', $encodedParts);
     
-    return URLROOT . '/' . $encodedPath;
+    return $root . '/' . $encodedPath;
 }
 
 /**

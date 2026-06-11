@@ -2,9 +2,6 @@
   Options -Multiviews
   RewriteEngine On
   
-  # Ensure RewriteBase is correct for the public folder
-  RewriteBase /
-
   # If the requested file or directory exists, serve it directly
   RewriteCond %{REQUEST_FILENAME} !-d
   RewriteCond %{REQUEST_FILENAME} !-f
