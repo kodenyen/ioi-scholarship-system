@@ -183,76 +183,115 @@
             .top-info-bar { text-align: center; }
             .top-info-bar .contact-item { margin: 5px 10px; font-size: 0.75rem; }
             
-            /* Fullscreen Mobile Menu Styling */
+            /* Floating Mobile Menu Styling */
             .navbar-collapse {
-                background: #1e3a5a; /* Deeper navy blue as seen in image */
+                background: white;
                 position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100vh;
-                padding: 100px 30px 40px; /* Space for fixed header */
-                z-index: 1050;
-                overflow-y: auto;
-                transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+                top: 15px;
+                left: 15px;
+                right: 15px;
+                width: calc(100% - 30px);
+                max-height: 85vh;
+                border-radius: 15px;
+                padding: 0;
+                z-index: 2000;
+                overflow: hidden;
+                box-shadow: 0 15px 50px rgba(0,0,0,0.3);
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
                 display: block !important;
                 visibility: hidden;
                 opacity: 0;
-                transform: translateX(100%);
+                transform: translateY(-20px);
             }
             .navbar-collapse.show {
                 visibility: visible;
                 opacity: 1;
-                transform: translateX(0);
+                transform: translateY(0);
+            }
+
+            /* Mobile Menu Header (White Bar) */
+            .mobile-menu-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 15px 20px;
+                background: white;
+                border-bottom: 1px solid #eee;
+            }
+            .mobile-menu-header img { height: 45px; width: auto; }
+            .mobile-menu-close {
+                font-size: 1.8rem;
+                color: #333;
+                cursor: pointer;
+                background: none;
+                border: none;
+                padding: 0;
             }
             
             .navbar-nav {
                 width: 100%;
+                background: #1e2a4a; /* Dark navy for menu body */
+                padding: 0;
             }
             .nav-item {
-                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+                border-bottom: 1px solid rgba(255, 255, 255, 0.05);
                 width: 100%;
             }
+            .nav-item:last-child { border-bottom: none; }
+
             .nav-link {
-                padding: 20px 0 !important;
-                font-size: 1.4rem !important; /* Larger text for mobile menu */
+                padding: 18px 25px !important;
+                font-size: 1.1rem !important;
                 color: white !important;
                 text-transform: uppercase;
-                letter-spacing: 1px;
+                font-weight: 700;
+                letter-spacing: 0.5px;
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
+                transition: background 0.2s;
             }
+            
+            /* Bright Blue for Home/Active */
+            .nav-link.active, .nav-link:hover {
+                background: #005BFF !important;
+                color: white !important;
+            }
+            
             .dropdown-menu {
-                background: rgba(255, 255, 255, 0.05);
-                padding: 0 0 0 20px;
+                background: rgba(0, 0, 0, 0.2);
+                padding: 0;
                 margin: 0;
                 box-shadow: none;
-                display: none; /* Let JS handle toggle or use show class */
+                display: none;
                 visibility: visible;
                 opacity: 1;
                 transform: none;
                 pointer-events: auto;
                 position: static;
+                border-radius: 0;
             }
             .dropdown-menu.show {
                 display: block;
             }
             .dropdown-item {
                 color: rgba(255, 255, 255, 0.8) !important;
-                padding: 15px 0;
-                font-size: 1.1rem;
+                padding: 15px 40px;
+                font-size: 0.95rem;
                 text-transform: uppercase;
                 border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+                background: transparent !important;
+            }
+            .dropdown-item:hover {
+                color: white !important;
+                background: rgba(255, 255, 255, 0.1) !important;
             }
             
-            /* Custom Mobile Actions (Donate + X) */
+            /* Custom Mobile Actions (Header) */
             .mobile-actions {
                 display: flex;
                 align-items: center;
                 gap: 15px;
-                z-index: 1100;
-                position: relative;
             }
             .mobile-donate-btn {
                 background: #005BFF;
@@ -262,25 +301,25 @@
                 padding: 8px 22px !important;
                 text-decoration: none;
                 text-transform: uppercase;
-                font-size: 0.85rem;
+                font-size: 0.8rem;
                 box-shadow: 0 4px 12px rgba(0, 91, 255, 0.3);
             }
             .navbar-toggler {
                 padding: 0;
-                font-size: 2.2rem;
+                font-size: 2rem;
                 color: #333;
                 line-height: 1;
-            }
-            .main-navbar.menu-open .navbar-toggler {
-                color: #333; /* Keep it dark or match background */
             }
             
             /* Hide desktop items on mobile */
             .main-navbar .btn-donate { display: none; }
+            /* Hide original toggler when menu is open to use the internal one */
+            .main-navbar.menu-open .mobile-actions { visibility: hidden; }
         }
         
         @media (min-width: 992px) {
             .mobile-actions { display: none; }
+            .mobile-menu-header { display: none; }
         }
     </style>
 </head>
@@ -327,26 +366,41 @@
             <div class="mobile-actions">
                 <a href="<?php echo getSetting('donate_url'); ?>" target="_blank" class="mobile-donate-btn">DONATE</a>
                 <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
-                    <i class="fa-solid fa-bars" id="menuIcon"></i>
+                    <i class="fa-solid fa-bars"></i>
                 </button>
             </div>
 
             <!-- MENU ITEMS -->
             <div class="collapse navbar-collapse" id="mainNav">
+                <!-- Mobile Only Header -->
+                <div class="mobile-menu-header">
+                    <div class="d-flex align-items-center gap-3">
+                        <?php if($logo) : ?>
+                            <img src="<?php echo asset($logo); ?>" alt="Logo">
+                        <?php endif; ?>
+                    </div>
+                    <div class="d-flex align-items-center gap-3">
+                        <a href="<?php echo getSetting('donate_url'); ?>" target="_blank" class="mobile-donate-btn">DONATE</a>
+                        <button class="mobile-menu-close" data-bs-toggle="collapse" data-bs-target="#mainNav">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
+                    </div>
+                </div>
+
                 <ul class="navbar-nav ms-auto align-items-center">
                     <?php 
                         $menuItems = getMenuItems();
                         $currentUrl = $_SERVER['REQUEST_URI'];
                         foreach($menuItems as $item) : 
                             $hasChildren = !empty($item->children);
-                            // Check if current URL starts with item URL (for subpages) or exact match
                             $itemUrl = ($item->url == '/') ? '/' : $item->url;
+                            // Exact match or active parent
                             $isActive = ($currentUrl == $itemUrl || ($itemUrl != '/' && strpos($currentUrl, $itemUrl) === 0)) ? 'active' : '';
                     ?>
                         <li class="nav-item <?php echo $hasChildren ? 'dropdown' : ''; ?>">
                             <a class="nav-link <?php echo $isActive; ?> <?php echo $hasChildren ? 'dropdown-toggle' : ''; ?>" 
                                href="<?php echo ($item->url == '/') ? URLROOT : (strpos($item->url, 'http') === 0 ? $item->url : URLROOT . $item->url); ?>"
-                               <?php echo $hasChildren ? 'data-bs-toggle="dropdown"' : ''; ?>>
+                               <?php echo $hasChildren ? 'data-bs-toggle="dropdown" aria-expanded="false"' : ''; ?>>
                                 <?php echo $item->label; ?>
                             </a>
                             
