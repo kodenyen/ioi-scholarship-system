@@ -126,8 +126,12 @@
             border-bottom: 1px solid rgba(255, 255, 255, 0.2); /* Visible divider on the list item */
         }
 
-        .dropdown-menu li:last-child,
-        .dropdown-menu li:nth-last-child(2) {
+        .dropdown-menu li:last-child {
+            border-bottom: none;
+        }
+
+        /* Remove faint border from User account dropdowns (Admin, Student, etc) */
+        .ms-lg-3 .dropdown-menu li {
             border-bottom: none !important;
         }
 
@@ -457,6 +461,7 @@
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end">
                                 <li><a class="dropdown-item" href="<?php echo URLROOT; ?>/student/dashboard">Dashboard</a></li>
+                                <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item text-danger" href="<?php echo URLROOT; ?>/student/logout">Logout</a></li>
                             </ul>
                         </li>
@@ -470,6 +475,7 @@
                                     <?php $token = isset($_GET['token']) ? $_GET['token'] : ''; ?>
                                     <a class="dropdown-item" href="<?php echo URLROOT; ?>/sponsor/dashboard<?php echo $token ? '?token='.$token : ''; ?>">Dashboard</a>
                                 </li>
+                                <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item text-danger" href="<?php echo URLROOT; ?>/sponsor/logout">Logout</a></li>
                             </ul>
                         </li>
@@ -481,6 +487,7 @@
                             <ul class="dropdown-menu dropdown-menu-end">
                                 <li><a class="dropdown-item" href="<?php echo URLROOT; ?>/admin/dashboard">Dashboard</a></li>
                                 <li><a class="dropdown-item" href="<?php echo URLROOT; ?>/admin/settings">Settings</a></li>
+                                <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item text-danger" href="<?php echo URLROOT; ?>/admin/logout">Logout</a></li>
                             </ul>
                         </li>
@@ -492,6 +499,7 @@
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end">
                                 <li><a class="dropdown-item" href="<?php echo URLROOT; ?>/sponsor/dashboard">Dashboard</a></li>
+                                <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item text-danger" href="<?php echo URLROOT; ?>/sponsor/logout">Logout</a></li>
                             </ul>
                         </li>
@@ -503,6 +511,7 @@
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end">
                                 <li><a class="dropdown-item" href="<?php echo URLROOT; ?>/student/dashboard">Dashboard</a></li>
+                                <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item text-danger" href="<?php echo URLROOT; ?>/student/logout">Logout</a></li>
                             </ul>
                         </li>
