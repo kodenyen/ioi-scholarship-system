@@ -180,23 +180,32 @@
         /* Mobile specific adjustments */
         @media (max-width: 991.98px) {
             .nav-link.active::after { display: none; }
-            .btn-donate { margin-left: 0; margin-top: 15px; display: inline-block; width: 100%; text-align: center; }
             .top-info-bar { text-align: center; }
             .top-info-bar .contact-item { margin: 5px 10px; font-size: 0.75rem; }
-            .dropdown-submenu > .dropdown-menu { left: 0; position: static; margin-left: 15px; box-shadow: none; border-left: 2px solid rgba(43, 147, 72, 0.2); }
             
-            /* Enhanced Mobile Menu Styling - Navy Blue */
+            /* Fullscreen Mobile Menu Styling */
             .navbar-collapse {
-                background: #2f4668;
-                padding: 15px 20px;
-                margin-top: 10px;
-                border-radius: 0 0 10px 10px;
-                box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-                position: absolute;
-                width: 100%;
+                background: #1e3a5a; /* Deeper navy blue as seen in image */
+                position: fixed;
+                top: 0;
                 left: 0;
-                z-index: 1000;
+                width: 100%;
+                height: 100vh;
+                padding: 100px 30px 40px; /* Space for fixed header */
+                z-index: 1050;
+                overflow-y: auto;
+                transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+                display: block !important;
+                visibility: hidden;
+                opacity: 0;
+                transform: translateX(100%);
             }
+            .navbar-collapse.show {
+                visibility: visible;
+                opacity: 1;
+                transform: translateX(0);
+            }
+            
             .navbar-nav {
                 width: 100%;
             }
@@ -204,41 +213,74 @@
                 border-bottom: 1px solid rgba(255, 255, 255, 0.1);
                 width: 100%;
             }
-            .nav-item:last-child {
-                border-bottom: none;
-            }
             .nav-link {
-                padding: 10px 5px !important; /* Tighter vertical spacing */
+                padding: 20px 0 !important;
+                font-size: 1.4rem !important; /* Larger text for mobile menu */
+                color: white !important;
+                text-transform: uppercase;
+                letter-spacing: 1px;
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
-                color: rgba(255, 255, 255, 0.9) !important; /* White text for navy background */
-            }
-            .nav-link:hover, .nav-link.active {
-                color: #fff !important;
-                background-color: rgba(255, 255, 255, 0.05);
             }
             .dropdown-menu {
-                background: rgba(0, 0, 0, 0.15); /* Darker tint for nested items to distinguish them */
-                border: none;
-                border-radius: 0;
-                margin-top: 0 !important;
-                padding: 5px 10px;
+                background: rgba(255, 255, 255, 0.05);
+                padding: 0 0 0 20px;
+                margin: 0;
                 box-shadow: none;
+                display: none; /* Let JS handle toggle or use show class */
+                visibility: visible;
+                opacity: 1;
+                transform: none;
+                pointer-events: auto;
+                position: static;
+            }
+            .dropdown-menu.show {
+                display: block;
             }
             .dropdown-item {
                 color: rgba(255, 255, 255, 0.8) !important;
+                padding: 15px 0;
+                font-size: 1.1rem;
+                text-transform: uppercase;
                 border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-                padding: 8px 15px; /* Tighter nested spacing */
             }
-            .dropdown-item:last-child {
-                border-bottom: none;
+            
+            /* Custom Mobile Actions (Donate + X) */
+            .mobile-actions {
+                display: flex;
+                align-items: center;
+                gap: 15px;
+                z-index: 1100;
+                position: relative;
             }
-            .dropdown-item:hover {
-                background-color: rgba(255, 255, 255, 0.1);
+            .mobile-donate-btn {
+                background: #005BFF;
                 color: white !important;
-                padding-left: 20px;
+                font-weight: 800;
+                border-radius: 50px;
+                padding: 8px 22px !important;
+                text-decoration: none;
+                text-transform: uppercase;
+                font-size: 0.85rem;
+                box-shadow: 0 4px 12px rgba(0, 91, 255, 0.3);
             }
+            .navbar-toggler {
+                padding: 0;
+                font-size: 2.2rem;
+                color: #333;
+                line-height: 1;
+            }
+            .main-navbar.menu-open .navbar-toggler {
+                color: #333; /* Keep it dark or match background */
+            }
+            
+            /* Hide desktop items on mobile */
+            .main-navbar .btn-donate { display: none; }
+        }
+        
+        @media (min-width: 992px) {
+            .mobile-actions { display: none; }
         }
     </style>
 </head>
@@ -281,10 +323,13 @@
                 <?php endif; ?>
             </a>
 
-            <!-- MOBILE TOGGLE -->
-            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+            <!-- MOBILE ACTIONS + TOGGLE -->
+            <div class="mobile-actions">
+                <a href="<?php echo getSetting('donate_url'); ?>" target="_blank" class="mobile-donate-btn">DONATE</a>
+                <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+                    <i class="fa-solid fa-bars" id="menuIcon"></i>
+                </button>
+            </div>
 
             <!-- MENU ITEMS -->
             <div class="collapse navbar-collapse" id="mainNav">
