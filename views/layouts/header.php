@@ -451,7 +451,7 @@
 
                     <?php if($isStudentPath && isset($_SESSION['student_id'])) : ?>
                         <li class="nav-item dropdown ms-lg-3">
-                            <a class="nav-link dropdown-toggle bg-light rounded-pill px-3" href="#" data-bs-toggle="dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
                                 <i class="fa-solid fa-graduation-cap text-primary me-1"></i> Student
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end">
@@ -462,7 +462,7 @@
                         </li>
                     <?php elseif($isSponsorPath && isset($_SESSION['sponsor_id'])) : ?>
                         <li class="nav-item dropdown ms-lg-3">
-                            <a class="nav-link dropdown-toggle bg-light rounded-pill px-3" href="#" data-bs-toggle="dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
                                 <i class="fa-solid fa-hand-holding-heart text-primary me-1"></i> Sponsor
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end">
@@ -476,7 +476,7 @@
                         </li>
                     <?php elseif(isset($_SESSION['admin_id'])) : ?>
                         <li class="nav-item dropdown ms-lg-3">
-                            <a class="nav-link dropdown-toggle bg-light rounded-pill px-3" href="#" data-bs-toggle="dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
                                 <i class="fa-solid fa-user-shield text-primary me-1"></i> Admin
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end">
@@ -489,7 +489,7 @@
                     <?php elseif(isset($_SESSION['sponsor_id'])) : ?>
                         <!-- Fallback for sponsor if not on sponsor path -->
                         <li class="nav-item dropdown ms-lg-3">
-                            <a class="nav-link dropdown-toggle bg-light rounded-pill px-3" href="#" data-bs-toggle="dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
                                 <i class="fa-solid fa-hand-holding-heart text-primary me-1"></i> Sponsor
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end">
@@ -501,7 +501,7 @@
                     <?php elseif(isset($_SESSION['student_id'])) : ?>
                         <!-- Fallback for student if not on student path -->
                         <li class="nav-item dropdown ms-lg-3">
-                            <a class="nav-link dropdown-toggle bg-light rounded-pill px-3" href="#" data-bs-toggle="dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
                                 <i class="fa-solid fa-graduation-cap text-primary me-1"></i> Student
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end">
